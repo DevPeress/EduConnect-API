@@ -1,1 +1,9 @@
-<Solution />
+<Solution>
+  <Folder Name="/1 - API/">
+    <Project Path="WebApplication1/EduConnect.csproj" />
+  </Folder>
+  <Folder Name="/2 - Application/" />
+  <Folder Name="/3 - Domain/" />
+  <Folder Name="/4 - Infra/" />
+  <Folder Name="/5 - Tests/" />
+</Solution>
