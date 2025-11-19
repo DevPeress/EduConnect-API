@@ -2,7 +2,7 @@
 
 public static class CorsConfiguration
 {
-    public static IServiceCollection AddCorsConfiguration(this IServiceCollection services)
+    public static IServiceCollection AddCorsConfiguration(this IServiceCollection services, ConfigurationManager configuration)
     {
         services.AddCors(p =>
         {
