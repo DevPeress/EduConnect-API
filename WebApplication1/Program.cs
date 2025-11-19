@@ -5,20 +5,23 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 builder.Services.AddOpenApi();
+builder.Services.AddApiConfiguration();
+builder.Services.AddAuthorizationConfiguration();
 builder.Services.AddCorsConfiguration(builder.Configuration);
-var app = builder.Build();
+builder.Services.AddProblemDetails();   
+var app = builder.Build();  
 
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
-
+// Middleware para redirecionar HTTP para HTTPS
 app.UseHttpsRedirection();
-
+// Utilizar CORS
 app.UseCors("CorsPolicy");
-
+// Middleware de autorização
 app.UseAuthorization();
-
+// Mapeia controllers para requisições de API
 app.MapControllers();
 
 app.Run();
