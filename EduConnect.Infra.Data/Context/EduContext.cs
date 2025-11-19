@@ -8,4 +8,4 @@ public class EduContext (DbContextOptions<EduContext> options) : DbContext(optio
     public virtual DbSet<Aluno> Alunos { get; set; }
     public virtual DbSet<Professor> Professores { get; set; }
     public virtual DbSet<Funcionario> Funcionarios { get; set; }
-    }
+}
