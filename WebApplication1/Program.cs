@@ -1,9 +1,4 @@
-using EduConnect.Application;
-using EduConnect.Domain.Interfaces;
-using EduConnect.Infra.Data.Context;
-using EduConnect.Infra.Data.Repositories;
 using EduConnect.MiddleWares;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,14 +8,7 @@ builder.Services.AddOpenApi();
 builder.Services.AddApiConfiguration();
 builder.Services.AddAuthorizationConfiguration();
 builder.Services.AddCorsConfiguration(builder.Configuration);
-builder.Services.AddProblemDetails();
-
-builder.Services.AddScoped<IAlunoRepository, AlunoRepository>();
-builder.Services.AddScoped<AlunoService>();
-builder.Services.AddDbContext<EduContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-
+builder.Services.AddProblemDetails();   
 var app = builder.Build();  
 
 if (app.Environment.IsDevelopment())
