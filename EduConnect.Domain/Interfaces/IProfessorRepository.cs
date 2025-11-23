@@ -4,8 +4,7 @@ public interface IProfessorRepository
 {
     Task<List<Professor>> GetAllAsync();
     Task<Professor?> GetByIdAsync(string matricula);
-    Task AddAsync(Professor aluno);
-    Task UpdateAsync(Professor aluno);
+    Task AddAsync(Professor professor);
+    Task UpdateAsync(Professor professor);
     Task DeleteAsync(string matricula);
-
 }
