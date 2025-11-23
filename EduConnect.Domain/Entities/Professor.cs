@@ -5,7 +5,6 @@ namespace EduConnect.Domain;
 public class Professor : Pessoa
 {
     [Key]
-    public required string Codigo { get; set; }
     public required List<string> Turmas { get; set; }
     public required string Disciplina { get; set; }
     public required DateTime Contratacao { get; set; }
