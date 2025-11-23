@@ -2,7 +2,9 @@
   <Folder Name="/1 - API/">
     <Project Path="WebApplication1/EduConnect.csproj" />
   </Folder>
-  <Folder Name="/2 - Application/" />
+  <Folder Name="/2 - Application/">
+    <Project Path="EduConnect.Application/EduConnect.Application.csproj" />
+  </Folder>
   <Folder Name="/3 - Domain/">
     <Project Path="EduConnect.Domain/EduConnect.Domain.csproj" Id="fb245314-6116-4e8e-80f4-66aad5422965" />
   </Folder>
