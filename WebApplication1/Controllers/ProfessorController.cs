@@ -1,4 +1,4 @@
-﻿using EduConnect.Application;
+﻿using EduConnect.Application.Services;
 using EduConnect.Domain;
 using Microsoft.AspNetCore.Mvc;
 

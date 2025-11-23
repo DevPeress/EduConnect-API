@@ -1,4 +1,4 @@
-using EduConnect.Application;
+using EduConnect.Application.Services;
 using EduConnect.Domain.Interfaces;
 using EduConnect.Infra.Data.Context;
 using EduConnect.Infra.Data.Repositories;

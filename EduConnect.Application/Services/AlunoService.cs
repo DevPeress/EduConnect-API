@@ -1,8 +1,7 @@
-﻿
-using EduConnect.Domain;
+﻿using EduConnect.Domain;
 using EduConnect.Domain.Interfaces;
 
-namespace EduConnect.Application;
+namespace EduConnect.Application.Services;
 
 public class AlunoService(IAlunoRepository repo)
 {
