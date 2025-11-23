@@ -34,7 +34,7 @@ namespace EduConnect.Controllers
         [HttpPut("{matricula}")]
         public async Task<IActionResult> UpdateAluno(string matricula, [FromBody] EduConnect.Domain.Aluno aluno)
         {
-            if (matricula != aluno.Matricula)
+            if (matricula != aluno.Registro)
             {
                 return BadRequest();
             }
