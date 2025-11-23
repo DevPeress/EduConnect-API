@@ -1,4 +1,5 @@
 ﻿using EduConnect.Application;
+using EduConnect.Domain;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EduConnect.Controllers
@@ -26,13 +27,13 @@ namespace EduConnect.Controllers
             return Ok(aluno);
         }
         [HttpPost]
-        public async Task<IActionResult> AddAluno([FromBody] EduConnect.Domain.Aluno aluno)
+        public async Task<IActionResult> AddAluno(Aluno aluno)
         {
             await _alunoService.AddAlunoAsync(aluno);
-            return CreatedAtAction(nameof(GetAlunoById), new { matricula = aluno.Matricula }, aluno);
+            return CreatedAtAction(nameof(GetAlunoById), new { matricula = aluno.Registro }, aluno);
         }
         [HttpPut("{matricula}")]
-        public async Task<IActionResult> UpdateAluno(string matricula, [FromBody] EduConnect.Domain.Aluno aluno)
+        public async Task<IActionResult> UpdateAluno(string matricula, Aluno aluno)
         {
             if (matricula != aluno.Registro)
             {
