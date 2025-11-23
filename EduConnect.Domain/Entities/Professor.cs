@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace EduConnect.Domain;
+﻿namespace EduConnect.Domain;
 
 public class Professor : Pessoa
 {
