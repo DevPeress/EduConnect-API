@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace EduConnect.Domain.Interfaces;
+﻿namespace EduConnect.Domain.Interfaces;
 
 public interface IAlunoRepository
 {
