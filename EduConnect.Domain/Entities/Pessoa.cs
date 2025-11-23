@@ -1,7 +1,11 @@
-﻿namespace EduConnect.Domain;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace EduConnect.Domain;
 
 public class Pessoa
 {
+    [Key]
+    public required string Registro { get; set; }
     public required string Nome { get; set; }
     public required string Email { get; set; }
     public required string Telefone { get; set; }
