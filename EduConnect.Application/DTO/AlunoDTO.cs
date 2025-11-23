@@ -10,7 +10,7 @@ public class AlunoDTO
     public string Endereco { get; set; } = null!;
     public string Cpf { get; set; } = null!;
     public string ContatoEmergencia { get; set; } = null!;
-    public string Matricula { get; set; } = null!;
+    public string Registro { get; set; } = null!;
     public string Turma { get; set; } = null!;
     public int Media { get; set; }
     public DateTime DataMatricula { get; set; }
