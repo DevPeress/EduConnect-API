@@ -15,7 +15,7 @@ public class AlunoRepository(EduContext context) : IAlunoRepository
     }
     public async Task<Aluno?> GetByIdAsync(string matricula)
     {
-        return await _context.Alunos.FirstOrDefaultAsync(a => a.Matricula == matricula);
+        return await _context.Alunos.FirstOrDefaultAsync(a => a.Registro == matricula);
     }
     public async Task AddAsync(Aluno aluno)
     {
