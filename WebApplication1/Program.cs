@@ -16,9 +16,11 @@ builder.Services.AddCorsConfiguration(builder.Configuration);
 builder.Services.AddProblemDetails();
 builder.Services.AddScoped<IAlunoRepository, AlunoRepository>();
 builder.Services.AddScoped<AlunoService>();
+builder.Services.AddScoped<IProfessorRepository, ProfessorRepository>();
+builder.Services.AddScoped<ProfessorService>();
+
 builder.Services.AddDbContext<EduContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
 
 var app = builder.Build();  
 
