@@ -1,4 +1,5 @@
-﻿using EduConnect.Application.Services;
+﻿using EduConnect.Application.DTO;
+using EduConnect.Application.Services;
 using EduConnect.Domain;
 using Microsoft.AspNetCore.Mvc;
 
@@ -39,15 +40,15 @@ namespace EduConnect.Controllers
             return Ok("MA" + novaMatricula);
         }
         [HttpPost]
-        public async Task<IActionResult> AddAluno(Aluno aluno)
+        public async Task<IActionResult> AddAluno(AlunoDTO dto)
         {
-            await _alunoService.AddAlunoAsync(aluno);
-            return CreatedAtAction(nameof(GetAlunoById), new { matricula = aluno.Registro }, aluno);
+            await _alunoService.AddAlunoAsync(dto);
+            return Ok();
         }
         [HttpPut("{matricula}")]
-        public async Task<IActionResult> UpdateAluno(string matricula, Aluno aluno)
+        public async Task<IActionResult> UpdateAluno(string matricula, AlunoDTO dto)
         {
-            if (matricula != aluno.Registro)
+            if (matricula != dto.Registro)
             {
                 return BadRequest();
             }
@@ -56,7 +57,7 @@ namespace EduConnect.Controllers
             {
                 return NotFound();
             }
-            await _alunoService.UpdateAlunoAsync(aluno);
+            await _alunoService.UpdateAlunoAsync(dto);
             return NoContent();
         }
         [HttpDelete("{matricula}")]

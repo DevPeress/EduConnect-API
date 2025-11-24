@@ -1,4 +1,5 @@
-﻿using EduConnect.Domain;
+﻿using EduConnect.Application.DTO;
+using EduConnect.Domain;
 using EduConnect.Domain.Interfaces;
 
 namespace EduConnect.Application.Services;
@@ -18,12 +19,42 @@ public class AlunoService(IAlunoRepository repo)
     {
         return await _alunoRepository.GetLastAlunoAsync();
     }
-    public async Task AddAlunoAsync(Aluno aluno)
+    public async Task AddAlunoAsync(AlunoDTO dto)
     {
+        var aluno = new Aluno
+        {
+            Nome = dto.Nome,
+            Email = dto.Email,
+            Telefone = dto.Telefone,
+            Status = dto.Status,
+            Nasc = dto.Nasc,
+            Endereco = dto.Endereco,
+            Cpf = dto.Cpf,
+            ContatoEmergencia = dto.ContatoEmergencia,
+            Registro = dto.Registro,
+            Turma = dto.Turma,
+            Media = dto.Media,
+            DataMatricula = dto.DataMatricula
+        };
         await _alunoRepository.AddAsync(aluno);
     }
-    public async Task UpdateAlunoAsync(Aluno aluno)
+    public async Task UpdateAlunoAsync(AlunoDTO dto)
     {
+        var aluno = new Aluno
+        {
+            Nome = dto.Nome,
+            Email = dto.Email,
+            Telefone = dto.Telefone,
+            Status = dto.Status,
+            Nasc = dto.Nasc,
+            Endereco = dto.Endereco,
+            Cpf = dto.Cpf,
+            ContatoEmergencia = dto.ContatoEmergencia,
+            Registro = dto.Registro,
+            Turma = dto.Turma,
+            Media = dto.Media,
+            DataMatricula = dto.DataMatricula
+        };
         await _alunoRepository.UpdateAsync(aluno);
     }
     public async Task DeleteAlunoAsync(string matricula)
