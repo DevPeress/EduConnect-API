@@ -1,5 +1,7 @@
-﻿using EduConnect.Application.Services;
+﻿using EduConnect.Application.DTO;
+using EduConnect.Application.Services;
 using EduConnect.Domain;
+using EduConnect.Infra.Data.Migrations;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EduConnect.Controllers
@@ -29,25 +31,25 @@ namespace EduConnect.Controllers
         [HttpGet("Cadastro")]
         public async Task<IActionResult> GetLastProfessorAsync()
         {
-            var aluno = await _professorService.GetLastProfessorAsync();
-            if (aluno == null)
+            var professor = await _professorService.GetLastProfessorAsync();
+            if (professor == null)
             {
                 return NotFound();
             }
-            var matricula = int.Parse(aluno.Registro.Substring(2));
+            var matricula = int.Parse(professor.Registro.Substring(2));
             var novaMatricula = (matricula + 1).ToString();
             return Ok("PO" + novaMatricula);
         }
         [HttpPost]
-        public async Task<IActionResult> AddProfessor(Professor professor)
+        public async Task<IActionResult> AddProfessor(ProfessorDTO dto)
         {
-            await _professorService.AddProfessorAsync(professor);
-            return CreatedAtAction(nameof(GetProfessorById), new { matricula = professor.Registro }, professor);
+            await _professorService.AddProfessorAsync(dto);
+            return Ok();
         }
         [HttpPut("{matricula}")]
-        public async Task<IActionResult> UpdateProfessor(string matricula, Professor professor)
+        public async Task<IActionResult> UpdateProfessor(string matricula, ProfessorDTO dto)
         {
-            if (matricula != professor.Registro)
+            if (matricula != dto.Registro)
             {
                 return BadRequest();
             }
@@ -56,7 +58,7 @@ namespace EduConnect.Controllers
             {
                 return NotFound();
             }
-            await _professorService.UpdateProfessorAsync(professor);
+            await _professorService.UpdateProfessorAsync(dto);
             return NoContent();
         }
         [HttpDelete("{matricula}")]
