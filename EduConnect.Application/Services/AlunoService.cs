@@ -14,6 +14,10 @@ public class AlunoService(IAlunoRepository repo)
     {
         return await _alunoRepository.GetByIdAsync(matricula);
     }
+    public async Task<Aluno?> GetLastAluno()
+    {
+        return await _alunoRepository.GetLastAlunoAsync();
+    }
     public async Task AddAlunoAsync(Aluno aluno)
     {
         await _alunoRepository.AddAsync(aluno);
