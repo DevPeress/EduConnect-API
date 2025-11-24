@@ -17,6 +17,12 @@ public class AlunoRepository(EduContext context) : IAlunoRepository
     {
         return await _context.Alunos.FirstOrDefaultAsync(a => a.Registro == matricula);
     }
+    public async Task<Aluno?> GetLastAlunoAsync()
+    {
+        return await _context.Alunos
+        .OrderBy(a => a.Registro)
+        .LastAsync();
+    }
     public async Task AddAsync(Aluno aluno)
     {
         await _context.Alunos.AddAsync(aluno);
