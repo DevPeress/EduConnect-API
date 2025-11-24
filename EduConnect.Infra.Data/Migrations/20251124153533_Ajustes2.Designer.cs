@@ -4,6 +4,7 @@ using EduConnect.Infra.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EduConnect.Infra.Data.Migrations
 {
     [DbContext(typeof(EduContext))]
-    partial class EduContextModelSnapshot : ModelSnapshot
+    [Migration("20251124153533_Ajustes2")]
+    partial class Ajustes2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,8 +38,8 @@ namespace EduConnect.Infra.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateOnly>("DataMatricula")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("DataMatricula")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -49,8 +52,8 @@ namespace EduConnect.Infra.Data.Migrations
                     b.Property<int>("Media")
                         .HasColumnType("int");
 
-                    b.Property<DateOnly>("Nasc")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("Nasc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Nome")
                         .IsRequired()
@@ -90,8 +93,8 @@ namespace EduConnect.Infra.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateOnly>("DataAdmissao")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("DataAdmissao")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Departamento")
                         .IsRequired()
@@ -105,8 +108,8 @@ namespace EduConnect.Infra.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateOnly>("Nasc")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("Nasc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Nome")
                         .IsRequired()
@@ -145,8 +148,8 @@ namespace EduConnect.Infra.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateOnly>("Contratacao")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("Contratacao")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Cpf")
                         .IsRequired()
@@ -176,8 +179,8 @@ namespace EduConnect.Infra.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateOnly>("Nasc")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("Nasc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Nome")
                         .IsRequired()
