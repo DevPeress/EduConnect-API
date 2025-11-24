@@ -18,6 +18,8 @@ builder.Services.AddScoped<IAlunoRepository, AlunoRepository>();
 builder.Services.AddScoped<AlunoService>();
 builder.Services.AddScoped<IProfessorRepository, ProfessorRepository>();
 builder.Services.AddScoped<ProfessorService>();
+builder.Services.AddScoped<IDashboardAdminRepository, DashBoardAdminRepository>();
+builder.Services.AddScoped<DashBoardAdminService>();
 
 builder.Services.AddDbContext<EduContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
