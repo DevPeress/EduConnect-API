@@ -48,10 +48,10 @@ namespace EduConnect.Controllers
             return NoContent();
         }
         [HttpDelete("{matricula}")]
-        public async Task<IActionResult> DeleteAluno(string matricula)
+        public async Task<IActionResult> DeleteProfessor(string matricula)
         {
-            var existingAluno = await _professorService.GetProfessorByIdAsync(matricula);
-            if (existingAluno == null)
+            var existingProfessor = await _professorService.GetProfessorByIdAsync(matricula);
+            if (existingProfessor == null)
             {
                 return NotFound();
             }
