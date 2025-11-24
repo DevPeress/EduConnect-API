@@ -29,9 +29,9 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 // Middleware para redirecionar HTTP para HTTPS
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 // Utilizar CORS
-app.UseCors("CorsPolicy");
+app.UseCors("restrictivePolicy");
 // Middleware de autorização
 app.UseAuthorization();
 // Mapeia controllers para requisições de API
