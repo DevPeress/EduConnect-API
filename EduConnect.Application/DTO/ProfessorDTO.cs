@@ -15,7 +15,5 @@ public class ProfessorDTO
     public string Disciplina { get; set; } = null!;
     public DateOnly Contratacao { get; set; }
     public string Formacao { get; set; } = null!;
-    public string Especializacao { get; set; } = null!;
     public decimal Salario { get; set; }
-    public string HorarioAula { get; set; } = null!;
 }
