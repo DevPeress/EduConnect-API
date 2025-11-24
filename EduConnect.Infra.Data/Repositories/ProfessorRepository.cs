@@ -17,6 +17,12 @@ public class ProfessorRepository(EduContext context) : IProfessorRepository
     {
         return await _context.Professores.FirstOrDefaultAsync(a => a.Registro == matricula);
     }
+    public async Task<Professor?> GetLastProfessorAsync()
+    {
+        return await _context.Professores
+        .OrderBy(a => a.Registro)
+        .LastAsync();
+    }
     public async Task AddAsync(Professor professor)
     {
         await _context.Professores.AddAsync(professor);
