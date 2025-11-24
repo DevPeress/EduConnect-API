@@ -26,6 +26,18 @@ namespace EduConnect.Controllers
             }
             return Ok(aluno);
         }
+        [HttpGet("Cadastro")]
+        public async Task<IActionResult> GetAlunosByCadastro()
+        {
+            var aluno = await _alunoService.GetLastAluno();
+            if (aluno == null)
+            {
+                return NotFound();
+            }
+            var matricula = int.Parse(aluno.Registro.Substring(2));
+            var novaMatricula = (matricula + 1).ToString();
+            return Ok("MA" + novaMatricula);
+        }
         [HttpPost]
         public async Task<IActionResult> AddAluno(Aluno aluno)
         {
