@@ -12,5 +12,8 @@
   <Folder Name="/4 - Infra/4.1 - Data/">
     <Project Path="EduConnect.Infra.Data/EduConnect.Infra.Data.csproj" Id="89caff7a-f5e8-490b-83e5-06b5e9c1f287" />
   </Folder>
+  <Folder Name="/4 - Infra/4.2 - IoC/">
+    <Project Path="EduConnect.Infra.IoC/EduConnect.Infra.IoC.csproj" Id="07690f56-eb56-4a4e-9a70-23c4d6906e11" />
+  </Folder>
   <Folder Name="/5 - Tests/" />
 </Solution>
