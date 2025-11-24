@@ -6,7 +6,5 @@ public class Professor : Pessoa
     public required string Disciplina { get; set; }
     public required DateOnly Contratacao { get; set; }
     public required string Formacao { get; set; }
-    public required string Especializacao { get; set; }
-    public required decimal Salario { get; set; }
-    public required string HorarioAula { get; set; }
+    public required decimal Salario { get; set; } = decimal.Zero;
 }
