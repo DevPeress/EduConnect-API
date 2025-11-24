@@ -14,6 +14,10 @@ public class ProfessorService(IProfessorRepository repo)
     {
         return await _professorRepository.GetByIdAsync(matricula);
     }
+    public async Task<Professor?> GetLastProfessorAsync()
+    {
+        return await _professorRepository.GetLastProfessorAsync();
+    }
     public async Task AddProfessorAsync(Professor professor)
     {
         await _professorRepository.AddAsync(professor);
