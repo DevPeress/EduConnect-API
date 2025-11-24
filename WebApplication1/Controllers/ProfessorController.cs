@@ -26,6 +26,18 @@ namespace EduConnect.Controllers
             }
             return Ok(professores);
         }
+        [HttpGet("Cadastro")]
+        public async Task<IActionResult> GetLastProfessorAsync()
+        {
+            var aluno = await _professorService.GetLastProfessorAsync();
+            if (aluno == null)
+            {
+                return NotFound();
+            }
+            var matricula = int.Parse(aluno.Registro.Substring(2));
+            var novaMatricula = (matricula + 1).ToString();
+            return Ok("PO" + novaMatricula);
+        }
         [HttpPost]
         public async Task<IActionResult> AddProfessor(Professor professor)
         {
