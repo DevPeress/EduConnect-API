@@ -1,5 +1,6 @@
-﻿using EduConnect.Application.Services;
-using EduConnect.Domain;
+﻿using EduConnect.Application.DTO;
+using EduConnect.Application.Services;
+using EduConnect.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EduConnect.Controllers
@@ -17,9 +18,9 @@ namespace EduConnect.Controllers
             return Ok(funcionarios);
         }
         [HttpGet("{matricula}")]
-        public async Task<IActionResult> GetFuncionarioById(string matricula)
+        public async Task<IActionResult> GetFuncionarioById(Guid id)
         {
-            var funcionarios = await _funcionarioService.GetFuncionarioByIdAsync(matricula);
+            var funcionarios = await _funcionarioService.GetFuncionarioByIdAsync(id);
             if (funcionarios == null)
             {
                 return NotFound();
@@ -27,35 +28,35 @@ namespace EduConnect.Controllers
             return Ok(funcionarios);
         }
         [HttpPost]
-        public async Task<IActionResult> AddFuncionario(Funcionario funcionario)
+        public async Task<IActionResult> AddFuncionario(FuncionarioDTO dto)
         {
-            await _funcionarioService.AddFuncionarioAsync(funcionario);
-            return CreatedAtAction(nameof(GetFuncionarioById), new { matricula = funcionario.Registro }, funcionario);
+            await _funcionarioService.AddFuncionarioAsync(dto);
+            return Ok();
         }
         [HttpPut("{matricula}")]
-        public async Task<IActionResult> UpdateFuncionario(string matricula, Funcionario funcionario)
+        public async Task<IActionResult> UpdateFuncionario(Guid id, FuncionarioDTO dto)
         {
-            if (matricula != funcionario.Registro)
+            if (id != dto.Id)
             {
                 return BadRequest();
             }
-            var existingFuncionario = await _funcionarioService.GetFuncionarioByIdAsync(matricula);
+            var existingFuncionario = await _funcionarioService.GetFuncionarioByIdAsync(id);
             if (existingFuncionario == null)
             {
                 return NotFound();
             }
-            await _funcionarioService.UpdateFuncionarioAsync(funcionario);
+            await _funcionarioService.UpdateFuncionarioAsync(dto);
             return NoContent();
         }
         [HttpDelete("{matricula}")]
-        public async Task<IActionResult> DeleteFuncionario(string matricula)
+        public async Task<IActionResult> DeleteFuncionario(Guid id)
         {
-            var existingFuncionario = await _funcionarioService.GetFuncionarioByIdAsync(matricula);
+            var existingFuncionario = await _funcionarioService.GetFuncionarioByIdAsync(id);
             if (existingFuncionario == null)
             {
                 return NotFound();
             }
-            await _funcionarioService.DeleteFuncionarioAsync(matricula);
+            await _funcionarioService.DeleteFuncionarioAsync(id);
             return NoContent();
         }
     }
