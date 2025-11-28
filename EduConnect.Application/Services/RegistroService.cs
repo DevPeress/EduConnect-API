@@ -26,7 +26,8 @@ public class RegistroService(IRegistroRepository repo)
             Id = Guid.NewGuid(),
             Tipo = dto.Tipo,
             Descricao = dto.Descricao,
-            Horario = DateTime.Now
+            Horario = DateTime.Now,
+            PessoaId = dto.Id
         };
         await _registroRepository.AddRegistroAsync(registro);
     }
@@ -37,7 +38,8 @@ public class RegistroService(IRegistroRepository repo)
             Id = dto.Id,
             Tipo = dto.Tipo,
             Descricao = dto.Descricao,
-            Horario = dto.Horario
+            Horario = dto.Horario,
+            PessoaId = dto.Id
         };
         await _registroRepository.UpdateRegistroAsync(registro);
     }
