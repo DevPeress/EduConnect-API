@@ -6,4 +6,5 @@ public class Registro
     public required string Tipo { get; set; }
     public required string Descricao { get; set; }
     public required DateTime Horario { get; set; }
+    public required Guid PessoaId { get; set; }
 }
