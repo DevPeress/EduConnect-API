@@ -13,9 +13,9 @@ public class FuncionarioRepository(EduContext context) : IFuncionarioRepository
     {
         return await _context.Funcionarios.ToListAsync();
     }
-    public async Task<Funcionario?> GetByIdAsync(string matricula)
+    public async Task<Funcionario?> GetByIdAsync(Guid id)
     {
-        return await _context.Funcionarios.FirstOrDefaultAsync(a => a.Registro == matricula);
+        return await _context.Funcionarios.FirstOrDefaultAsync(a => a.Id == id);
     }
     public async Task AddAsync(Funcionario funcionario)
     {
@@ -27,9 +27,9 @@ public class FuncionarioRepository(EduContext context) : IFuncionarioRepository
         _context.Funcionarios.Update(funcionario);
         await _context.SaveChangesAsync();
     }
-    public async Task DeleteAsync(string matricula)
+    public async Task DeleteAsync(Guid id)
     {
-        var funcionario = await GetByIdAsync(matricula);
+        var funcionario = await GetByIdAsync(id);
         if (funcionario != null)
         {
             _context.Funcionarios.Remove(funcionario);
