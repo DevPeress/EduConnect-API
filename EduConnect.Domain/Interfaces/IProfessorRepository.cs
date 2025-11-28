@@ -1,11 +1,12 @@
-﻿namespace EduConnect.Domain.Interfaces;
+﻿using EduConnect.Domain.Entities;
 
+namespace EduConnect.Domain.Interfaces;
 public interface IProfessorRepository
 {
     Task<List<Professor>> GetAllAsync();
-    Task<Professor?> GetByIdAsync(string matricula);
+    Task<Professor?> GetByIdAsync(Guid id);
     Task<Professor?> GetLastProfessorAsync();
     Task AddAsync(Professor professor);
     Task UpdateAsync(Professor professor);
-    Task DeleteAsync(string matricula);
+    Task DeleteAsync(Guid id);
 }
