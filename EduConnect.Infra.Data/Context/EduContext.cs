@@ -10,4 +10,22 @@ public class EduContext(DbContextOptions<EduContext> options) : DbContext(option
     public DbSet<Professor> Professores { get; set; }
     public DbSet<Funcionario> Funcionarios { get; set; }
     public DbSet<Registro> Registros { get; set; }
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+        var tipos = new List<Type>
+        {
+            typeof(Aluno),
+            typeof(Professor),
+            typeof(Funcionario)
+        };
+
+        // 🔒 Impede que existam 2 tipos com a mesma matrícula
+        foreach (var tipo in tipos)
+        {
+            modelBuilder.Entity(tipo)
+                .HasIndex("Registro")
+            .IsUnique();
+        }
+    }
 }
