@@ -1,7 +1,7 @@
 ﻿namespace EduConnect.Application.DTO;
-
 public class AlunoDTO
 {
+    public Guid Id { get; set; }
     public string Registro { get; set; } = null!;
     public string Nome { get; set; } = null!;
     public string Email { get; set; } = null!;
