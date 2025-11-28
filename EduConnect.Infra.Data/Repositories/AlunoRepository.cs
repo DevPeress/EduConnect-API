@@ -1,4 +1,4 @@
-﻿using EduConnect.Domain.Entities;
+﻿using EduConnect.Domain;
 using EduConnect.Domain.Interfaces;
 using EduConnect.Infra.Data.Context;
 using Microsoft.EntityFrameworkCore;
@@ -13,9 +13,9 @@ public class AlunoRepository(EduContext context) : IAlunoRepository
     {
         return await _context.Alunos.ToListAsync();
     }
-    public async Task<Aluno?> GetByIdAsync(Guid id)
+    public async Task<Aluno?> GetByIdAsync(string matricula)
     {
-        return await _context.Alunos.FirstOrDefaultAsync(a => a.Id == id);
+        return await _context.Alunos.FirstOrDefaultAsync(a => a.Registro == matricula);
     }
     public async Task<Aluno?> GetLastAlunoAsync()
     {
@@ -33,9 +33,9 @@ public class AlunoRepository(EduContext context) : IAlunoRepository
         _context.Alunos.Update(aluno);
         await _context.SaveChangesAsync();
     }
-    public async Task DeleteAsync(Guid id)
+    public async Task DeleteAsync(string matricula)
     {
-        var aluno = await GetByIdAsync(id);
+        var aluno = await GetByIdAsync(matricula);
         if (aluno != null)
         {
             _context.Alunos.Remove(aluno);

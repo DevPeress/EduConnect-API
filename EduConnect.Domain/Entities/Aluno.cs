@@ -1,4 +1,4 @@
-﻿namespace EduConnect.Domain.Entities;
+﻿namespace EduConnect.Domain;
 
 public class Aluno : Pessoa
 {

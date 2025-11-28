@@ -1,8 +1,9 @@
 ﻿using EduConnect.Application.DTO;
-using EduConnect.Domain.Entities;
+using EduConnect.Domain;
 using EduConnect.Domain.Interfaces;
 
 namespace EduConnect.Application.Services;
+
 public class AlunoService(IAlunoRepository repo)
 {
     private readonly IAlunoRepository _alunoRepository = repo;
@@ -10,9 +11,9 @@ public class AlunoService(IAlunoRepository repo)
     {
         return await _alunoRepository.GetAllAsync();
     }
-    public async Task<Aluno?> GetAlunoByIdAsync(Guid id)
+    public async Task<Aluno?> GetAlunoByIdAsync(string matricula)
     {
-        return await _alunoRepository.GetByIdAsync(id);
+        return await _alunoRepository.GetByIdAsync(matricula);
     }
     public async Task<Aluno?> GetLastAluno()
     {
@@ -22,7 +23,6 @@ public class AlunoService(IAlunoRepository repo)
     {
         var aluno = new Aluno
         {
-            Id = Guid.NewGuid(),
             Nome = dto.Nome,
             Email = dto.Email,
             Telefone = dto.Telefone,
@@ -42,7 +42,6 @@ public class AlunoService(IAlunoRepository repo)
     {
         var aluno = new Aluno
         {
-            Id = dto.Id,
             Nome = dto.Nome,
             Email = dto.Email,
             Telefone = dto.Telefone,
@@ -58,8 +57,8 @@ public class AlunoService(IAlunoRepository repo)
         };
         await _alunoRepository.UpdateAsync(aluno);
     }
-    public async Task DeleteAlunoAsync(Guid id)
+    public async Task DeleteAlunoAsync(string matricula)
     {
-        await _alunoRepository.DeleteAsync(id);
+        await _alunoRepository.DeleteAsync(matricula);
     }
 }
