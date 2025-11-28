@@ -1,7 +1,6 @@
 ﻿using EduConnect.Application.DTO;
 using EduConnect.Application.Services;
-using EduConnect.Domain;
-using EduConnect.Infra.Data.Migrations;
+using EduConnect.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EduConnect.Controllers
@@ -19,9 +18,9 @@ namespace EduConnect.Controllers
             return Ok(professores);
         }
         [HttpGet("{matricula}")]
-        public async Task<IActionResult> GetProfessorById(string matricula)
+        public async Task<IActionResult> GetProfessorById(Guid id)
         {
-            var professores = await _professorService.GetProfessorByIdAsync(matricula);
+            var professores = await _professorService.GetProfessorByIdAsync(id);
             if (professores == null)
             {
                 return NotFound();
@@ -47,13 +46,13 @@ namespace EduConnect.Controllers
             return Ok();
         }
         [HttpPut("{matricula}")]
-        public async Task<IActionResult> UpdateProfessor(string matricula, ProfessorDTO dto)
+        public async Task<IActionResult> UpdateProfessor(Guid id, ProfessorDTO dto)
         {
-            if (matricula != dto.Registro)
+            if (id != dto.Id)
             {
                 return BadRequest();
             }
-            var existingProfessor = await _professorService.GetProfessorByIdAsync(matricula);
+            var existingProfessor = await _professorService.GetProfessorByIdAsync(id);
             if (existingProfessor == null)
             {
                 return NotFound();
@@ -62,14 +61,14 @@ namespace EduConnect.Controllers
             return NoContent();
         }
         [HttpDelete("{matricula}")]
-        public async Task<IActionResult> DeleteProfessor(string matricula)
+        public async Task<IActionResult> DeleteProfessor(Guid id)
         {
-            var existingProfessor = await _professorService.GetProfessorByIdAsync(matricula);
+            var existingProfessor = await _professorService.GetProfessorByIdAsync(id);
             if (existingProfessor == null)
             {
                 return NotFound();
             }
-            await _professorService.DeleteProfessorAsync(matricula);
+            await _professorService.DeleteProfessorAsync(id);
             return NoContent();
         }
     }
