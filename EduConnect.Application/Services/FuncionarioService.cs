@@ -1,4 +1,4 @@
-﻿using EduConnect.Domain;
+﻿using EduConnect.Domain.Entities;
 using EduConnect.Domain.Interfaces;
 
 namespace EduConnect.Application.Services;
@@ -10,9 +10,9 @@ public class FuncionarioService(IFuncionarioRepository repo)
     {
         return await _funcionarioRepository.GetAllAsync();
     }
-    public async Task<Funcionario?> GetFuncionarioByIdAsync(string matricula)
+    public async Task<Funcionario?> GetFuncionarioByIdAsync(Guid id)
     {
-        return await _funcionarioRepository.GetByIdAsync(matricula);
+        return await _funcionarioRepository.GetByIdAsync(id);
     }
     public async Task AddFuncionarioAsync(Funcionario funcionario)
     {
@@ -22,8 +22,8 @@ public class FuncionarioService(IFuncionarioRepository repo)
     {
         await _funcionarioRepository.UpdateAsync(funcionario);
     }
-    public async Task DeleteFuncionarioAsync(string matricula)
+    public async Task DeleteFuncionarioAsync(Guid id)
     {
-        await _funcionarioRepository.DeleteAsync(matricula);
+        await _funcionarioRepository.DeleteAsync(id);
     }
 }
