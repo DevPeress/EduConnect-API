@@ -1,6 +1,5 @@
 ﻿using EduConnect.Application.DTO;
 using EduConnect.Application.Services;
-using EduConnect.Domain;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EduConnect.Controllers
@@ -18,9 +17,9 @@ namespace EduConnect.Controllers
             return Ok(alunos);
         }
         [HttpGet("{matricula}")]
-        public async Task<IActionResult> GetAlunoById(string matricula)
+        public async Task<IActionResult> GetAlunoById(Guid id)
         {
-            var aluno = await _alunoService.GetAlunoByIdAsync(matricula);
+            var aluno = await _alunoService.GetAlunoByIdAsync(id);
             if (aluno == null)
             {
                 return NotFound();
@@ -46,13 +45,13 @@ namespace EduConnect.Controllers
             return Ok();
         }
         [HttpPut("{matricula}")]
-        public async Task<IActionResult> UpdateAluno(string matricula, AlunoDTO dto)
+        public async Task<IActionResult> UpdateAluno(Guid id, AlunoDTO dto)
         {
-            if (matricula != dto.Registro)
+            if (id != dto.Id)
             {
                 return BadRequest();
             }
-            var existingAluno = await _alunoService.GetAlunoByIdAsync(matricula);
+            var existingAluno = await _alunoService.GetAlunoByIdAsync(id);
             if (existingAluno == null)
             {
                 return NotFound();
@@ -61,14 +60,14 @@ namespace EduConnect.Controllers
             return NoContent();
         }
         [HttpDelete("{matricula}")]
-        public async Task<IActionResult> DeleteAluno(string matricula)
+        public async Task<IActionResult> DeleteAluno(Guid id)
         {
-            var existingAluno = await _alunoService.GetAlunoByIdAsync(matricula);
+            var existingAluno = await _alunoService.GetAlunoByIdAsync(id);
             if (existingAluno == null)
             {
                 return NotFound();
             }
-            await _alunoService.DeleteAlunoAsync(matricula);
+            await _alunoService.DeleteAlunoAsync(id);
             return NoContent();
         }
     }
