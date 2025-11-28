@@ -1,4 +1,4 @@
-﻿namespace EduConnect.Domain;
+﻿namespace EduConnect.Domain.Entities;
 
 public class Professor : Pessoa
 {
