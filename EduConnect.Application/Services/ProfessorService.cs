@@ -1,5 +1,5 @@
 ﻿using EduConnect.Application.DTO;
-using EduConnect.Domain;
+using EduConnect.Domain.Entities;
 using EduConnect.Domain.Interfaces;
 
 namespace EduConnect.Application.Services;
@@ -11,9 +11,9 @@ public class ProfessorService(IProfessorRepository repo)
     {
         return await _professorRepository.GetAllAsync();
     }
-    public async Task<Professor?> GetProfessorByIdAsync(string matricula)
+    public async Task<Professor?> GetProfessorByIdAsync(Guid id)
     {
-        return await _professorRepository.GetByIdAsync(matricula);
+        return await _professorRepository.GetByIdAsync(id);
     }
     public async Task<Professor?> GetLastProfessorAsync()
     {
@@ -23,6 +23,7 @@ public class ProfessorService(IProfessorRepository repo)
     {
         var professor = new Professor
         {
+            Id = Guid.NewGuid(),
             Nome = dto.Nome,
             Email = dto.Email,
             Telefone = dto.Telefone,
@@ -44,6 +45,7 @@ public class ProfessorService(IProfessorRepository repo)
     {
         var professor = new Professor
         {
+            Id = dto.Id,
             Nome = dto.Nome,
             Email = dto.Email,
             Telefone = dto.Telefone,
@@ -61,8 +63,8 @@ public class ProfessorService(IProfessorRepository repo)
         };
         await _professorRepository.UpdateAsync(professor);
     }
-    public async Task DeleteProfessorAsync(string matricula)
+    public async Task DeleteProfessorAsync(Guid id)
     {
-        await _professorRepository.DeleteAsync(matricula);
+        await _professorRepository.DeleteAsync(id);
     }
 }
