@@ -22,6 +22,8 @@ namespace EduConnect.Infra.IoC
             services.AddScoped<ProfessorService>();
             services.AddScoped<IDashboardAdminRepository, DashBoardAdminRepository>();
             services.AddScoped<DashBoardAdminService>();
+            services.AddScoped<IRegistroRepository, RegistroRepository>();
+            services.AddScoped<RegistroService>();
         }
     }
 }
