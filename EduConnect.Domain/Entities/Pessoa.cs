@@ -5,6 +5,7 @@ namespace EduConnect.Domain;
 public class Pessoa
 {
     [Key]
+    public required Guid Id { get; set; }
     public required string Registro { get; set; }
     public required string Nome { get; set; }
     public required string Email { get; set; }
