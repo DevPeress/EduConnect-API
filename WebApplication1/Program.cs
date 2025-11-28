@@ -4,7 +4,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-builder.Services.AddOpenApi();
+//builder.Services.AddOpenApi();
 builder.Services.AddApiConfiguration();
 builder.Services.AddAuthorizationConfiguration();
 builder.Services.AddDependencyInjectionConfiguration(builder.Configuration);
