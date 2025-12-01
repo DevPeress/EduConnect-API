@@ -1,5 +1,4 @@
-﻿using EduConnect.Domain;
-using EduConnect.Domain.Entities;
+﻿using EduConnect.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace EduConnect.Infra.Data.Context;
@@ -10,6 +9,7 @@ public class EduContext(DbContextOptions<EduContext> options) : DbContext(option
     public DbSet<Professor> Professores { get; set; }
     public DbSet<Funcionario> Funcionarios { get; set; }
     public DbSet<Registro> Registros { get; set; }
+    public DbSet<Financeiro> Financeiros { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
