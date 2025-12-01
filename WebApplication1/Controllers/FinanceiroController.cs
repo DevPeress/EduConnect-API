@@ -41,28 +41,16 @@ namespace EduConnect.Controllers
 
             return Ok(financeiroDTOs);
         }
+        [HttpGet("filtro/categoria={categoria}&status={status}&data={data}")]
+        public async Task<IActionResult> GetByFilters(string categoria, string status, string data)
+        {
+            var financeiros = await _financeiroService.GetByFilters(categoria, status, data);
+            return Ok(financeiros);
+        }
         [HttpGet("aluno/{alunoId}")]
         public async Task<IActionResult> GetByAlunoId(Guid alunoId)
         {
             var financeiros = await _financeiroService.GetByAlunoId(alunoId);
-            return Ok(financeiros);
-        }
-        [HttpGet("categoria/{categoria}")]
-        public async Task<IActionResult> GetByCategoria(string categoria)
-        {
-            var financeiros = await _financeiroService.GetByCategoria(categoria);
-            return Ok(financeiros);
-        }
-        [HttpGet("status/{status}")]
-        public async Task<IActionResult> GetByStatus(string status)
-        {
-            var financeiros = await _financeiroService.GetByStatus(status);
-            return Ok(financeiros);
-        }
-        [HttpGet("daterange")]
-        public async Task<IActionResult> GetByDateRange([FromQuery] DateOnly startDate, [FromQuery] DateOnly endDate)
-        {
-            var financeiros = await _financeiroService.GetByDateRange(startDate, endDate);
             return Ok(financeiros);
         }
         [HttpGet("{id}")]
