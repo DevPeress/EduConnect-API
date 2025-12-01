@@ -15,17 +15,9 @@ public class FinanceiroService(IFinanceiroRepository repo)
     {
         return await _financeiroRepository.GetByAlunoId(id);
     }
-    public async Task<List<Financeiro>> GetByCategoria(string categoria)
+    public async Task<List<Financeiro>> GetByFilters(string categoria, string status, string data)
     {
-        return await _financeiroRepository.GetByCategoria(categoria);
-    }
-    public async Task<List<Financeiro>> GetByStatus(string status)
-    {
-        return await _financeiroRepository.GetByStatus(status);
-    }
-    public async Task<List<Financeiro>> GetByDateRange(DateOnly startDate, DateOnly endDate)
-    {
-        return await _financeiroRepository.GetByDateRange(startDate, endDate);
+        return await _financeiroRepository.GetByFilters(categoria, status, data);
     }
     public async Task<Financeiro?> GetById(Guid id)
     {
