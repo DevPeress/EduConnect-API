@@ -2,6 +2,7 @@
 using EduConnect.Domain.Interfaces;
 using EduConnect.Infra.Data.Context;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 namespace EduConnect.Infra.Data.Repositories;
 
@@ -16,41 +17,71 @@ public class FinanceiroRepository(EduContext context) : IFinanceiroRepository
     {
         return await _context.Financeiros.Where(dados => dados.AlunoId == alunoId).ToListAsync();
     }
-    public async Task<List<Financeiro>> GetByCategoria(string categoria)
+    public async Task<List<Financeiro>> GetByFilters(string categoria, string status, string data)
     {
-        return await _context.Financeiros.Where(dados => dados.Categoria == categoria).ToListAsync();
-    }
-    public async Task<List<Financeiro>> GetByStatus(string status)
-    {
-        if (status == "Pago")
+        List<Financeiro> resultados = await GetAll();
+        if (status == "Todos os Status" && categoria == "Todas as Categorias" && data == "Todas as Datas")
         {
-            return await _context.Financeiros.Where(dados => dados.Pago == true).ToListAsync();
-        } 
-        else if (status == "Pendente")
-        {
-            return await _context.Financeiros.Where(dados => dados.Pago == false).ToListAsync();
+            return resultados;
         }
-        else if (status == "Atrasado")
+
+        if (categoria != "Todas as Categorias")
+        {
+            foreach (var dados in resultados.ToList())
+            {
+                if (dados.Categoria != categoria)
+                {
+                    resultados.Remove(dados);
+                }
+            }
+        }
+
+        if (status != "Todos os Status")
+        {
+            foreach (var dados in resultados.ToList())
+            {
+                if (status == "Pago" && dados.Pago == false)
+                {
+                    resultados.Remove(dados);
+                }
+                else if (status == "Pendente" && dados.Pago == true)
+                {
+                    resultados.Remove(dados);
+                }
+                else if (status == "Atrasado")
+                {
+                    var today = DateOnly.FromDateTime(DateTime.Now);
+                    if (!(dados.Pago == false && dados.DataVencimento < today))
+                    {
+                        resultados.Remove(dados);
+                    }
+                }
+                else if (status == "Cancelado" && dados.Cancelado == false)
+                {
+                    resultados.Remove(dados);
+                }
+            }
+        }
+
+        if (data != "Todas as Datas")
         {
             var today = DateOnly.FromDateTime(DateTime.Now);
-            return await _context.Financeiros
-                .Where(dados => dados.Pago == false && dados.DataVencimento < today)
-                .ToListAsync();
+            foreach (var dados in resultados.ToList())
+            {
+                int mesSelecionado = DateTime.ParseExact(
+                    data,
+                    "MMMM",
+                    new CultureInfo("pt-BR"),
+                    DateTimeStyles.None
+                ).Month;
+                if (mesSelecionado != dados.DataVencimento.Month)
+                {
+                    resultados.Remove(dados);
+                }
+            }
         }
-        else if (status == "Cancelado")
-        {
-            return await _context.Financeiros.Where(dados => dados.Cancelado == true).ToListAsync();
-        }
-        else
-        {
-            return await GetAll();
-        }
-    }
-    public async Task<List<Financeiro>> GetByDateRange(DateOnly startDate, DateOnly endDate)
-    {
-        return await _context.Financeiros
-            .Where(dados => dados.DataVencimento >= startDate && dados.DataVencimento <= endDate)
-            .ToListAsync();
+
+        return resultados;
     }
     public async Task<Financeiro?> GetById(Guid id)
     {
