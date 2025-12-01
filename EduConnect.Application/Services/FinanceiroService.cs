@@ -35,7 +35,7 @@ public class FinanceiroService(IFinanceiroRepository repo)
     {
         var financeiro = new Financeiro
         {
-            Id = Guid.NewGuid(),
+            Registro = Guid.NewGuid(),
             AlunoId = dto.AlunoId,
             Categoria = dto.Categoria,
             Valor = dto.Valor,
@@ -50,7 +50,7 @@ public class FinanceiroService(IFinanceiroRepository repo)
     {
         var financeiro = new Financeiro
         {
-            Id = dto.Id,
+            Registro = dto.Registro,
             AlunoId = dto.AlunoId,
             Categoria = dto.Categoria,
             Valor = dto.Valor,
