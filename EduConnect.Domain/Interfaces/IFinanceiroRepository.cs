@@ -6,9 +6,7 @@ public interface IFinanceiroRepository
 {
     Task<List<Financeiro>> GetAll();
     Task <List<Financeiro>> GetByAlunoId(Guid alunoId);
-    Task <List<Financeiro>> GetByCategoria(string categoria);
-    Task <List<Financeiro>> GetByStatus(string status);
-    Task <List<Financeiro>> GetByDateRange(DateOnly startDate, DateOnly endDate);
+    Task <List<Financeiro>> GetByFilters(string categoria, string status, string data);
     Task <Financeiro?> GetById(Guid id);
     Task Add(Financeiro financeiro);
     Task Update(Financeiro financeiro);
