@@ -6,14 +6,40 @@ namespace EduConnect.Controllers
 {
     [ApiController]
     [Route("api/financeiro")]
-    public class FinanceiroController(FinanceiroService service) : ControllerBase
+    public class FinanceiroController(FinanceiroService service, AlunoService alunoService) : ControllerBase
     {
         private readonly FinanceiroService _financeiroService = service;
+        private readonly AlunoService _alunoService = alunoService;
         [HttpGet]
         public async Task<IActionResult> GetAllFinanceiros()
         {
             var financeiros = await _financeiroService.GetAllFinanceirosAsync();
-            return Ok(financeiros);
+            var financeiroDTOs = new List<FinanceiroDTO>();
+
+            foreach (var f in financeiros)
+            {
+                var aluno = await _alunoService.GetAlunoByIdAsync(f.AlunoId);
+                if (aluno == null)
+                {
+                    continue;
+                }
+                var dto = new FinanceiroDTO
+                {
+                    Registro = f.Registro,
+                    AlunoId = f.AlunoId,
+                    Categoria = f.Categoria,
+                    Valor = f.Valor,
+                    DataVencimento = f.DataVencimento,
+                    Pago = f.Pago,
+                    DataPagamento = f.DataPagamento,
+                    Cancelado = f.Cancelado,
+                    Aluno = aluno.Nome,
+                    Nasc = aluno.Nasc
+                };
+                financeiroDTOs.Add(dto);
+            }
+
+            return Ok(financeiroDTOs);
         }
         [HttpGet("aluno/{alunoId}")]
         public async Task<IActionResult> GetByAlunoId(Guid alunoId)
