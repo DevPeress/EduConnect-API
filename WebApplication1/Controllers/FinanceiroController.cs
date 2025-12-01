@@ -84,8 +84,8 @@ namespace EduConnect.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateFinanceiro(Guid id, FinanceiroDTO dto)
         {
-            if (id != dto.Id)
-            {
+            if (id != dto.Registro)
+            {ete
                 return BadRequest();
             }
             var existingFinanceiro = await _financeiroService.GetById(id);
