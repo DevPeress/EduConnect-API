@@ -6,8 +6,8 @@ public interface IRegistroRepository
 {
     Task<List<Registro>> GetRegistrosAsync();
     Task<List<Registro>> GetLastRegistrosAync();
-    Task<Registro?> GetRegistroByIdAsync(Guid id);
+    Task<Registro?> GetRegistroByIdAsync(int registro);
     Task AddRegistroAsync(Registro registro);
     Task UpdateRegistroAsync(Registro registro);
-    Task DeleteRegistroAsync(Guid id);
+    Task DeleteRegistroAsync(int registro);
 }
