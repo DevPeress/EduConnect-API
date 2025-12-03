@@ -9,4 +9,9 @@ public class FiltroBase
     {
         return (Page == 1) ? 0 : (Page - 1) * Limit;
     }
+
+    public void AlterarLimit(int novoLimit)
+    {
+        Limit = novoLimit;
+    }
 }
