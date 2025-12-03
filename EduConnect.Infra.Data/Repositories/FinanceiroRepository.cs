@@ -1,5 +1,4 @@
-﻿using EduConnect.Application.DTO;
-using EduConnect.Domain.Entities;
+﻿using EduConnect.Domain.Entities;
 using EduConnect.Domain.Interfaces;
 using EduConnect.Infra.Data.Context;
 using Microsoft.EntityFrameworkCore;
