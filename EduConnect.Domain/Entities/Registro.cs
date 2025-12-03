@@ -2,7 +2,7 @@
 
 public class Registro
 {
-    public required Guid Id { get; set; }
+    public required int Id { get; set; }
     public required string Tipo { get; set; }
     public required string Descricao { get; set; }
     public required DateTime Horario { get; set; }

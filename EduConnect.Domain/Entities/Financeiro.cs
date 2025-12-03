@@ -5,8 +5,8 @@ namespace EduConnect.Domain.Entities;
 public class Financeiro
 {
     [Key]
-    public Guid Registro { get; set; }
-    public Guid AlunoId { get; set; }
+    public int Registro { get; set; }
+    public int AlunoId { get; set; }
     public required string Categoria { get; set; }
     public decimal Valor { get; set; }
     public DateOnly DataVencimento { get; set; }
