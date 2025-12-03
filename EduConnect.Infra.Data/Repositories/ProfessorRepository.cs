@@ -13,7 +13,7 @@ public class ProfessorRepository(EduContext context) : IProfessorRepository
     {
         return await _context.Professores.ToListAsync();
     }
-    public async Task<Professor?> GetByIdAsync(Guid id)
+    public async Task<Professor?> GetByIdAsync(int id)
     {
         return await _context.Professores.FirstOrDefaultAsync(a => a.Id == id);
     }
@@ -33,7 +33,7 @@ public class ProfessorRepository(EduContext context) : IProfessorRepository
         _context.Professores.Update(professor);
         await _context.SaveChangesAsync();
     }
-    public async Task DeleteAsync(Guid id)
+    public async Task DeleteAsync(int id)
     {
         var professor = await GetByIdAsync(id);
         if (professor != null)
