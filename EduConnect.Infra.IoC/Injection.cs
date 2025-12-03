@@ -12,7 +12,6 @@ namespace EduConnect.Infra.IoC
     {
         public static void RegisterServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddScoped<ProfessorRepository, ProfessorRepository>();
             services.AddDbContext<EduContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
