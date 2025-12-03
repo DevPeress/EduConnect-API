@@ -7,6 +7,7 @@ public record RegistroDTO
     public string Tipo { get; init; } = null!;
     public string Descricao { get; init; } = null!;
     public DateTime Horario { get; init; } = DateTime.Now;
+    public int PessoaId { get; init; } 
 
     public RegistroDTO (Registro dados)
     {
@@ -14,5 +15,6 @@ public record RegistroDTO
         Tipo = dados.Tipo;
         Descricao = dados.Descricao;
         Horario = dados.Horario;
+        PessoaId = dados.PessoaId;
     }
 }

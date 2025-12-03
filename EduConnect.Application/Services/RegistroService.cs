@@ -23,11 +23,11 @@ public class RegistroService(IRegistroRepository repo)
     {
         var registro = new Registro
         {
-            Id = Guid.NewGuid(),
+            Id = dto.Id,
             Tipo = dto.Tipo,
             Descricao = dto.Descricao,
             Horario = DateTime.Now,
-            PessoaId = dto.Id
+            PessoaId = dto.PessoaId
         };
         await _registroRepository.AddRegistroAsync(registro);
     }
