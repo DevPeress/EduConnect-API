@@ -2,6 +2,7 @@
 
 public record PessoaDTO
 {
+    public required int Id { get; init; }
     public required string Registro { get; init; }
     public required string Nome { get; init; }
     public required string Email { get; init; }
