@@ -25,6 +25,18 @@ public class FinanceiroService(IFinanceiroRepository repo)
         };
         return await _financeiroRepository.GetByFilters(filtro);
     }
+    public async Task<decimal> GetRecebidosAsync()
+    {
+        return await _financeiroRepository.GetRecebidos();
+    }
+    public async Task<decimal> GetPendentesAsync()
+    {
+        return await _financeiroRepository.GetPendentes();
+    }
+    public async Task<decimal> GetAtrasadosAsync()
+    {
+        return await _financeiroRepository.GetAtrasados();
+    }
     public async Task<Financeiro?> GetById(int id)
     {
         return await _financeiroRepository.GetById(id);
