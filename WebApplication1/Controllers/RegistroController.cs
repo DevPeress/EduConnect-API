@@ -22,7 +22,7 @@ namespace EduConnect.Controllers
             return Ok(registros);
         }
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetRegistroById(Guid id)
+        public async Task<IActionResult> GetRegistroById(int id)
         {
             var registro = await _registroService.GetRegistroByIdAsync(id);
             return Ok(registro);
@@ -34,7 +34,7 @@ namespace EduConnect.Controllers
             return Ok();
         }
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateRegistro(Guid id, RegistroDTO dto)
+        public async Task<IActionResult> UpdateRegistro(int id, RegistroDTO dto)
         {
             if (id != dto.Id)
             {
@@ -49,7 +49,7 @@ namespace EduConnect.Controllers
             return Ok();
         }
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteRegistro(Guid id)
+        public async Task<IActionResult> DeleteRegistro(int id)
         {
             await _registroService.DeleteRegistroAsync(id);
             return Ok();
