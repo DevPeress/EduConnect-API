@@ -11,7 +11,7 @@ public class FuncionarioService(IFuncionarioRepository repo)
     {
         return await _funcionarioRepository.GetAllAsync();
     }
-    public async Task<Funcionario?> GetFuncionarioByIdAsync(Guid id)
+    public async Task<Funcionario?> GetFuncionarioByIdAsync(int id)
     {
         return await _funcionarioRepository.GetByIdAsync(id);
     }
@@ -19,7 +19,6 @@ public class FuncionarioService(IFuncionarioRepository repo)
     {
         var funcionario = new Funcionario
         {
-            Id = Guid.NewGuid(),
             Nome = dto.Nome,
             Email = dto.Email,
             Telefone = dto.Telefone,
@@ -61,7 +60,7 @@ public class FuncionarioService(IFuncionarioRepository repo)
         };
         await _funcionarioRepository.UpdateAsync(funcionario);
     }
-    public async Task DeleteFuncionarioAsync(Guid id)
+    public async Task DeleteFuncionarioAsync(int id)
     {
         await _funcionarioRepository.DeleteAsync(id);
     }
