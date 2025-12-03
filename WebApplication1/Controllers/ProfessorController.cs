@@ -18,7 +18,7 @@ namespace EduConnect.Controllers
             return Ok(professores);
         }
         [HttpGet("{matricula}")]
-        public async Task<IActionResult> GetProfessorById(Guid id)
+        public async Task<IActionResult> GetProfessorById(int id)
         {
             var professores = await _professorService.GetProfessorByIdAsync(id);
             if (professores == null)
@@ -46,7 +46,7 @@ namespace EduConnect.Controllers
             return Ok();
         }
         [HttpPut("{matricula}")]
-        public async Task<IActionResult> UpdateProfessor(Guid id, ProfessorDTO dto)
+        public async Task<IActionResult> UpdateProfessor(int id, ProfessorDTO dto)
         {
             if (id != dto.Id)
             {
@@ -61,7 +61,7 @@ namespace EduConnect.Controllers
             return NoContent();
         }
         [HttpDelete("{matricula}")]
-        public async Task<IActionResult> DeleteProfessor(Guid id)
+        public async Task<IActionResult> DeleteProfessor(int id)
         {
             var existingProfessor = await _professorService.GetProfessorByIdAsync(id);
             if (existingProfessor == null)
