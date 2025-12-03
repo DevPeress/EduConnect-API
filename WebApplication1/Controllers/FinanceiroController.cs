@@ -33,14 +33,15 @@ namespace EduConnect.Controllers
 
             return Ok(financeiroDTOs);
         }
-        [HttpGet("filtro/categoria/{categoria}/status/{status}/data/{data}")]
-        public async Task<IActionResult> GetByFilters(string categoria, string status, string data)
+        [HttpGet("filtro/categoria/{categoria}/status/{status}/data/{data}/page/{page}")]
+        public async Task<IActionResult> GetByFilters(string categoria, string status, string data, int page)
         {
             var filtro = new FinanceiroFiltroDTO
             {
                 Categoria = categoria,
                 Status = status,
-                Data = data
+                Data = data,
+                Page = page
             };
 
             var (financeiros, total) = await _financeiroService.GetByFilters(filtro);
