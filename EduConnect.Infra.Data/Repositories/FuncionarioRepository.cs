@@ -13,7 +13,7 @@ public class FuncionarioRepository(EduContext context) : IFuncionarioRepository
     {
         return await _context.Funcionarios.ToListAsync();
     }
-    public async Task<Funcionario?> GetByIdAsync(Guid id)
+    public async Task<Funcionario?> GetByIdAsync(int id)
     {
         return await _context.Funcionarios.FirstOrDefaultAsync(a => a.Id == id);
     }
@@ -27,7 +27,7 @@ public class FuncionarioRepository(EduContext context) : IFuncionarioRepository
         _context.Funcionarios.Update(funcionario);
         await _context.SaveChangesAsync();
     }
-    public async Task DeleteAsync(Guid id)
+    public async Task DeleteAsync(int id)
     {
         var funcionario = await GetByIdAsync(id);
         if (funcionario != null)
