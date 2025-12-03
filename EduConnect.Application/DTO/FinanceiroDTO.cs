@@ -16,6 +16,7 @@ public record FinanceiroDTO
     // Dados opcionais relacionados ao aluno (preenchidos no serviço, não na entidade)
     public string? Aluno { get; init; }
     public DateOnly? Nasc { get; init; }
+    public string? Status { get; init; }
 
     public FinanceiroDTO(Financeiro u)
     {
