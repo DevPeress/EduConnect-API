@@ -13,7 +13,7 @@ public class AlunoRepository(EduContext context) : IAlunoRepository
     {
         return await _context.Alunos.ToListAsync();
     }
-    public async Task<Aluno?> GetByIdAsync(Guid id)
+    public async Task<Aluno?> GetByIdAsync(int id)
     {
         return await _context.Alunos.FirstOrDefaultAsync(a => a.Id == id);
     }
@@ -33,7 +33,7 @@ public class AlunoRepository(EduContext context) : IAlunoRepository
         _context.Alunos.Update(aluno);
         await _context.SaveChangesAsync();
     }
-    public async Task DeleteAsync(Guid id)
+    public async Task DeleteAsync(int id)
     {
         var aluno = await GetByIdAsync(id);
         if (aluno != null)
