@@ -11,7 +11,7 @@ public class TurmaRepository(EduContext context) : ITurmaRepository
     {
         return await _context.Turmas.ToListAsync();
     }
-    public async Task<Turma?> GetTurmaByIdAsync(Guid id)
+    public async Task<Turma?> GetTurmaByIdAsync(int id)
     {
         return await _context.Turmas.FindAsync(id);
     }
@@ -25,7 +25,7 @@ public class TurmaRepository(EduContext context) : ITurmaRepository
         _context.Turmas.Update(turma);
         await _context.SaveChangesAsync();
     }
-    public async Task DeleteTurmaAsync(Guid id)
+    public async Task DeleteTurmaAsync(int id)
     {
         var turma = await _context.Turmas.FindAsync(id);
         if (turma != null)
