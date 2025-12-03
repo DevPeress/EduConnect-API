@@ -10,7 +10,7 @@ public class TurmaService(ITurmaRepository repo)
     {
         return await _turmaRepository.GetTurmasAsync();
     }
-    public async Task<Turma?> GetTurmaByIdAsync(Guid id)
+    public async Task<Turma?> GetTurmaByIdAsync(int id)
     {
         return await _turmaRepository.GetTurmaByIdAsync(id);
     }
@@ -18,7 +18,7 @@ public class TurmaService(ITurmaRepository repo)
     {
         var turma = new Turma
         {
-            Registro = Guid.NewGuid(),
+            Registro = turmadto.Registro,
             Nome = turmadto.Nome,
             Turno = turmadto.Turno,
             ProfessorID = turmadto.ProfessorID,
@@ -35,6 +35,7 @@ public class TurmaService(ITurmaRepository repo)
     {
         var turma = new Turma
         {
+            Id = turmaDTO.Id,
             Registro = turmaDTO.Registro,
             Nome = turmaDTO.Nome,
             Turno = turmaDTO.Turno,
@@ -48,7 +49,7 @@ public class TurmaService(ITurmaRepository repo)
         };
         await _turmaRepository.UpdateTurmaAsync(turma);
     }
-    public async Task DeleteTurmaAsync(Guid id)
+    public async Task DeleteTurmaAsync(int id)
     {
         await _turmaRepository.DeleteTurmaAsync(id);
     }
