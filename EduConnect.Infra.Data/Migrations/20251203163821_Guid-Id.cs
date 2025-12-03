@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace EduConnect.Infra.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class Tabelas : Migration
+    public partial class GuidId : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,7 +15,8 @@ namespace EduConnect.Infra.Data.Migrations
                 name: "Alunos",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Turma = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Media = table.Column<int>(type: "int", nullable: false),
                     DataMatricula = table.Column<DateOnly>(type: "date", nullable: false),
@@ -38,8 +39,9 @@ namespace EduConnect.Infra.Data.Migrations
                 name: "Financeiros",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    AlunoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Registro = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    AlunoId = table.Column<int>(type: "int", nullable: false),
                     Categoria = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Valor = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     DataVencimento = table.Column<DateOnly>(type: "date", nullable: false),
@@ -50,14 +52,15 @@ namespace EduConnect.Infra.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Financeiros", x => x.Id);
+                    table.PrimaryKey("PK_Financeiros", x => x.Registro);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Funcionarios",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Cargo = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DataAdmissao = table.Column<DateOnly>(type: "date", nullable: false),
                     Salario = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
@@ -83,7 +86,8 @@ namespace EduConnect.Infra.Data.Migrations
                 name: "Professores",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Turmas = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Disciplina = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Contratacao = table.Column<DateOnly>(type: "date", nullable: false),
@@ -108,15 +112,37 @@ namespace EduConnect.Infra.Data.Migrations
                 name: "Registros",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Tipo = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Descricao = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Horario = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    PessoaId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    PessoaId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Registros", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Turmas",
+                columns: table => new
+                {
+                    Registro = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Turno = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProfessorID = table.Column<int>(type: "int", nullable: false),
+                    Alunos = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SalaID = table.Column<int>(type: "int", nullable: false),
+                    DisciplinaID = table.Column<int>(type: "int", nullable: false),
+                    Horario = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Capacidade = table.Column<int>(type: "int", nullable: false),
+                    AnoLetivo = table.Column<DateOnly>(type: "date", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Turmas", x => x.Registro);
                 });
 
             migrationBuilder.CreateIndex(
@@ -155,6 +181,9 @@ namespace EduConnect.Infra.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Registros");
+
+            migrationBuilder.DropTable(
+                name: "Turmas");
         }
     }
 }

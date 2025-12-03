@@ -24,9 +24,11 @@ namespace EduConnect.Infra.Data.Migrations
 
             modelBuilder.Entity("EduConnect.Domain.Entities.Aluno", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ContatoEmergencia")
                         .IsRequired()
@@ -83,12 +85,14 @@ namespace EduConnect.Infra.Data.Migrations
 
             modelBuilder.Entity("EduConnect.Domain.Entities.Financeiro", b =>
                 {
-                    b.Property<Guid>("Registro")
+                    b.Property<int>("Registro")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
 
-                    b.Property<Guid>("AlunoId")
-                        .HasColumnType("uniqueidentifier");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Registro"));
+
+                    b.Property<int>("AlunoId")
+                        .HasColumnType("int");
 
                     b.Property<bool>("Cancelado")
                         .HasColumnType("bit");
@@ -119,9 +123,11 @@ namespace EduConnect.Infra.Data.Migrations
 
             modelBuilder.Entity("EduConnect.Domain.Entities.Funcionario", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Cargo")
                         .IsRequired()
@@ -190,9 +196,11 @@ namespace EduConnect.Infra.Data.Migrations
 
             modelBuilder.Entity("EduConnect.Domain.Entities.Professor", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ContatoEmergencia")
                         .IsRequired()
@@ -257,9 +265,11 @@ namespace EduConnect.Infra.Data.Migrations
 
             modelBuilder.Entity("EduConnect.Domain.Entities.Registro", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Descricao")
                         .IsRequired()
@@ -268,8 +278,8 @@ namespace EduConnect.Infra.Data.Migrations
                     b.Property<DateTime>("Horario")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("PessoaId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("PessoaId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Tipo")
                         .IsRequired()
@@ -282,9 +292,11 @@ namespace EduConnect.Infra.Data.Migrations
 
             modelBuilder.Entity("EduConnect.Domain.Entities.Turma", b =>
                 {
-                    b.Property<Guid>("Registro")
+                    b.Property<int>("Registro")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Registro"));
 
                     b.PrimitiveCollection<string>("Alunos")
                         .IsRequired()
@@ -296,8 +308,8 @@ namespace EduConnect.Infra.Data.Migrations
                     b.Property<int>("Capacidade")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("DisciplinaID")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("DisciplinaID")
+                        .HasColumnType("int");
 
                     b.Property<string>("Horario")
                         .IsRequired()
@@ -307,11 +319,11 @@ namespace EduConnect.Infra.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("ProfessorID")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("ProfessorID")
+                        .HasColumnType("int");
 
-                    b.Property<Guid>("SalaID")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("SalaID")
+                        .HasColumnType("int");
 
                     b.Property<string>("Turno")
                         .IsRequired()

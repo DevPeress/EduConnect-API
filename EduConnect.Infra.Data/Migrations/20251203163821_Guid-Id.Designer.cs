@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EduConnect.Infra.Data.Migrations
 {
     [DbContext(typeof(EduContext))]
-    [Migration("20251201170307_Tabelas")]
-    partial class Tabelas
+    [Migration("20251203163821_Guid-Id")]
+    partial class GuidId
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,9 +27,11 @@ namespace EduConnect.Infra.Data.Migrations
 
             modelBuilder.Entity("EduConnect.Domain.Entities.Aluno", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ContatoEmergencia")
                         .IsRequired()
@@ -86,12 +88,14 @@ namespace EduConnect.Infra.Data.Migrations
 
             modelBuilder.Entity("EduConnect.Domain.Entities.Financeiro", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Registro")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
 
-                    b.Property<Guid>("AlunoId")
-                        .HasColumnType("uniqueidentifier");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Registro"));
+
+                    b.Property<int>("AlunoId")
+                        .HasColumnType("int");
 
                     b.Property<bool>("Cancelado")
                         .HasColumnType("bit");
@@ -115,16 +119,18 @@ namespace EduConnect.Infra.Data.Migrations
                     b.Property<decimal>("Valor")
                         .HasColumnType("decimal(18,2)");
 
-                    b.HasKey("Id");
+                    b.HasKey("Registro");
 
                     b.ToTable("Financeiros");
                 });
 
             modelBuilder.Entity("EduConnect.Domain.Entities.Funcionario", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Cargo")
                         .IsRequired()
@@ -193,9 +199,11 @@ namespace EduConnect.Infra.Data.Migrations
 
             modelBuilder.Entity("EduConnect.Domain.Entities.Professor", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ContatoEmergencia")
                         .IsRequired()
@@ -260,9 +268,11 @@ namespace EduConnect.Infra.Data.Migrations
 
             modelBuilder.Entity("EduConnect.Domain.Entities.Registro", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Descricao")
                         .IsRequired()
@@ -271,8 +281,8 @@ namespace EduConnect.Infra.Data.Migrations
                     b.Property<DateTime>("Horario")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("PessoaId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("PessoaId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Tipo")
                         .IsRequired()
@@ -281,6 +291,50 @@ namespace EduConnect.Infra.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Registros");
+                });
+
+            modelBuilder.Entity("EduConnect.Domain.Entities.Turma", b =>
+                {
+                    b.Property<int>("Registro")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Registro"));
+
+                    b.PrimitiveCollection<string>("Alunos")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateOnly>("AnoLetivo")
+                        .HasColumnType("date");
+
+                    b.Property<int>("Capacidade")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DisciplinaID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Horario")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ProfessorID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SalaID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Turno")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Registro");
+
+                    b.ToTable("Turmas");
                 });
 #pragma warning restore 612, 618
         }
