@@ -2,18 +2,8 @@
 
 namespace EduConnect.Application.DTO;
 
-public record ProfessorDTO
+public record ProfessorDTO : PessoaDTO
 {
-    public Guid Id { get; init; }
-    public string Nome { get; init; } = null!;
-    public string Email { get; init; } = null!;
-    public string Telefone { get; init; } = null!;
-    public string Status { get; init; } = null!;
-    public DateOnly Nasc { get; init; }
-    public string Endereco { get; init; } = null!;
-    public string Cpf { get; init; } = null!;
-    public string ContatoEmergencia { get; init; } = null!;
-    public string Registro { get; init; } = null!;
     public List<string> Turmas { get; init; } = null!;
     public string Disciplina { get; init; } = null!;
     public DateOnly Contratacao { get; init; }
@@ -22,7 +12,6 @@ public record ProfessorDTO
 
     public ProfessorDTO(Professor dados)
     {
-        Id = dados.Id;
         Nome = dados.Nome;
         Email = dados.Email;
         Telefone = dados.Telefone;

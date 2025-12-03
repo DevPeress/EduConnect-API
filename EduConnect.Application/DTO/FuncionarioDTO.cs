@@ -2,18 +2,8 @@
 
 namespace EduConnect.Application.DTO;
 
-public class FuncionarioDTO
+public record FuncionarioDTO : PessoaDTO
 {
-    public Guid Id { get; init; }
-    public string Nome { get; init; } = null!;
-    public string Email { get; init; } = null!;
-    public string Telefone { get; init; } = null!;
-    public string Status { get; init; } = null!;
-    public DateOnly Nasc { get; init; }
-    public string Endereco { get; init; } = null!;
-    public string Cpf { get; init; } = null!;
-    public string ContatoEmergencia { get; init; } = null!;
-    public string Registro { get; init; } = null!;
     public string Cargo { get; init; } = null!;
     public DateOnly DataAdmissao { get; init; }
     public decimal Salario { get; init; }
@@ -23,7 +13,6 @@ public class FuncionarioDTO
 
     public FuncionarioDTO(Funcionario dados)
     {
-        Id = dados.Id;
         Nome = dados.Nome;
         Email = dados.Email;
         Telefone = dados.Telefone;

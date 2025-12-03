@@ -3,7 +3,7 @@
 namespace EduConnect.Application.DTO;
 public record RegistroDTO
 {
-    public Guid Id { get; init; } = Guid.NewGuid();
+    public int Id { get; init; } 
     public string Tipo { get; init; } = null!;
     public string Descricao { get; init; } = null!;
     public DateTime Horario { get; init; } = DateTime.Now;
