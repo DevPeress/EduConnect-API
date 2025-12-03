@@ -15,7 +15,7 @@ public class RegistroService(IRegistroRepository repo)
     {
         return await _registroRepository.GetLastRegistrosAync();
     }
-    public async Task<Registro?> GetRegistroByIdAsync(Guid id)
+    public async Task<Registro?> GetRegistroByIdAsync(int id)
     {
         return await _registroRepository.GetRegistroByIdAsync(id);
     }
@@ -23,7 +23,6 @@ public class RegistroService(IRegistroRepository repo)
     {
         var registro = new Registro
         {
-            Id = dto.Id,
             Tipo = dto.Tipo,
             Descricao = dto.Descricao,
             Horario = DateTime.Now,
@@ -43,7 +42,7 @@ public class RegistroService(IRegistroRepository repo)
         };
         await _registroRepository.UpdateRegistroAsync(registro);
     }
-    public async Task DeleteRegistroAsync(Guid id)
+    public async Task DeleteRegistroAsync(int id)
     {
         await _registroRepository.DeleteRegistroAsync(id);
     }
