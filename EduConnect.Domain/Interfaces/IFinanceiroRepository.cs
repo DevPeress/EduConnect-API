@@ -5,10 +5,10 @@ namespace EduConnect.Domain.Interfaces;
 public interface IFinanceiroRepository
 {
     Task<List<Financeiro>> GetAll();
-    Task <List<Financeiro>> GetByAlunoId(Guid alunoId);
+    Task <List<Financeiro>> GetByAlunoId(int alunoId);
     Task <(IEnumerable<Financeiro>, int TotalRegistro)> GetByFilters(FinanceiroFiltro filtro);
-    Task <Financeiro?> GetById(Guid id);
+    Task <Financeiro?> GetById(int id);
     Task Add(Financeiro financeiro);
     Task Update(Financeiro financeiro);
-    Task Delete(Guid id);
+    Task Delete(int id);
 }
