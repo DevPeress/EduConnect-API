@@ -16,7 +16,8 @@ namespace EduConnect.Controllers
             var alunos = await _alunoService.GetAllAlunosAsync();
             return Ok(alunos);
         }
-        [HttpGet("{matricula}")]
+
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> GetAlunoById(int id)
         {
             var aluno = await _alunoService.GetAlunoByIdAsync(id);
@@ -26,47 +27,61 @@ namespace EduConnect.Controllers
             }
             return Ok(aluno);
         }
+
         [HttpGet("Cadastro")]
         public async Task<IActionResult> GetAlunosByCadastro()
         {
             var aluno = await _alunoService.GetLastAluno();
             if (aluno == null)
             {
-                return NotFound();
+                return Ok("MA000001");
             }
-            var matricula = int.Parse(aluno.Registro.Substring(2));
-            var novaMatricula = (matricula + 1).ToString();
-            return Ok("MA" + novaMatricula);
+            // Registro vem no formato MA000123
+            var atual = aluno.Registro;
+
+            // Pega somente os números (6 dígitos)
+            var numeros = atual.Substring(2);
+
+            // Converte para int
+            var numeroAtual = int.Parse(numeros);
+
+            // Incrementa
+            var proximo = numeroAtual + 1;
+
+            // Formata para sempre ter 6 dígitos
+            var proximoFormatado = proximo.ToString("D6");
+
+            return Ok("MA" + proximoFormatado);
         }
+
         [HttpPost]
-        public async Task<IActionResult> AddAluno(AlunoDTO dto)
+        public async Task<IActionResult> AddAluno([FromBody] AlunoDTO dto)
         {
             await _alunoService.AddAlunoAsync(dto);
             return Ok();
         }
-        [HttpPut("{matricula}")]
+
+        [HttpPut("{id:int}")]
         public async Task<IActionResult> UpdateAluno(int id, AlunoDTO dto)
         {
             if (id != dto.Id)
-            {
                 return BadRequest();
-            }
+
             var existingAluno = await _alunoService.GetAlunoByIdAsync(id);
             if (existingAluno == null)
-            {
                 return NotFound();
-            }
+
             await _alunoService.UpdateAlunoAsync(dto);
             return NoContent();
         }
-        [HttpDelete("{matricula}")]
+
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteAluno(int id)
         {
             var existingAluno = await _alunoService.GetAlunoByIdAsync(id);
             if (existingAluno == null)
-            {
                 return NotFound();
-            }
+
             await _alunoService.DeleteAlunoAsync(id);
             return NoContent();
         }
