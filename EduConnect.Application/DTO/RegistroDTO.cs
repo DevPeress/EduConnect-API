@@ -1,8 +1,18 @@
-﻿namespace EduConnect.Application.DTO;
+﻿using EduConnect.Domain.Entities;
+
+namespace EduConnect.Application.DTO;
 public record RegistroDTO
 {
-    public Guid Id { get; set; } = Guid.NewGuid();
-    public string Tipo { get; set; } = null!;
-    public string Descricao { get; set; } = null!;
-    public DateTime Horario { get; set; } = DateTime.Now;
+    public Guid Id { get; init; } = Guid.NewGuid();
+    public string Tipo { get; init; } = null!;
+    public string Descricao { get; init; } = null!;
+    public DateTime Horario { get; init; } = DateTime.Now;
+
+    public RegistroDTO (Registro dados)
+    {
+        Id = dados.Id;
+        Tipo = dados.Tipo;
+        Descricao = dados.Descricao;
+        Horario = dados.Horario;
+    }
 }
