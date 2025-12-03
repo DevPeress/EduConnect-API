@@ -11,7 +11,7 @@ public class ProfessorService(IProfessorRepository repo)
     {
         return await _professorRepository.GetAllAsync();
     }
-    public async Task<Professor?> GetProfessorByIdAsync(Guid id)
+    public async Task<Professor?> GetProfessorByIdAsync(int id)
     {
         return await _professorRepository.GetByIdAsync(id);
     }
@@ -23,7 +23,6 @@ public class ProfessorService(IProfessorRepository repo)
     {
         var professor = new Professor
         {
-            Id = Guid.NewGuid(),
             Nome = dto.Nome,
             Email = dto.Email,
             Telefone = dto.Telefone,
@@ -63,7 +62,7 @@ public class ProfessorService(IProfessorRepository repo)
         };
         await _professorRepository.UpdateAsync(professor);
     }
-    public async Task DeleteProfessorAsync(Guid id)
+    public async Task DeleteProfessorAsync(int id)
     {
         await _professorRepository.DeleteAsync(id);
     }
