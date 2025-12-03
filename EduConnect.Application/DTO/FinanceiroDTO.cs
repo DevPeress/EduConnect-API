@@ -1,15 +1,31 @@
-﻿namespace EduConnect.Application.DTO;
+﻿using EduConnect.Domain.Entities;
 
-public class FinanceiroDTO
+namespace EduConnect.Application.DTO;
+
+public record FinanceiroDTO
 {
-    public Guid Registro { get; set; }
-    public Guid AlunoId { get; set; }
-    public required string Categoria { get; set; }
-    public decimal Valor { get; set; }
-    public DateOnly DataVencimento { get; set; }
-    public bool Pago { get; set; }
-    public DateOnly? DataPagamento { get; set; }
-    public string? Aluno { get; set; }
-    public DateOnly? Nasc { get; set; }
-    public bool Cancelado { get; set; }
+    public Guid Registro { get; init; }
+    public Guid AlunoId { get; init; }
+    public string Categoria { get; init; } = default!;
+    public decimal Valor { get; init; }
+    public DateOnly DataVencimento { get; init; }
+    public bool Pago { get; init; }
+    public DateOnly? DataPagamento { get; init; }
+    public bool Cancelado { get; init; }
+
+    // Dados opcionais relacionados ao aluno (preenchidos no serviço, não na entidade)
+    public string? Aluno { get; init; }
+    public DateOnly? Nasc { get; init; }
+
+    public FinanceiroDTO(Financeiro u)
+    {
+        Registro = u.Registro;
+        AlunoId = u.AlunoId;
+        Categoria = u.Categoria;
+        Valor = u.Valor;
+        DataVencimento = u.DataVencimento;
+        Pago = u.Pago;
+        DataPagamento = u.DataPagamento;
+        Cancelado = u.Cancelado;
+    }
 }
