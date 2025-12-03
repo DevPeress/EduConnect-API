@@ -56,13 +56,13 @@ namespace EduConnect.Controllers
             );
         }
         [HttpGet("aluno/{alunoId}")]
-        public async Task<IActionResult> GetByAlunoId(Guid alunoId)
+        public async Task<IActionResult> GetByAlunoId(int alunoId)
         {
             var financeiros = await _financeiroService.GetByAlunoId(alunoId);
             return Ok(financeiros);
         }
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(Guid id)
+        public async Task<IActionResult> GetById(int id)
         {
             var financeiro = await _financeiroService.GetById(id);
             if (financeiro == null)
@@ -78,9 +78,9 @@ namespace EduConnect.Controllers
             return Ok();
         }
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateFinanceiro(Guid id, FinanceiroDTO dto)
+        public async Task<IActionResult> UpdateFinanceiro(int id, FinanceiroDTO dto)
         {
-            if (id != dto.Registro)
+            if (id != dto.Id)
             {
                 return BadRequest();
             }
@@ -93,7 +93,7 @@ namespace EduConnect.Controllers
             return NoContent();
         }
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteFinanceiro(Guid id)
+        public async Task<IActionResult> DeleteFinanceiro(int id)
         {
             var existingFinanceiro = await _financeiroService.GetById(id);
             if (existingFinanceiro == null)
