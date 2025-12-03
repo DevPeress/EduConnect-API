@@ -1,12 +1,12 @@
 ﻿using EduConnect.Domain.Entities;
 
 namespace EduConnect.Application.DTO;
-public record AlunoDTO : PessoaDTO
+public class AlunoDTO : PessoaDTO
 {
     public string Turma { get; init; } = null!;
     public int Media { get; init; }
     public DateOnly DataMatricula { get; init; }
-
+    public AlunoDTO() { }
     public AlunoDTO(Aluno dados)
     {
         Registro = dados.Registro;

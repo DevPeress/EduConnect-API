@@ -2,7 +2,7 @@
 
 namespace EduConnect.Application.DTO;
 
-public record ProfessorDTO : PessoaDTO
+public class ProfessorDTO : PessoaDTO
 {
     public List<string> Turmas { get; init; } = null!;
     public string Disciplina { get; init; } = null!;

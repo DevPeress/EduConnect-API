@@ -2,7 +2,7 @@
 
 namespace EduConnect.Application.DTO;
 
-public record FuncionarioDTO : PessoaDTO
+public class FuncionarioDTO : PessoaDTO
 {
     public string Cargo { get; init; } = null!;
     public DateOnly DataAdmissao { get; init; }
