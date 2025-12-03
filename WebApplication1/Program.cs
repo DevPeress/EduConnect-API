@@ -10,6 +10,8 @@ builder.Services.AddAuthorizationConfiguration();
 builder.Services.AddDependencyInjectionConfiguration(builder.Configuration);
 builder.Services.AddCorsConfiguration(builder.Configuration);
 builder.Services.AddProblemDetails();
+builder.Services.AddJsonConverterConfiguration();
+
 var app = builder.Build();  
 
 if (app.Environment.IsDevelopment())
