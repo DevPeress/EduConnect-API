@@ -18,9 +18,9 @@ public class RegistroRepository(EduContext context) : IRegistroRepository
             .Take(10)
             .ToListAsync();
     }
-    public async Task<Registro?> GetRegistroByIdAsync(Guid id)
+    public async Task<Registro?> GetRegistroByIdAsync(int registro)
     {
-        return await _context.Registros.FirstOrDefaultAsync(r => r.Id == id);
+        return await _context.Registros.FirstOrDefaultAsync(r => r.Registro == registro);
     }
     public async Task AddRegistroAsync(Registro registro)
     {
@@ -32,7 +32,7 @@ public class RegistroRepository(EduContext context) : IRegistroRepository
         _context.Registros.Update(registro);
         await _context.SaveChangesAsync();
     }
-    public async Task DeleteRegistroAsync(Guid id)
+    public async Task DeleteRegistroAsync(int id)
     {
         var registro = await GetRegistroByIdAsync(id);
         if (registro != null)
