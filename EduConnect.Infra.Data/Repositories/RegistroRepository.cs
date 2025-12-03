@@ -20,7 +20,7 @@ public class RegistroRepository(EduContext context) : IRegistroRepository
     }
     public async Task<Registro?> GetRegistroByIdAsync(int registro)
     {
-        return await _context.Registros.FirstOrDefaultAsync(r => r.Registro == registro);
+        return await _context.Registros.FirstOrDefaultAsync(r => r.Id == registro);
     }
     public async Task AddRegistroAsync(Registro registro)
     {
