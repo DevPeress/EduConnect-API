@@ -4,8 +4,7 @@ namespace EduConnect.Application.DTO;
 
 public record FinanceiroDTO
 {
-    public int Id { get; init; }
-    public string Registro { get; init; }
+    public int Registro { get; init; }
     public int AlunoId { get; init; }
     public string Categoria { get; init; } = default!;
     public decimal Valor { get; init; }
