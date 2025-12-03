@@ -16,7 +16,7 @@ namespace EduConnect.Controllers
             return Ok(turmas);
         }
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetTurmaById(Guid id)
+        public async Task<IActionResult> GetTurmaById(int id)
         {
             var turma = await _turmaService.GetTurmaByIdAsync(id);
             if (turma == null)
@@ -32,7 +32,7 @@ namespace EduConnect.Controllers
             return Ok();
         }
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateTurma(Guid id, TurmaDTO turmaDTO)
+        public async Task<IActionResult> UpdateTurma(int id, TurmaDTO turmaDTO)
         {
             if (id != turmaDTO.Registro)
             {
@@ -42,7 +42,7 @@ namespace EduConnect.Controllers
             return NoContent();
         }
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTurma(Guid id)
+        public async Task<IActionResult> DeleteTurma(int id)
         {
             await _turmaService.DeleteTurmaAsync(id);
             return NoContent();
