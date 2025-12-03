@@ -5,8 +5,7 @@ namespace EduConnect.Domain.Entities;
 public class Turma
 {
     [Key]
-    public int Id { get; set; }
-    public string Registro { get; set; }
+    public int Registro { get; set; }
     public required string Nome { get; set; }
     public required string Turno { get; set; }
     public int ProfessorID { get; set; }

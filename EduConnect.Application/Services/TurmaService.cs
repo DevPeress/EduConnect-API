@@ -18,7 +18,6 @@ public class TurmaService(ITurmaRepository repo)
     {
         var turma = new Turma
         {
-            Registro = turmadto.Registro,
             Nome = turmadto.Nome,
             Turno = turmadto.Turno,
             ProfessorID = turmadto.ProfessorID,
@@ -35,7 +34,6 @@ public class TurmaService(ITurmaRepository repo)
     {
         var turma = new Turma
         {
-            Id = turmaDTO.Id,
             Registro = turmaDTO.Registro,
             Nome = turmaDTO.Nome,
             Turno = turmaDTO.Turno,
