@@ -23,16 +23,8 @@ namespace EduConnect.Controllers
                 {
                     continue;
                 }
-                var dto = new FinanceiroDTO
+                var dto = new FinanceiroDTO(f)
                 {
-                    Registro = f.Registro,
-                    AlunoId = f.AlunoId,
-                    Categoria = f.Categoria,
-                    Valor = f.Valor,
-                    DataVencimento = f.DataVencimento,
-                    Pago = f.Pago,
-                    DataPagamento = f.DataPagamento,
-                    Cancelado = f.Cancelado,
                     Aluno = aluno.Nome,
                     Nasc = aluno.Nasc
                 };
@@ -41,11 +33,26 @@ namespace EduConnect.Controllers
 
             return Ok(financeiroDTOs);
         }
-        [HttpGet("filtro/categoria={categoria}&status={status}&data={data}")]
+        [HttpGet("filtro/categoria/{categoria}/status/{status}/data/{data}")]
         public async Task<IActionResult> GetByFilters(string categoria, string status, string data)
         {
-            var financeiros = await _financeiroService.GetByFilters(categoria, status, data);
-            return Ok(financeiros);
+            var filtro = new FinanceiroFiltroDTO
+            {
+                Categoria = categoria,
+                Status = status,
+                Data = data
+            };
+
+            var (financeiros, total) = await _financeiroService.GetByFilters(filtro);
+
+            var result = financeiros.Select((u) => new FinanceiroDTO(u)).ToList();
+
+            return Ok(new RetornoFiltro<FinanceiroDTO>
+                {
+                    Total = total,
+                    Dados = result
+                }
+            );
         }
         [HttpGet("aluno/{alunoId}")]
         public async Task<IActionResult> GetByAlunoId(Guid alunoId)

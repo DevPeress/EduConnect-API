@@ -1,4 +1,5 @@
-﻿using EduConnect.Domain.Entities;
+﻿using EduConnect.Application.DTO;
+using EduConnect.Domain.Entities;
 using EduConnect.Domain.Interfaces;
 using EduConnect.Infra.Data.Context;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,49 @@ namespace EduConnect.Infra.Data.Repositories;
 public class FinanceiroRepository(EduContext context) : IFinanceiroRepository
 {
     private readonly EduContext _context = context;
+    private IQueryable<Financeiro> QueryFiltroFuncionario(FinanceiroFiltro filtro)
+    {
+        var query = _context.Financeiros.AsNoTracking();
+
+        if (filtro.Categoria != "Todas as Categorias")
+        {
+            query = query.Where(dados => dados.Categoria == filtro.Categoria);
+        }
+
+        if (filtro.Status != "Todos os Status")
+        {
+            if (filtro.Status == "Pago")
+            {
+                query = query.Where(dados => dados.Pago == true);
+            }
+            else if (filtro.Status == "Pendente")
+            {
+                query = query.Where(dados => dados.Pago == false);
+            }
+            else if (filtro.Status == "Atrasado")
+            {
+                var today = DateOnly.FromDateTime(DateTime.Now);
+                query = query.Where(dados => dados.Pago == false && dados.DataVencimento < today);
+            }
+            else if (filtro.Status == "Cancelado")
+            {
+                query = query.Where(dados => dados.Cancelado == true);
+            }
+        }
+
+        if (filtro.Data != "Todos os Meses")
+        {
+            int mesSelecionado = DateTime.ParseExact(
+                filtro.Data,
+                "MMMM",
+                new CultureInfo("pt-BR"),
+                DateTimeStyles.None
+            ).Month;
+            query = query.Where(dados => dados.DataVencimento.Month == mesSelecionado);
+        }
+
+        return query;
+    }
     public async Task<List<Financeiro>> GetAll()
     {
         return await _context.Financeiros.ToListAsync();
@@ -17,71 +61,15 @@ public class FinanceiroRepository(EduContext context) : IFinanceiroRepository
     {
         return await _context.Financeiros.Where(dados => dados.AlunoId == alunoId).ToListAsync();
     }
-    public async Task<List<Financeiro>> GetByFilters(string categoria, string status, string data)
+    public async Task<(IEnumerable<Financeiro>, int TotalRegistro)> GetByFilters(FinanceiroFiltro filtro)
     {
-        List<Financeiro> resultados = await GetAll();
-        if (status == "Todos os Status" && categoria == "Todas as Categorias" && data == "Todas as Datas")
-        {
-            return resultados;
-        }
+        var query = QueryFiltroFuncionario(filtro);
+        var total = await query.CountAsync();
 
-        if (categoria != "Todas as Categorias")
-        {
-            foreach (var dados in resultados.ToList())
-            {
-                if (dados.Categoria != categoria)
-                {
-                    resultados.Remove(dados);
-                }
-            }
-        }
+        query = query.Skip(0).Take(6);
+        var result = await query.ToListAsync();
 
-        if (status != "Todos os Status")
-        {
-            foreach (var dados in resultados.ToList())
-            {
-                if (status == "Pago" && dados.Pago == false)
-                {
-                    resultados.Remove(dados);
-                }
-                else if (status == "Pendente" && dados.Pago == true)
-                {
-                    resultados.Remove(dados);
-                }
-                else if (status == "Atrasado")
-                {
-                    var today = DateOnly.FromDateTime(DateTime.Now);
-                    if (!(dados.Pago == false && dados.DataVencimento < today))
-                    {
-                        resultados.Remove(dados);
-                    }
-                }
-                else if (status == "Cancelado" && dados.Cancelado == false)
-                {
-                    resultados.Remove(dados);
-                }
-            }
-        }
-
-        if (data != "Todas as Datas")
-        {
-            var today = DateOnly.FromDateTime(DateTime.Now);
-            foreach (var dados in resultados.ToList())
-            {
-                int mesSelecionado = DateTime.ParseExact(
-                    data,
-                    "MMMM",
-                    new CultureInfo("pt-BR"),
-                    DateTimeStyles.None
-                ).Month;
-                if (mesSelecionado != dados.DataVencimento.Month)
-                {
-                    resultados.Remove(dados);
-                }
-            }
-        }
-
-        return resultados;
+        return (result, total);
     }
     public async Task<Financeiro?> GetById(Guid id)
     {

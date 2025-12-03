@@ -1,6 +1,6 @@
 ﻿namespace EduConnect.Application.DTO;
 
-public class FuncionarioDTO
+public record FuncionarioDTO
 {
     public Guid Id { get; set; }
     public string Nome { get; set; } = null!;

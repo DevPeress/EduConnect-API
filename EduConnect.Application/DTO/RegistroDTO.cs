@@ -1,5 +1,5 @@
 ﻿namespace EduConnect.Application.DTO;
-public class RegistroDTO
+public record RegistroDTO
 {
     public Guid Id { get; set; } = Guid.NewGuid();
     public string Tipo { get; set; } = null!;

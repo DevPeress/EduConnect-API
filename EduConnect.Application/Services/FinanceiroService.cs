@@ -15,9 +15,15 @@ public class FinanceiroService(IFinanceiroRepository repo)
     {
         return await _financeiroRepository.GetByAlunoId(id);
     }
-    public async Task<List<Financeiro>> GetByFilters(string categoria, string status, string data)
+    public async Task<(IEnumerable<Financeiro>, int totalRegistro)> GetByFilters(FinanceiroFiltroDTO filtrodto)
     {
-        return await _financeiroRepository.GetByFilters(categoria, status, data);
+        var  filtro = new FinanceiroFiltro
+        {
+            Categoria = filtrodto.Categoria,
+            Status = filtrodto.Status,
+            Data = filtrodto.Data,
+        };
+        return await _financeiroRepository.GetByFilters(filtro);
     }
     public async Task<Financeiro?> GetById(Guid id)
     {

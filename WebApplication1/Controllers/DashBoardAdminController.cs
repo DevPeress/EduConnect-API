@@ -1,5 +1,5 @@
-﻿using EduConnect.Application.Services;
-using EduConnect.Domain;
+﻿using EduConnect.Application.DTO;
+using EduConnect.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EduConnect.Controllers
