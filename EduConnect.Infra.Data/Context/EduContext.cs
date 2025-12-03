@@ -10,6 +10,7 @@ public class EduContext(DbContextOptions<EduContext> options) : DbContext(option
     public DbSet<Funcionario> Funcionarios { get; set; }
     public DbSet<Registro> Registros { get; set; }
     public DbSet<Financeiro> Financeiros { get; set; }
+    public DbSet<Turma> Turmas { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
