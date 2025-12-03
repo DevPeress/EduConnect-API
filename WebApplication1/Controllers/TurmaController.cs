@@ -34,7 +34,7 @@ namespace EduConnect.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateTurma(int id, TurmaDTO turmaDTO)
         {
-            if (id != turmaDTO.Registro)
+            if (id != turmaDTO.Id)
             {
                 return BadRequest();
             }
