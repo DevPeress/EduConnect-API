@@ -80,7 +80,7 @@ namespace EduConnect.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateFinanceiro(int id, FinanceiroDTO dto)
         {
-            if (id != dto.Id)
+            if (id != dto.Registro)
             {
                 return BadRequest();
             }
