@@ -56,7 +56,7 @@ public class FinanceiroRepository(EduContext context) : IFinanceiroRepository
     {
         return await _context.Financeiros.ToListAsync();
     }
-    public async Task<List<Financeiro>> GetByAlunoId(Guid alunoId)
+    public async Task<List<Financeiro>> GetByAlunoId(int alunoId)
     {
         return await _context.Financeiros.Where(dados => dados.AlunoId == alunoId).ToListAsync();
     }
@@ -70,9 +70,9 @@ public class FinanceiroRepository(EduContext context) : IFinanceiroRepository
 
         return (result, total);
     }
-    public async Task<Financeiro?> GetById(Guid id)
+    public async Task<Financeiro?> GetById(int id)
     {
-        return await _context.Financeiros.FirstOrDefaultAsync(dados => dados.Registro == id);
+        return await _context.Financeiros.FirstOrDefaultAsync(dados => dados.Id == id);
     }
 
     public async Task Add(Financeiro financeiro)
@@ -87,7 +87,7 @@ public class FinanceiroRepository(EduContext context) : IFinanceiroRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task Delete(Guid id)
+    public async Task Delete(int id)
     {
         var financeiro = await GetById(id);
         if (financeiro != null)
