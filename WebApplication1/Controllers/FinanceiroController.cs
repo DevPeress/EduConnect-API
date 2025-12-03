@@ -40,7 +40,37 @@ namespace EduConnect.Controllers
 
             return Ok(financeiroDTOs);
         }
-        [HttpGet("filtro/categoria/{categoria}/status/{status}/data/{data}/page/{page}")]
+        [HttpGet("DashBoard")]
+        public async Task<IActionResult> GetBashBoard()
+        {
+            decimal recebido = await _financeiroService.GetRecebidosAsync();
+            decimal pendente = await _financeiroService.GetPendentesAsync();
+            decimal atrasado = await _financeiroService.GetAtrasadosAsync();
+            return Ok(new List<CardsFinanceiroDTO>
+            {
+                new CardsFinanceiroDTO
+                {
+                    Dado = "Recebido",
+                    Number = recebido
+                },
+                new CardsFinanceiroDTO
+                {
+                    Dado = "Pendente",
+                    Number = pendente
+                },
+                new CardsFinanceiroDTO
+                {
+                    Dado = "Atrasado",
+                    Number = atrasado
+                },
+                new CardsFinanceiroDTO
+                {
+                    Dado = "Total",
+                    Number = recebido + atrasado + pendente
+                }
+            });
+        }
+        [HttpGet("Filtro/categoria/{categoria}/status/{status}/data/{data}/page/{page}")]
         public async Task<IActionResult> GetByFilters(string categoria, string status, string data, int page)
         {
             var filtro = new FinanceiroFiltroDTO
