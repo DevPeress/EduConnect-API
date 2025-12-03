@@ -1,5 +1,6 @@
 ﻿using EduConnect.Application.DTO;
 using EduConnect.Application.Services;
+using EduConnect.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EduConnect.Controllers
@@ -10,26 +11,32 @@ namespace EduConnect.Controllers
     {
         private readonly FinanceiroService _financeiroService = service;
         private readonly AlunoService _alunoService = alunoService;
-        [HttpGet]
-        public async Task<IActionResult> GetAllFinanceiros()
+        private List<FinanceiroDTO> Filtro(List<Financeiro> lista)
         {
-            var financeiros = await _financeiroService.GetAllFinanceirosAsync();
             var financeiroDTOs = new List<FinanceiroDTO>();
-
-            foreach (var f in financeiros)
+            foreach (var f in lista)
             {
-                var aluno = await _alunoService.GetAlunoByIdAsync(f.AlunoId);
+                var aluno = _alunoService.GetAlunoByIdAsync(f.AlunoId).Result;
                 if (aluno == null)
                 {
                     continue;
                 }
+                var verificarStatus = f.Pago ? "Pago" : f.Cancelado ? "Cancelado" : f.DataVencimento < DateOnly.FromDateTime(DateTime.Now) ? "Atrasado" : "Pendente";
                 var dto = new FinanceiroDTO(f)
                 {
                     Aluno = aluno.Nome,
-                    Nasc = aluno.Nasc
+                    Nasc = aluno.Nasc,
+                    Status = verificarStatus
                 };
                 financeiroDTOs.Add(dto);
             }
+            return financeiroDTOs;
+        } 
+        [HttpGet]
+        public async Task<IActionResult> GetAllFinanceiros()
+        {
+            var financeiros = await _financeiroService.GetAllFinanceirosAsync();
+            var financeiroDTOs = Filtro(financeiros.ToList());
 
             return Ok(financeiroDTOs);
         }
@@ -45,14 +52,17 @@ namespace EduConnect.Controllers
             };
 
             var (financeiros, total) = await _financeiroService.GetByFilters(filtro);
-
-            var result = financeiros.Select((u) => new FinanceiroDTO(u)).ToList();
+            if (financeiros == null || !financeiros.Any())
+            {
+                return NotFound();
+            }
+            var financeiroDTOs = Filtro(financeiros.ToList());
 
             return Ok(new RetornoFiltro<FinanceiroDTO>
                 {
                     Total = total,
-                    Dados = result
-                }
+                    Dados = financeiroDTOs
+            }
             );
         }
         [HttpGet("aluno/{alunoId}")]
