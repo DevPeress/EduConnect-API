@@ -9,6 +9,7 @@ namespace EduConnect.Infra.Data.Repositories;
 public class FinanceiroRepository(EduContext context) : IFinanceiroRepository
 {
     private readonly EduContext _context = context;
+    private readonly DateOnly Today = DateOnly.FromDateTime(DateTime.Now);
     private IQueryable<Financeiro> QueryFiltroFuncionario(FinanceiroFiltro filtro)
     {
         var query = _context.Financeiros.AsNoTracking();
@@ -30,8 +31,7 @@ public class FinanceiroRepository(EduContext context) : IFinanceiroRepository
             }
             else if (filtro.Status == "Atrasado")
             {
-                var today = DateOnly.FromDateTime(DateTime.Now);
-                query = query.Where(dados => dados.Pago == false && dados.DataVencimento < today);
+                query = query.Where(dados => dados.Pago == false && dados.DataVencimento < Today);
             }
             else if (filtro.Status == "Cancelado")
             {
@@ -64,8 +64,9 @@ public class FinanceiroRepository(EduContext context) : IFinanceiroRepository
     {
         var query = QueryFiltroFuncionario(filtro);
         var total = await query.CountAsync();
-       
-        query = query.Skip(filtro.Offset).Take(6);
+
+        filtro.AlterarLimit(4);
+        query = query.Skip(filtro.Offset).Take(4);
         var result = await query.ToListAsync();
 
         return (result, total);
@@ -80,18 +81,16 @@ public class FinanceiroRepository(EduContext context) : IFinanceiroRepository
     }
     public async Task<decimal> GetPendentes()
     {
-        var today = DateOnly.FromDateTime(DateTime.Now);
         var query = _context.Financeiros.AsNoTracking()
-            .Where(dados => dados.Pago == false && dados.DataVencimento < today);
+            .Where(dados => dados.Pago == false && dados.DataVencimento < Today);
         var dados = await query.ToListAsync();
         decimal total = dados.Sum(p => p.Valor);
         return total;
     }
     public async Task<decimal> GetAtrasados()
     {
-        var today = DateOnly.FromDateTime(DateTime.Now);
         var query = _context.Financeiros.AsNoTracking()
-            .Where(dados => dados.Pago == false && dados.DataVencimento > today);
+            .Where(dados => dados.Pago == false && dados.DataVencimento > Today);
         var dados = await query.ToListAsync();
         decimal total = dados.Sum(p => p.Valor);
         return total;
