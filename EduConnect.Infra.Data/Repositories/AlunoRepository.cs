@@ -8,10 +8,31 @@ namespace EduConnect.Infra.Data.Repositories;
 public class AlunoRepository(EduContext context) : IAlunoRepository
 {
     private readonly EduContext _context = context;
+    private IQueryable<Aluno> QueryFiltroAluno(FiltroPessoas filtro)
+    {
+        var query = _context.Alunos.AsNoTracking();
+        
+        if (filtro.Status != null && filtro.Status != "Todos os Status")
+        {
+            query = query.Where(dados => dados.Status == filtro.Status);
+        }
+
+        return query;
+    }
 
     public async Task<List<Aluno>> GetAllAsync()
     {
         return await _context.Alunos.ToListAsync();
+    }
+    public async Task<(IEnumerable<Aluno>, int TotalRegistro)> GetByFilters(FiltroPessoas filtro)
+    {
+        var query = QueryFiltroAluno(filtro);
+        var total = await query.CountAsync();
+
+        query = query.Skip(filtro.Offset).Take(6);
+        var result = await query.ToListAsync(); 
+
+        return (result, total);
     }
     public async Task<Aluno?> GetByIdAsync(int id)
     {
