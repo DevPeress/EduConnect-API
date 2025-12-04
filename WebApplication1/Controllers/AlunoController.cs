@@ -11,13 +11,12 @@ namespace EduConnect.Controllers
         private readonly AlunoService _alunoService = service;
 
         [HttpGet]
-        public async Task<IActionResult> GetAlunos(string categoria, string status, string data, int page)
+        public async Task<IActionResult> GetAlunos(string categoria, string status, int page)
         {
             var filtro = new FiltroPessoaDTO
             {
                 Categoria = categoria,
                 Status = status,
-                Data = data,
                 Page = page
             };
 
