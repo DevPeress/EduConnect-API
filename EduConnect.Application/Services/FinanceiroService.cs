@@ -11,10 +11,17 @@ public class FinanceiroService(IFinanceiroRepository repo)
     {
         return await _financeiroRepository.GetAll();
     }
+
     public async Task<List<Financeiro>> GetByAlunoId(int id)
     {
         return await _financeiroRepository.GetByAlunoId(id);
     }
+
+    public async Task<(decimal TotalRecebido, decimal TotalPendente, decimal TotalAtrasado)> GetDashBoard()
+    {
+        return await _financeiroRepository.GetDashBoard();
+    }
+
     public async Task<(IEnumerable<Financeiro>, int totalRegistro)> GetByFilters(FinanceiroFiltroDTO filtrodto)
     {
         var  filtro = new FinanceiroFiltro
@@ -25,10 +32,12 @@ public class FinanceiroService(IFinanceiroRepository repo)
         };
         return await _financeiroRepository.GetByFilters(filtro);
     }
+
     public async Task<Financeiro?> GetById(int id)
     {
         return await _financeiroRepository.GetById(id);
     }
+
     public async Task AddFinanceiroAsync(FinanceiroDTO dto)
     {
         var financeiro = new Financeiro
@@ -43,6 +52,7 @@ public class FinanceiroService(IFinanceiroRepository repo)
         };
         await _financeiroRepository.Add(financeiro);
     }
+
     public async Task UpdateFinanceiroAsync(FinanceiroDTO dto)
     {
         var financeiro = new Financeiro
