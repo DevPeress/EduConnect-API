@@ -10,12 +10,12 @@ namespace EduConnect.Controllers
     {
         private readonly AlunoService _alunoService = service;
 
-        [HttpGet]
-        public async Task<IActionResult> GetAlunos(string categoria, string status, int page)
+        [HttpGet("filtro/selecionada/{selecionada}/status/{status}/page/{page}")]
+        public async Task<IActionResult> GetAlunos(string selecionada, string status, int page)
         {
             var filtro = new FiltroPessoaDTO
             {
-                Categoria = categoria,
+                Categoria = selecionada,
                 Status = status,
                 Page = page
             };
@@ -26,7 +26,12 @@ namespace EduConnect.Controllers
                 return NotFound();
             }
 
-            return Ok(alunos);
+            return Ok(new RetornoFiltro<AlunoDTO>
+            {
+                Dados = alunos,
+                Total = total
+            }
+            );
         }
 
         [HttpGet("{id:int}")]
