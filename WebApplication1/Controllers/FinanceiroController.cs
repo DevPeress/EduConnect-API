@@ -34,6 +34,7 @@ namespace EduConnect.Controllers
             }
             return financeiroDTOs;
         } 
+
         [HttpGet]
         public async Task<IActionResult> GetAllFinanceiros()
         {
@@ -43,6 +44,7 @@ namespace EduConnect.Controllers
 
             return Ok(financeiroDTOs);
         }
+
         [HttpGet("filtro/categoria/{categoria}/status/{status}/data/{data}/page/{page}")]
         public async Task<IActionResult> GetByFilters(string categoria, string status, string data, int page)
         {
@@ -69,6 +71,7 @@ namespace EduConnect.Controllers
             }
             );
         }
+
         [HttpGet("aluno/{alunoId}")]
         public async Task<IActionResult> GetByAlunoId(int alunoId)
         {
@@ -78,6 +81,7 @@ namespace EduConnect.Controllers
 
             return Ok(financeiroDTOs);
         }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -102,6 +106,7 @@ namespace EduConnect.Controllers
             };
             return Ok(financeiroDTO);
         }
+
         [HttpPost]
         public async Task<IActionResult> AddFinanceiro(FinanceiroDTO dto)
         {
@@ -109,6 +114,7 @@ namespace EduConnect.Controllers
             await _financeiroService.AddFinanceiroAsync(dto);
             return Ok();
         }
+
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateFinanceiro(int id, FinanceiroDTO dto)
         {
@@ -125,6 +131,7 @@ namespace EduConnect.Controllers
             await _financeiroService.UpdateFinanceiroAsync(dto);
             return NoContent();
         }
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteFinanceiro(int id)
         {
