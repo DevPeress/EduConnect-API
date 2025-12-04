@@ -11,8 +11,15 @@ public class AlunoService(IAlunoRepository repo)
     {
         return await _alunoRepository.GetAllAsync();
     }
-    public async Task<(IEnumerable<Aluno>, int TotalRegistro)> GetByFilters(FiltroPessoas filtro)
+    public async Task<(IEnumerable<Aluno>, int TotalRegistro)> GetByFilters(FiltroPessoaDTO filtrodto)
     {
+        var filtro = new FiltroPessoas
+        {
+            Page = filtrodto.Page,
+            Categoria = filtrodto.Categoria,
+            Data = filtrodto.Data,
+            Status = filtrodto.Status,
+        };
         return await _alunoRepository.GetByFilters(filtro);
     }
     public async Task<Aluno?> GetAlunoByIdAsync(int id)
