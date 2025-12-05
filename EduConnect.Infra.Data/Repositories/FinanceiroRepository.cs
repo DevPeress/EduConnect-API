@@ -9,7 +9,7 @@ namespace EduConnect.Infra.Data.Repositories;
 public class FinanceiroRepository(EduContext context) : IFinanceiroRepository
 {
     private readonly EduContext _context = context;
-    private readonly DateOnly today = DateOnly.FromDateTime(DateTime.Now);
+    private readonly DateOnly today = DateOnly.FromDateTime(DateTime.Today);
     private IQueryable<Financeiro> QueryFiltroFuncionario(FinanceiroFiltro filtro)
     {
         var query = _context.Financeiros.AsNoTracking();
@@ -27,7 +27,7 @@ public class FinanceiroRepository(EduContext context) : IFinanceiroRepository
             }
             else if (filtro.Status == "Pendente")
             {
-                query = query.Where(dados => dados.Pago == false && dados.DataVencimento > today);
+                query = query.Where(dados => dados.Pago == false && dados.DataVencimento >= today);
             }
             else if (filtro.Status == "Atrasado")
             {
@@ -67,8 +67,9 @@ public class FinanceiroRepository(EduContext context) : IFinanceiroRepository
         decimal totalRecebido = query.Where(p => p.Pago == true).Sum(p => p.Valor);
 
         query = query.Where(p => p.Pago == false);
-        decimal totalPendente = query.Where(p => p.DataVencimento > today).Sum(p => p.Valor);
-        decimal totalAtrasado = query.Where(p => p.DataVencimento < today).Sum(p => p.Valor);
+
+        decimal totalPendente = query.Where(p => p.DataVencimento >= today).AsEnumerable().Sum(p => p.Valor);
+        decimal totalAtrasado = query.Where(p => p.DataVencimento < today).AsEnumerable().Sum(p => p.Valor);
 
         return (totalRecebido, totalPendente, totalAtrasado);
     }
