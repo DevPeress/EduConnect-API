@@ -14,11 +14,13 @@ namespace EduConnect.Controllers
         {
             var totalAlunos = await _dashBoardAdminService.GetTotalAlunosAsync();
             var totalProfessores = await _dashBoardAdminService.GetTotalProfessoresAsync();
-            var (aumentoAlunos, aumentoProfessores) = await _dashBoardAdminService.GetAumentoAsync();
-            var (porcentagemAlunos, porcentagemProfessores) = await _dashBoardAdminService.GetPorcentagemAsync();
+            var totalTurmas = await _dashBoardAdminService.GetTotalTurmasAsync();
+            var (aumentoAlunos, aumentoProfessores, aumentoTurmas) = await _dashBoardAdminService.GetAumentoAsync();
+            var (porcentagemAlunos, porcentagemProfessores, porcentagemTurmas) = await _dashBoardAdminService.GetPorcentagemAsync();
             return Ok(new List<CardsAdminDto>
             {
-                new CardsAdminDto                 {
+                new CardsAdminDto                 
+                {
                     Dado = "Alunos",
                     Total = totalAlunos,
                     Aumento = aumentoAlunos,
@@ -30,6 +32,13 @@ namespace EduConnect.Controllers
                     Total = totalProfessores,
                     Aumento = aumentoProfessores,
                     Porcentagem = porcentagemProfessores
+                },
+                new CardsAdminDto
+                {
+                    Dado = "Turmas",
+                    Total = totalTurmas,
+                    Aumento = aumentoTurmas,
+                    Porcentagem = porcentagemTurmas
                 }
             });
         }
