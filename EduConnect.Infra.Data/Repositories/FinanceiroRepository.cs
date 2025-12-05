@@ -54,11 +54,6 @@ public class FinanceiroRepository(EduContext context) : IFinanceiroRepository
         return query;
     }
 
-    public async Task<List<Financeiro>> GetAll()
-    {
-        return await _context.Financeiros.ToListAsync();
-    }
-
     public async Task<List<Financeiro>> GetByAlunoId(int alunoId)
     {
         return await _context.Financeiros.Where(dados => dados.AlunoId == alunoId).ToListAsync();
