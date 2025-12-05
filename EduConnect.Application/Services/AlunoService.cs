@@ -11,6 +11,37 @@ public class AlunoService(IAlunoRepository repo)
     {
         return await _alunoRepository.GetAllAsync();
     }
+    public async Task<(List<AlunoDTO>, int TotalRegistro)> GetByFilters(FiltroPessoaDTO filtrodto)
+    {
+        var filtro = new FiltroPessoas
+        {
+            Page = filtrodto.Page,
+            Categoria = filtrodto.Categoria,
+            Status = filtrodto.Status
+        };
+
+        var (alunos, total) = await _alunoRepository.GetByFilters(filtro);
+
+        List<AlunoDTO> alunosDTO = [];
+        foreach(var aluno in alunos)
+        {
+            var dto = new AlunoDTO(aluno)
+            {
+                Registro = aluno.Registro,
+                Nome = aluno.Nome,
+                Email = aluno.Email,
+                Telefone = aluno.Telefone,
+                Status = aluno.Status,
+                Nasc = aluno.Nasc,
+                Endereco = aluno.Endereco,
+                Cpf = aluno.Cpf,
+                ContatoEmergencia = aluno.ContatoEmergencia,
+            };
+            alunosDTO.Add(dto);
+        }
+
+        return (alunosDTO, total);
+    }
     public async Task<Aluno?> GetAlunoByIdAsync(int id)
     {
         return await _alunoRepository.GetByIdAsync(id);

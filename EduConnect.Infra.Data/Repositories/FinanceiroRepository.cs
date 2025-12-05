@@ -9,7 +9,7 @@ namespace EduConnect.Infra.Data.Repositories;
 public class FinanceiroRepository(EduContext context) : IFinanceiroRepository
 {
     private readonly EduContext _context = context;
-    private readonly DateOnly Today = DateOnly.FromDateTime(DateTime.Now);
+    private readonly DateOnly today = DateOnly.FromDateTime(DateTime.Now);
     private IQueryable<Financeiro> QueryFiltroFuncionario(FinanceiroFiltro filtro)
     {
         var query = _context.Financeiros.AsNoTracking();
@@ -27,11 +27,11 @@ public class FinanceiroRepository(EduContext context) : IFinanceiroRepository
             }
             else if (filtro.Status == "Pendente")
             {
-                query = query.Where(dados => dados.Pago == false);
+                query = query.Where(dados => dados.Pago == false && dados.DataVencimento > today);
             }
             else if (filtro.Status == "Atrasado")
             {
-                query = query.Where(dados => dados.Pago == false && dados.DataVencimento < Today);
+                query = query.Where(dados => dados.Pago == false && dados.DataVencimento < today);
             }
             else if (filtro.Status == "Cancelado")
             {
@@ -60,6 +60,19 @@ public class FinanceiroRepository(EduContext context) : IFinanceiroRepository
     {
         return await _context.Financeiros.Where(dados => dados.AlunoId == alunoId).ToListAsync();
     }
+
+    public async Task<(decimal TotalRecebido, decimal TotalPendente, decimal TotalAtrasado)> GetDashBoard()
+    {
+        var query = _context.Financeiros.AsNoTracking();
+        decimal totalRecebido = query.Where(p => p.Pago == true).Sum(p => p.Valor);
+
+        query = query.Where(p => p.Pago == false);
+        decimal totalPendente = query.Where(p => p.DataVencimento > today).Sum(p => p.Valor);
+        decimal totalAtrasado = query.Where(p => p.DataVencimento < today).Sum(p => p.Valor);
+
+        return (totalRecebido, totalPendente, totalAtrasado);
+    }
+
     public async Task<(IEnumerable<Financeiro>, int TotalRegistro)> GetByFilters(FinanceiroFiltro filtro)
     {
         var query = QueryFiltroFuncionario(filtro);
@@ -71,6 +84,12 @@ public class FinanceiroRepository(EduContext context) : IFinanceiroRepository
 
         return (result, total);
     }
+
+    public async Task<Financeiro?> GetById(int id)
+    {
+        return await _context.Financeiros.FirstOrDefaultAsync(dados => dados.Registro == id);
+    }
+
     public async Task<decimal> GetRecebidos()
     {
         var query = _context.Financeiros.AsNoTracking()
@@ -82,7 +101,7 @@ public class FinanceiroRepository(EduContext context) : IFinanceiroRepository
     public async Task<decimal> GetPendentes()
     {
         var query = _context.Financeiros.AsNoTracking()
-            .Where(dados => dados.Pago == false && dados.DataVencimento < Today);
+            .Where(dados => dados.Pago == false && dados.DataVencimento < today);
         var dados = await query.ToListAsync();
         decimal total = dados.Sum(p => p.Valor);
         return total;
@@ -90,14 +109,10 @@ public class FinanceiroRepository(EduContext context) : IFinanceiroRepository
     public async Task<decimal> GetAtrasados()
     {
         var query = _context.Financeiros.AsNoTracking()
-            .Where(dados => dados.Pago == false && dados.DataVencimento > Today);
+            .Where(dados => dados.Pago == false && dados.DataVencimento > today);
         var dados = await query.ToListAsync();
         decimal total = dados.Sum(p => p.Valor);
         return total;
-    }
-    public async Task<Financeiro?> GetById(int id)
-    {
-        return await _context.Financeiros.FirstOrDefaultAsync(dados => dados.Registro == id);
     }
 
     public async Task Add(Financeiro financeiro)
