@@ -8,6 +8,7 @@ namespace EduConnect.Infra.Data.Repositories;
 public class AlunoRepository(EduContext context) : IAlunoRepository
 {
     private readonly EduContext _context = context;
+
     private IQueryable<Aluno> QueryFiltroAluno(FiltroPessoas filtro)
     {
         var query = _context.Alunos.AsNoTracking();
@@ -24,6 +25,7 @@ public class AlunoRepository(EduContext context) : IAlunoRepository
     {
         return await _context.Alunos.ToListAsync();
     }
+
     public async Task<(IEnumerable<Aluno>, int TotalRegistro)> GetByFilters(FiltroPessoas filtro)
     {
         var query = QueryFiltroAluno(filtro);
@@ -34,26 +36,31 @@ public class AlunoRepository(EduContext context) : IAlunoRepository
 
         return (result, total);
     }
+
     public async Task<Aluno?> GetByIdAsync(int id)
     {
         return await _context.Alunos.FirstOrDefaultAsync(a => a.Id == id);
     }
+
     public async Task<Aluno?> GetLastAlunoAsync()
     {
         return await _context.Alunos
         .OrderBy(a => a.Id)
         .LastOrDefaultAsync();
     }
+
     public async Task AddAsync(Aluno aluno)
     {
         await _context.Alunos.AddAsync(aluno);
         await _context.SaveChangesAsync();
     }
+
     public async Task UpdateAsync(Aluno aluno)
     {
         _context.Alunos.Update(aluno);
         await _context.SaveChangesAsync();
     }
+
     public async Task DeleteAsync(int id)
     {
         var aluno = await GetByIdAsync(id);

@@ -11,11 +11,27 @@ namespace EduConnect.Controllers
     {
         private readonly ProfessorService _professorService = service;
 
-        [HttpGet]
-        public async Task<IActionResult> GetAllProfessor()
+        [HttpGet("filtro/selecionada/{selecionada}/status/{status}/page/{page}")]
+        public async Task<IActionResult> GetAllProfessor(string selecionada, string status, int page)
         {
-            var professores = await _professorService.GetAllProfessorAsync();
-            return Ok(professores);
+            var filtro = new FiltroPessoaDTO
+            {
+                Categoria = selecionada,
+                Status = status,
+                Page = page
+            };
+
+            var (professores, total) = await _professorService.GetByFilters(filtro);
+            if (professores == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(new RetornoFiltro<ProfessorDTO>
+            {
+                Dados = professores,
+                Total = total
+            });
         }
         [HttpGet("{matricula}")]
         public async Task<IActionResult> GetProfessorById(int id)
@@ -33,11 +49,24 @@ namespace EduConnect.Controllers
             var professor = await _professorService.GetLastProfessorAsync();
             if (professor == null)
             {
-                return NotFound();
+                return Ok("P000001");
             }
-            var matricula = int.Parse(professor.Registro.Substring(2));
-            var novaMatricula = (matricula + 1).ToString();
-            return Ok("PO" + novaMatricula);
+            // Registro vem no formato PO000123
+            var atual = professor.Registro;
+
+            // Pega somente os números (6 dígitos)
+            var numeros = atual.Substring(2);
+
+            // Converte para int
+            var numeroAtual = int.Parse(numeros);
+
+            // Incrementa
+            var proximo = numeroAtual + 1;
+
+            // Formata para sempre ter 6 dígitos
+            var proximoFormatado = proximo.ToString("D6");
+
+            return Ok("P" + proximoFormatado);
         }
         [HttpPost]
         public async Task<IActionResult> AddProfessor(ProfessorDTO dto)

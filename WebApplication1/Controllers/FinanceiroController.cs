@@ -139,6 +139,11 @@ namespace EduConnect.Controllers
         [HttpPost]
         public async Task<IActionResult> AddFinanceiro(FinanceiroDTO dto)
         {
+            var aluno = _alunoService.GetAlunoByIdAsync(dto.AlunoId).Result;
+            if (aluno == null)
+            {
+                return NotFound();
+            }
             // Adiciona um novo Financeiro
             await _financeiroService.AddFinanceiroAsync(dto);
             return Ok();

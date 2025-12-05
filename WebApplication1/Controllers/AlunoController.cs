@@ -51,7 +51,7 @@ namespace EduConnect.Controllers
             var aluno = await _alunoService.GetLastAluno();
             if (aluno == null)
             {
-                return Ok("MA000001");
+                return Ok("A000001");
             }
             // Registro vem no formato MA000123
             var atual = aluno.Registro;
@@ -68,7 +68,7 @@ namespace EduConnect.Controllers
             // Formata para sempre ter 6 dígitos
             var proximoFormatado = proximo.ToString("D6");
 
-            return Ok("MA" + proximoFormatado);
+            return Ok("A" + proximoFormatado);
         }
 
         [HttpPost]

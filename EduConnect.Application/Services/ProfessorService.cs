@@ -11,14 +11,47 @@ public class ProfessorService(IProfessorRepository repo)
     {
         return await _professorRepository.GetAllAsync();
     }
+    
+    public async Task<(List<ProfessorDTO>, int TotalRegistro)> GetByFilters(FiltroPessoaDTO filtrodto)
+    {
+        var filtro = new FiltroPessoas
+        {
+            Page = filtrodto.Page,
+            Categoria = filtrodto.Categoria,
+            Status = filtrodto.Status
+        };
+
+        var (professores, total) = await _professorRepository.GetByFilters(filtro);
+        List<ProfessorDTO> professoresDTO = [];
+        foreach(var professor in professores)
+        {
+            var dto = new ProfessorDTO(professor)
+            {
+                Registro = professor.Registro,
+                Nome = professor.Nome,
+                Email = professor.Email,
+                Telefone = professor.Telefone,
+                Status = professor.Status,
+                Nasc = professor.Nasc,
+                Endereco = professor.Endereco,
+                Cpf = professor.Cpf,
+                ContatoEmergencia = professor.ContatoEmergencia
+            };
+            professoresDTO.Add(dto);
+        }
+        return (professoresDTO, total);
+    }
+
     public async Task<Professor?> GetProfessorByIdAsync(int id)
     {
         return await _professorRepository.GetByIdAsync(id);
     }
+
     public async Task<Professor?> GetLastProfessorAsync()
     {
         return await _professorRepository.GetLastProfessorAsync();
     }
+
     public async Task AddProfessorAsync(ProfessorDTO dto)
     {
         var professor = new Professor
@@ -40,6 +73,7 @@ public class ProfessorService(IProfessorRepository repo)
         };
         await _professorRepository.AddAsync(professor);
     }
+
     public async Task UpdateProfessorAsync(ProfessorDTO dto)
     {
         var professor = new Professor

@@ -48,7 +48,10 @@ public class FinanceiroService(IFinanceiroRepository repo)
             DataVencimento = dto.DataVencimento,
             Pago = dto.Pago,
             DataPagamento = dto.DataPagamento,
-            Cancelado = dto.Cancelado
+            Cancelado = dto.Cancelado,
+            Descricao = dto.Descricao,
+            Metodo = dto.Metodo,
+            Observacoes = dto.Observacoes
         };
         await _financeiroRepository.Add(financeiro);
     }

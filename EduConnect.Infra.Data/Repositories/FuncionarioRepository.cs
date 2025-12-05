@@ -13,20 +13,24 @@ public class FuncionarioRepository(EduContext context) : IFuncionarioRepository
     {
         return await _context.Funcionarios.ToListAsync();
     }
+
     public async Task<Funcionario?> GetByIdAsync(int id)
     {
         return await _context.Funcionarios.FirstOrDefaultAsync(a => a.Id == id);
     }
+
     public async Task AddAsync(Funcionario funcionario)
     {
         await _context.Funcionarios.AddAsync(funcionario);
         await _context.SaveChangesAsync();
     }
+
     public async Task UpdateAsync(Funcionario funcionario)
     {
         _context.Funcionarios.Update(funcionario);
         await _context.SaveChangesAsync();
     }
+
     public async Task DeleteAsync(int id)
     {
         var funcionario = await GetByIdAsync(id);
