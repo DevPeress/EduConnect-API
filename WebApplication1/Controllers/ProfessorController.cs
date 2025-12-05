@@ -49,7 +49,7 @@ namespace EduConnect.Controllers
             var professor = await _professorService.GetLastProfessorAsync();
             if (professor == null)
             {
-                return NotFound();
+                return Ok("P000001");
             }
             // Registro vem no formato PO000123
             var atual = professor.Registro;
@@ -66,7 +66,7 @@ namespace EduConnect.Controllers
             // Formata para sempre ter 6 dígitos
             var proximoFormatado = proximo.ToString("D6");
 
-            return Ok("PO" + proximoFormatado);
+            return Ok("P" + proximoFormatado);
         }
         [HttpPost]
         public async Task<IActionResult> AddProfessor(ProfessorDTO dto)
