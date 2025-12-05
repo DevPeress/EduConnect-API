@@ -10,7 +10,7 @@ public class FinanceiroRepository(EduContext context) : IFinanceiroRepository
 {
     private readonly EduContext _context = context;
     private readonly DateOnly today = DateOnly.FromDateTime(DateTime.Today);
-    private IQueryable<Financeiro> QueryFiltroFuncionario(FinanceiroFiltro filtro)
+    private IQueryable<Financeiro> QueryFiltroFinanceiro(FinanceiroFiltro filtro)
     {
         var query = _context.Financeiros.AsNoTracking();
 
@@ -76,7 +76,7 @@ public class FinanceiroRepository(EduContext context) : IFinanceiroRepository
 
     public async Task<(IEnumerable<Financeiro>, int TotalRegistro)> GetByFilters(FinanceiroFiltro filtro)
     {
-        var query = QueryFiltroFuncionario(filtro);
+        var query = QueryFiltroFinanceiro(filtro);
         var total = await query.CountAsync();
        
         query = query.Skip(filtro.Offset).Take(6);
