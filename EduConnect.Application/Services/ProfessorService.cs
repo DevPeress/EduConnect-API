@@ -7,11 +7,7 @@ namespace EduConnect.Application.Services;
 public class ProfessorService(IProfessorRepository repo)
 {
     private readonly IProfessorRepository _professorRepository = repo;
-    public async Task<List<Professor>> GetAllProfessorAsync()
-    {
-        return await _professorRepository.GetAllAsync();
-    }
-    
+
     public async Task<(List<ProfessorDTO>, int TotalRegistro)> GetByFilters(FiltroPessoaDTO filtrodto)
     {
         var filtro = new FiltroPessoas
