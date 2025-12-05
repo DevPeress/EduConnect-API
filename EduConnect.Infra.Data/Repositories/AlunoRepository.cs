@@ -21,11 +21,6 @@ public class AlunoRepository(EduContext context) : IAlunoRepository
         return query;
     }
 
-    public async Task<List<Aluno>> GetAllAsync()
-    {
-        return await _context.Alunos.ToListAsync();
-    }
-
     public async Task<(IEnumerable<Aluno>, int TotalRegistro)> GetByFilters(FiltroPessoas filtro)
     {
         var query = QueryFiltroAluno(filtro);

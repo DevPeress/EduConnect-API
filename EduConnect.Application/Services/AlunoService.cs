@@ -7,10 +7,7 @@ namespace EduConnect.Application.Services;
 public class AlunoService(IAlunoRepository repo)
 {
     private readonly IAlunoRepository _alunoRepository = repo;
-    public async Task<List<Aluno>> GetAllAlunosAsync()
-    {
-        return await _alunoRepository.GetAllAsync();
-    }
+
     public async Task<(List<AlunoDTO>, int TotalRegistro)> GetByFilters(FiltroPessoaDTO filtrodto)
     {
         var filtro = new FiltroPessoas
