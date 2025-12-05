@@ -10,6 +10,7 @@ public class ProfessorDTO : PessoaDTO
     public string Formacao { get; init; } = null!;
     public decimal Salario { get; init; }
 
+    public ProfessorDTO() { }
     public ProfessorDTO(Professor dados)
     {
         Nome = dados.Nome;
