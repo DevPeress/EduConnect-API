@@ -8,6 +8,7 @@ namespace EduConnect.Infra.Data.Repositories;
 public class ProfessorRepository(EduContext context) : IProfessorRepository
 {
     private readonly EduContext _context = context;
+
     private IQueryable<Professor> QueryFiltroProfessor(FiltroPessoas filtro)
     {
         var query = _context.Professores.AsNoTracking();
