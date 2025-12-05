@@ -11,12 +11,28 @@ namespace EduConnect.Controllers
     {
         private readonly FuncionarioService _funcionarioService = service;
 
-        [HttpGet]
-        public async Task<IActionResult> GetAllFuncionarios()
+        [HttpGet("filtro/status/{status}/page/{page}")]
+        public async Task<IActionResult> GetAllFuncionarios(string status, int page)
         {
-            var funcionarios = await _funcionarioService.GetAllFuncionariosAsync();
-            return Ok(funcionarios);
+            var filtro = new FiltroPessoaDTO
+            {
+                Status = status,
+                Page = page
+            };
+
+            var (funcionarios, total) = await _funcionarioService.GetByFilters(filtro);
+            if (funcionarios == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(new RetornoFiltro<FuncionarioDTO>
+            {
+                Dados = funcionarios,
+                Total = total
+            });
         }
+
         [HttpGet("{matricula}")]
         public async Task<IActionResult> GetFuncionarioById(int id)
         {
@@ -27,12 +43,14 @@ namespace EduConnect.Controllers
             }
             return Ok(funcionarios);
         }
+
         [HttpPost]
         public async Task<IActionResult> AddFuncionario(FuncionarioDTO dto)
         {
             await _funcionarioService.AddFuncionarioAsync(dto);
             return Ok();
         }
+
         [HttpPut("{matricula}")]
         public async Task<IActionResult> UpdateFuncionario(int id, FuncionarioDTO dto)
         {
@@ -48,6 +66,7 @@ namespace EduConnect.Controllers
             await _funcionarioService.UpdateFuncionarioAsync(dto);
             return NoContent();
         }
+
         [HttpDelete("{matricula}")]
         public async Task<IActionResult> DeleteFuncionario(int id)
         {
