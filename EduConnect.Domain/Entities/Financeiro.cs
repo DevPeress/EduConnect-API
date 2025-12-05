@@ -8,6 +8,8 @@ public class Financeiro
     public int Registro { get; set; }
     public int AlunoId { get; set; }
     public required string Categoria { get; set; }
+    public string Metodo { get; init; } = "Cartão de Crédito";
+    public string Descricao { get; init; } = default!;
     public decimal Valor { get; set; }
     public DateOnly DataVencimento { get; set; }
     public bool Pago { get; set; }
