@@ -51,9 +51,22 @@ namespace EduConnect.Controllers
             {
                 return NotFound();
             }
-            var matricula = int.Parse(professor.Registro.Substring(2));
-            var novaMatricula = (matricula + 1).ToString();
-            return Ok("PO" + novaMatricula);
+            // Registro vem no formato PO000123
+            var atual = professor.Registro;
+
+            // Pega somente os números (6 dígitos)
+            var numeros = atual.Substring(2);
+
+            // Converte para int
+            var numeroAtual = int.Parse(numeros);
+
+            // Incrementa
+            var proximo = numeroAtual + 1;
+
+            // Formata para sempre ter 6 dígitos
+            var proximoFormatado = proximo.ToString("D6");
+
+            return Ok("PO" + proximoFormatado);
         }
         [HttpPost]
         public async Task<IActionResult> AddProfessor(ProfessorDTO dto)
