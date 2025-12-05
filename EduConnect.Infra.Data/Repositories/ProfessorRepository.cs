@@ -8,7 +8,7 @@ namespace EduConnect.Infra.Data.Repositories;
 public class ProfessorRepository(EduContext context) : IProfessorRepository
 {
     private readonly EduContext _context = context;
-    private IQueryable<Professor> QueryFiltroAluno(FiltroPessoas filtro)
+    private IQueryable<Professor> QueryFiltroProfessor(FiltroPessoas filtro)
     {
         var query = _context.Professores.AsNoTracking();
 
@@ -27,7 +27,7 @@ public class ProfessorRepository(EduContext context) : IProfessorRepository
 
     public async Task<(IEnumerable<Professor>, int TotalRegistro)> GetByFilters(FiltroPessoas filtro)
     {
-        var query = QueryFiltroAluno(filtro);
+        var query = QueryFiltroProfessor(filtro);
         var total = await query.CountAsync();
 
         query = query.Skip(filtro.Offset).Take(6);
