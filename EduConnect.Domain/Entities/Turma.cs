@@ -15,4 +15,5 @@ public class Turma
     public required string Horario { get; set; }
     public int Capacidade { get; set; }
     public DateOnly AnoLetivo { get; set; }
+    public DateOnly DataCriacao { get; set; } = DateOnly.FromDateTime(DateTime.Today);
 }
