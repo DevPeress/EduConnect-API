@@ -44,6 +44,33 @@ namespace EduConnect.Controllers
             return Ok(funcionarios);
         }
 
+        [HttpGet("Cadastro")]
+        public async Task<IActionResult> GetLastFuncionarioAsync()
+        {
+            var funcionario = await _funcionarioService.GetLastFuncionarioAsync();
+            if (funcionario == null)
+            {
+                return Ok("F000001");
+            }
+
+            // Registro vem no formato FO000123
+            var atual = funcionario.Registro;
+
+            // Pega somente os números (6 dígitos)
+            var numeros = atual.Substring(2);
+
+            // Converte para int
+            var numeroAtual = int.Parse(numeros);
+
+            // Incrementa
+            var proximo = numeroAtual + 1;
+
+            // Formata para sempre ter 6 dígitos
+            var proximoFormatado = proximo.ToString("D6");
+
+            return Ok("F" + proximoFormatado);
+        }
+
         [HttpPost]
         public async Task<IActionResult> AddFuncionario(FuncionarioDTO dto)
         {

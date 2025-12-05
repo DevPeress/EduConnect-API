@@ -42,6 +42,13 @@ public class FuncionarioRepository(EduContext context) : IFuncionarioRepository
         return await _context.Funcionarios.FirstOrDefaultAsync(a => a.Id == id);
     }
 
+    public async Task<Funcionario?> GetLastFuncionarioAsync()
+    {
+        return await _context.Funcionarios
+        .OrderBy(a => a.Registro)
+        .LastAsync();
+    }
+
     public async Task AddAsync(Funcionario funcionario)
     {
         await _context.Funcionarios.AddAsync(funcionario);

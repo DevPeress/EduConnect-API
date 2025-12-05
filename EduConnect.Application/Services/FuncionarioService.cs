@@ -44,6 +44,11 @@ public class FuncionarioService(IFuncionarioRepository repo)
         return await _funcionarioRepository.GetByIdAsync(id);
     }
 
+    public async Task<Funcionario?> GetLastFuncionarioAsync()
+    {
+        return await _funcionarioRepository.GetLastFuncionarioAsync();
+    }
+
     public async Task AddFuncionarioAsync(FuncionarioDTO dto)
     {
         var funcionario = new Funcionario
