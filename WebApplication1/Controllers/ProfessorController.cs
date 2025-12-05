@@ -11,11 +11,27 @@ namespace EduConnect.Controllers
     {
         private readonly ProfessorService _professorService = service;
 
-        [HttpGet]
-        public async Task<IActionResult> GetAllProfessor()
+        [HttpGet("filtro/selecionada/{selecionada}/status/{status}/page/{page}")]
+        public async Task<IActionResult> GetAllProfessor(string selecionada, string status, int page)
         {
-            var professores = await _professorService.GetAllProfessorAsync();
-            return Ok(professores);
+            var filtro = new FiltroPessoaDTO
+            {
+                Categoria = selecionada,
+                Status = status,
+                Page = page
+            };
+
+            var (professores, total) = await _professorService.GetByFilters(filtro);
+            if (professores == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(new RetornoFiltro<ProfessorDTO>
+            {
+                Dados = professores,
+                Total = total
+            });
         }
         [HttpGet("{matricula}")]
         public async Task<IActionResult> GetProfessorById(int id)
