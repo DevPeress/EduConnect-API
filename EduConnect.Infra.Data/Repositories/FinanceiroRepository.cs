@@ -90,31 +90,6 @@ public class FinanceiroRepository(EduContext context) : IFinanceiroRepository
         return await _context.Financeiros.FirstOrDefaultAsync(dados => dados.Registro == id);
     }
 
-    public async Task<decimal> GetRecebidos()
-    {
-        var query = _context.Financeiros.AsNoTracking()
-            .Where(dados => dados.Pago == true);
-        var dados = await query.ToListAsync();
-        decimal total = dados.Sum(p => p.Valor);
-        return total;
-    }
-    public async Task<decimal> GetPendentes()
-    {
-        var query = _context.Financeiros.AsNoTracking()
-            .Where(dados => dados.Pago == false && dados.DataVencimento < today);
-        var dados = await query.ToListAsync();
-        decimal total = dados.Sum(p => p.Valor);
-        return total;
-    }
-    public async Task<decimal> GetAtrasados()
-    {
-        var query = _context.Financeiros.AsNoTracking()
-            .Where(dados => dados.Pago == false && dados.DataVencimento > today);
-        var dados = await query.ToListAsync();
-        decimal total = dados.Sum(p => p.Valor);
-        return total;
-    }
-
     public async Task Add(Financeiro financeiro)
     {
         await _context.Financeiros.AddAsync(financeiro);
