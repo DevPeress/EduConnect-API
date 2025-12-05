@@ -8,11 +8,6 @@ public class FuncionarioService(IFuncionarioRepository repo)
 {
     private readonly IFuncionarioRepository _funcionarioRepository = repo;
 
-    public async Task<List<Funcionario>> GetAllFuncionariosAsync()
-    {
-        return await _funcionarioRepository.GetAllAsync();
-    }
-
     public async Task<(List<FuncionarioDTO>, int TotalRegistro)> GetByFilters(FiltroPessoaDTO filtrodto)
     {
         var filtro = new FiltroPessoas

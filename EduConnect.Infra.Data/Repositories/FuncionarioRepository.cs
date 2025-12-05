@@ -21,11 +21,6 @@ public class FuncionarioRepository(EduContext context) : IFuncionarioRepository
         return query;
     }
 
-    public async Task<List<Funcionario>> GetAllAsync()
-    {
-        return await _context.Funcionarios.ToListAsync();
-    }
-
     public async Task<(IEnumerable<Funcionario>, int TotalRegistro)> GetByFilters(FiltroPessoas filtro)
     {
         var query = QueryFiltroProfessor(filtro);
