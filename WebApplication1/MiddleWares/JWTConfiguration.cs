@@ -3,28 +3,31 @@ using Microsoft.IdentityModel.Tokens;
 using System.Net;
 using System.Text;
 
-namespace Cemig.Part2.Middlewares
+namespace EduConnect.MiddleWares
 {
     public static class JWTConfiguration
     {
-        extension(IServiceCollection services)
+        public static IServiceCollection AddJWTConfiguration(
+            this IServiceCollection services,
+            IConfiguration configuration)
         {
-            public IServiceCollection AddJWTConfiguration(IConfiguration configuration)
-            {
-                services.AddAuthentication(options =>
+            services
+                .AddAuthentication(options =>
                 {
                     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                }).AddJwtBearer(options =>
+                })
+                .AddJwtBearer(options =>
                 {
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
-                        ValidateIssuer = true,
+                        ValidateIssuer = false,
                         ValidateAudience = false,
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
-                        ValidIssuer = configuration["ISSUER"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtKey"]!)),
+                        IssuerSigningKey = new SymmetricSecurityKey(
+                            Encoding.UTF8.GetBytes(configuration["JwtKey"]!)
+                        ),
                         RequireExpirationTime = true,
                         ClockSkew = TimeSpan.Zero
                     };
@@ -39,6 +42,7 @@ namespace Cemig.Part2.Middlewares
                             }
                             return Task.CompletedTask;
                         },
+
                         OnAuthenticationFailed = context =>
                         {
                             if (context.Exception is SecurityTokenExpiredException)
@@ -50,11 +54,9 @@ namespace Cemig.Part2.Middlewares
                             return Task.CompletedTask;
                         }
                     };
-
                 });
 
-                return services;
-            }
+            return services;
         }
     }
 }
