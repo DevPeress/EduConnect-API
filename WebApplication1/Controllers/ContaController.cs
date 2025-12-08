@@ -1,15 +1,27 @@
 ﻿using EduConnect.Application.DTO;
 using EduConnect.Application.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace EduConnect.Controllers
 {
     [ApiController]
-    [Route("api/contas")]
+    [Route("api/auth")]
     public class ContaController(ContaService service, JWTService jwt) : ControllerBase
     {
         private readonly ContaService _contaService = service;
         private readonly JWTService _jwtService = jwt;
+
+        [Authorize]
+        [HttpGet("usuario")]
+        public IActionResult Get()
+        {
+            var id = User.FindFirst("Registro")?.Value;
+            var role = User.FindFirst(ClaimTypes.Role)?.Value;
+
+            return Ok(new { id, role });
+        }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] ContaDTO contaDto)
@@ -20,12 +32,12 @@ namespace EduConnect.Controllers
                 return Unauthorized("Credenciais inválidas.");
             }
 
-            var token = _jwtService.GenerateToken(1,"Admin",contaDto.Lembrar);
+            var token = _jwtService.GenerateToken(contaDto.Registro, "Administrador", contaDto.Lembrar);
             Response.Cookies.Append("auth", token, new CookieOptions
             {
                 HttpOnly = true,
                 Secure = false,       // Requer HTTPS
-                SameSite = SameSiteMode.Strict,
+                SameSite = SameSiteMode.Lax,
                 Expires = DateTimeOffset.UtcNow.AddHours(2)
             });
 
