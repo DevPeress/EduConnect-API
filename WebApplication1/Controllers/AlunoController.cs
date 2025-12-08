@@ -6,9 +6,10 @@ namespace EduConnect.Controllers
 {
     [ApiController]
     [Route("api/alunos")]
-    public class AlunoController(AlunoService service) : ControllerBase
+    public class AlunoController(AlunoService service, ContaService conta) : ControllerBase
     {
         private readonly AlunoService _alunoService = service;
+        private readonly ContaService _contaService = conta;
 
         [HttpGet("filtro/selecionada/{selecionada}/status/{status}/page/{page}")]
         public async Task<IActionResult> GetAlunos(string selecionada, string status, int page)
@@ -75,6 +76,12 @@ namespace EduConnect.Controllers
         public async Task<IActionResult> AddAluno([FromBody] AlunoDTO dto)
         {
             await _alunoService.AddAlunoAsync(dto);
+            var conta = new ContaDTO
+            {
+                Registro = dto.Registro,
+                Senha = "Teste",
+            };
+            await _contaService.AddContaAsync(conta);
             return Ok();
         }
 
