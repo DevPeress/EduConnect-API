@@ -14,7 +14,7 @@ namespace EduConnect.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] ContaDTO contaDto)
         {
-            var conta = await _contaService.GetConta(contaDto.Email, contaDto.Senha);
+            var conta = await _contaService.GetConta(contaDto.Registro, contaDto.Senha);
             if (conta == null)
             {
                 return Unauthorized("Credenciais inválidas.");
@@ -37,18 +37,6 @@ namespace EduConnect.Controllers
         {
             Response.Cookies.Delete("auth");
             return Ok();
-        }
-
-        [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] ContaDTO contaDto)
-        {
-            if (await _contaService.EmailExistsAsync(contaDto.Email))
-            {
-                return Conflict("Email já está em uso.");
-            }
-
-            await _contaService.AddContaAsync(contaDto);
-            return Ok("Conta criada com sucesso.");
         }
 
         [HttpDelete("{id:int}")]
