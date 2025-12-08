@@ -46,7 +46,8 @@ public class TurmaService(ITurmaRepository repo)
             DisciplinaID = turmadto.DisciplinaID,
             Horario = turmadto.Horario,
             Capacidade = turmadto.Capacidade,
-            AnoLetivo = turmadto.AnoLetivo
+            AnoLetivo = turmadto.AnoLetivo,
+            Status = turmadto.Status,
         };
         await _turmaRepository.AddTurmaAsync(turma);
     }
@@ -64,7 +65,8 @@ public class TurmaService(ITurmaRepository repo)
             DisciplinaID = turmaDTO.DisciplinaID,
             Horario = turmaDTO.Horario,
             Capacidade = turmaDTO.Capacidade,
-            AnoLetivo = turmaDTO.AnoLetivo
+            AnoLetivo = turmaDTO.AnoLetivo,
+            Status = turmaDTO.Status,
         };
         await _turmaRepository.UpdateTurmaAsync(turma);
     }
