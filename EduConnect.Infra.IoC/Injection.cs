@@ -25,6 +25,8 @@ namespace EduConnect.Infra.IoC
             services.AddScoped<RegistroService>();
             services.AddScoped<IFinanceiroRepository, FinanceiroRepository>();
             services.AddScoped<FinanceiroService>();
+            services.AddScoped<IContaRepository, ContaRepository>();
+            services.AddScoped<ContaService>();
         }
     }
 }
