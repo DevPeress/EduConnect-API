@@ -1,4 +1,3 @@
-using Cemig.Part2.Middlewares;
 using EduConnect.MiddleWares;
 
 var builder = WebApplication.CreateBuilder(args);
