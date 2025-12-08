@@ -1,3 +1,4 @@
+using Cemig.Part2.Middlewares;
 using EduConnect.MiddleWares;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +12,8 @@ builder.Services.AddDependencyInjectionConfiguration(builder.Configuration);
 builder.Services.AddCorsConfiguration(builder.Configuration);
 builder.Services.AddProblemDetails();
 builder.Services.AddJsonConverterConfiguration();
+builder.Services.AddJWTConfiguration(builder.Configuration);
+builder.Services.AddAuthorization();
 
 var app = builder.Build();  
 
@@ -22,6 +25,8 @@ if (app.Environment.IsDevelopment())
 //app.UseHttpsRedirection();
 // Utilizar CORS
 app.UseCors("restrictivePolicy");
+// Middleware de autenticação 
+app.UseAuthentication();
 // Middleware de autorização
 app.UseAuthorization();
 // Mapeia controllers para requisições de API
