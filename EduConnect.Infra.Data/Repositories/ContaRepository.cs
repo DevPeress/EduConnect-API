@@ -1,20 +1,22 @@
 ﻿using EduConnect.Domain.Entities;
 using EduConnect.Domain.Interfaces;
 using EduConnect.Infra.Data.Context;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Win32;
 
 namespace EduConnect.Infra.Data.Repositories;
 
 public class ContaRepository(EduContext context) : IContaRepository
 {
     private readonly EduContext _context = context;
-    public async Task<Conta> GetConta(string email, string senha)
+    public async Task<Conta> GetConta(string registro, string senha)
     {
         return await _context.Contas
-            .FirstOrDefaultAsync(c => c.Email == email && c.Senha == senha);
+            .FirstAsync(c => c.Registro == registro && c.Senha == senha);
     }
-    public async Task<bool> EmailExistsAsync(string email)
+    public async Task<bool> EmailExistsAsync(string registro)
     {
-        return await _context.Contas.AnyAsync(c => c.Email == email);
+        return await _context.Contas.AnyAsync(c => c.Registro == registro);
     }
     public async Task AddContaAsync(Conta conta)
     {

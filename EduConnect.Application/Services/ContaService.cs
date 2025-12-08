@@ -15,7 +15,7 @@ public class ContaService(IContaRepository contaRepository)
     {
         var conta = new Conta
         {
-            Email = contadtp.Email,
+            Registro = contadtp.Registro,
             Senha = contadtp.Senha
         };
         await _contaRepository.AddContaAsync(conta);
