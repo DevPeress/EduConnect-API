@@ -29,3 +29,38 @@ Desenvolvida em **C# com .NET**, a API foi projetada para ser **escalável, orga
 - [Entity Framework Core](https://learn.microsoft.com/pt-br/ef/core/)
 - [Mapeamento via Models]
 - [Controllers Rest]
+
+## ✨ Funcionalidades
+
+- **Autenticação JWT** (login e controle de acesso)
+- **CRUD de usuários** (alunos, professores, administradores)
+- **CRUD de turmas**
+- **Gerenciamento de presença**
+- **Integração com calendário escolar**
+- **Estrutura modular e extensível**
+
+## ⚙️ Instalação e Execução
+
+``` bash
+# Clone o repositório
+git clone https://github.com/DevPeress/EduConnect-API
+cd EduConnect-API
+
+# Restaure as dependências
+dotnet restore
+
+# Execute a aplicação
+dotnet run
+```
+
+## 🗂 Estrutura do Projeto
+
+📁 EduConnect-API
+  ┣ 📂 Controllers        # Endpoints da API
+  ┣ 📂 Entities           # Modelos de dados (entidades)
+  ┣ 📂 Services           # Regras de negócio e lógica
+  ┣ 📂 Interfaces         # Interfaces para serviços e contratos
+  ┣ 📂 Data               # Configurações de banco, migrations e contexto
+  ┣ 📂 DTOs               # Objetos de transferência de dados
+  ┣ 📄 Program.cs         # Inicialização da API
+  ┣ 📄 appsettings.json   # Configurações (DB, JWT, etc.)
