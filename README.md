@@ -55,6 +55,7 @@ dotnet run
 
 ## 🗂 Estrutura do Projeto
 
+```
 📁 EduConnect-API
   ┣ 📂 Controllers        # Endpoints da API
   ┣ 📂 Entities           # Modelos de dados (entidades)
@@ -64,3 +65,4 @@ dotnet run
   ┣ 📂 DTOs               # Objetos de transferência de dados
   ┣ 📄 Program.cs         # Inicialização da API
   ┣ 📄 appsettings.json   # Configurações (DB, JWT, etc.)
+```
