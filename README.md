@@ -27,8 +27,8 @@ Desenvolvida em **C# com .NET**, a API foi projetada para ser **escalável, orga
 ### 🧹 Qualidade e Organização
 
 - [Entity Framework Core](https://learn.microsoft.com/pt-br/ef/core/)
-- [Mapeamento via Models]
-- [Controllers Rest]
+- [Mapeamento via Models]()
+- [Controllers Rest]()
 
 ## ✨ Funcionalidades
 
