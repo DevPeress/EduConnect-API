@@ -11,6 +11,7 @@ public class EduContext(DbContextOptions<EduContext> options) : DbContext(option
     public DbSet<Registro> Registros { get; set; }
     public DbSet<Financeiro> Financeiros { get; set; }
     public DbSet<Turma> Turmas { get; set; }
+    public DbSet<Conta> Contas { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

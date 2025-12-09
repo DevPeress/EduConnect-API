@@ -11,6 +11,7 @@ public class FuncionarioDTO : PessoaDTO
     public string Supervisor { get; init; } = null!;
     public string Turno { get; init; } = null!;
 
+    public FuncionarioDTO() { }
     public FuncionarioDTO(Funcionario dados)
     {
         Nome = dados.Nome;

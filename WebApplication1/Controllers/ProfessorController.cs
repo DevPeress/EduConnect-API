@@ -33,6 +33,7 @@ namespace EduConnect.Controllers
                 Total = total
             });
         }
+
         [HttpGet("{matricula}")]
         public async Task<IActionResult> GetProfessorById(int id)
         {
@@ -43,6 +44,7 @@ namespace EduConnect.Controllers
             }
             return Ok(professores);
         }
+
         [HttpGet("Cadastro")]
         public async Task<IActionResult> GetLastProfessorAsync()
         {
@@ -68,12 +70,14 @@ namespace EduConnect.Controllers
 
             return Ok("P" + proximoFormatado);
         }
+
         [HttpPost]
         public async Task<IActionResult> AddProfessor(ProfessorDTO dto)
         {
             await _professorService.AddProfessorAsync(dto);
             return Ok();
         }
+
         [HttpPut("{matricula}")]
         public async Task<IActionResult> UpdateProfessor(int id, ProfessorDTO dto)
         {
@@ -89,6 +93,7 @@ namespace EduConnect.Controllers
             await _professorService.UpdateProfessorAsync(dto);
             return NoContent();
         }
+
         [HttpDelete("{matricula}")]
         public async Task<IActionResult> DeleteProfessor(int id)
         {

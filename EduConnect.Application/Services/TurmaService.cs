@@ -6,14 +6,34 @@ namespace EduConnect.Application.Services;
 public class TurmaService(ITurmaRepository repo)
 {
     private readonly ITurmaRepository _turmaRepository = repo;
-    public async Task<List<Turma>> GetAllTurmasAsync()
+
+    public async Task<(List<TurmaDTO>, int TotalRegistro)> GetByFilters(FiltroPessoaDTO filtrodto)
     {
-        return await _turmaRepository.GetTurmasAsync();
+        var filtro = new FiltroPessoas
+        {
+            Page = filtrodto.Page,
+            Categoria = filtrodto.Categoria,
+            Status = filtrodto.Status,
+            Turno = filtrodto.Turno
+        };
+
+        var (turmas, total) = await _turmaRepository.GetByFilters(filtro);
+        List<TurmaDTO> turmaDTO = turmas.Select(turmas => new TurmaDTO(turmas)
+        {
+            Registro = turmas.Registro,
+            Nome = turmas.Nome,
+            Turno = turmas.Turno,
+            Horario = turmas.Horario,
+        }).ToList();
+
+        return (turmaDTO, total);
     }
+
     public async Task<Turma?> GetTurmaByIdAsync(int id)
     {
         return await _turmaRepository.GetTurmaByIdAsync(id);
     }
+
     public async Task AddTurmaAsync(TurmaDTO turmadto)
     {
         var turma = new Turma
@@ -26,10 +46,12 @@ public class TurmaService(ITurmaRepository repo)
             DisciplinaID = turmadto.DisciplinaID,
             Horario = turmadto.Horario,
             Capacidade = turmadto.Capacidade,
-            AnoLetivo = turmadto.AnoLetivo
+            AnoLetivo = turmadto.AnoLetivo,
+            Status = turmadto.Status,
         };
         await _turmaRepository.AddTurmaAsync(turma);
     }
+
     public async Task UpdateTurmaAsync(TurmaDTO turmaDTO)
     {
         var turma = new Turma
@@ -43,10 +65,12 @@ public class TurmaService(ITurmaRepository repo)
             DisciplinaID = turmaDTO.DisciplinaID,
             Horario = turmaDTO.Horario,
             Capacidade = turmaDTO.Capacidade,
-            AnoLetivo = turmaDTO.AnoLetivo
+            AnoLetivo = turmaDTO.AnoLetivo,
+            Status = turmaDTO.Status,
         };
         await _turmaRepository.UpdateTurmaAsync(turma);
     }
+
     public async Task DeleteTurmaAsync(int id)
     {
         await _turmaRepository.DeleteTurmaAsync(id);

@@ -9,14 +9,39 @@ public class FuncionarioRepository(EduContext context) : IFuncionarioRepository
 {
     private readonly EduContext _context = context;
 
-    public async Task<List<Funcionario>> GetAllAsync()
+    private IQueryable<Funcionario> QueryFiltroProfessor(FiltroPessoas filtro)
     {
-        return await _context.Funcionarios.ToListAsync();
+        var query = _context.Funcionarios.AsNoTracking();
+
+        if (filtro.Status != null && filtro.Status != "Todos os Status")
+        {
+            query = query.Where(dados => dados.Status == filtro.Status);
+        }
+
+        return query;
+    }
+
+    public async Task<(IEnumerable<Funcionario>, int TotalRegistro)> GetByFilters(FiltroPessoas filtro)
+    {
+        var query = QueryFiltroProfessor(filtro);
+        var total = await query.CountAsync();
+
+        query = query.Skip(filtro.Offset).Take(6);
+        var result = await query.ToListAsync();
+
+        return (result, total);
     }
 
     public async Task<Funcionario?> GetByIdAsync(int id)
     {
         return await _context.Funcionarios.FirstOrDefaultAsync(a => a.Id == id);
+    }
+
+    public async Task<Funcionario?> GetLastFuncionarioAsync()
+    {
+        return await _context.Funcionarios
+        .OrderBy(a => a.Registro)
+        .LastAsync();
     }
 
     public async Task AddAsync(Funcionario funcionario)

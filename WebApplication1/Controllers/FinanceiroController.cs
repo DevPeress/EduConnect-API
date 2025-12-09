@@ -35,16 +35,6 @@ namespace EduConnect.Controllers
             return financeiroDTOs;
         } 
 
-        [HttpGet]
-        public async Task<IActionResult> GetAllFinanceiros()
-        {
-            // Pega todos os Financeiros e adiciona o Nome do Aluno e o Status no DTO
-            var financeiros = await _financeiroService.GetAllFinanceirosAsync();
-            var financeiroDTOs = Filtro(financeiros.ToList());
-
-            return Ok(financeiroDTOs);
-        }
-
         [HttpGet("Dashboard")] 
         public async Task<IActionResult> TestGetFinanceiros()
         {

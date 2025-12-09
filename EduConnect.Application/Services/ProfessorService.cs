@@ -7,11 +7,7 @@ namespace EduConnect.Application.Services;
 public class ProfessorService(IProfessorRepository repo)
 {
     private readonly IProfessorRepository _professorRepository = repo;
-    public async Task<List<Professor>> GetAllProfessorAsync()
-    {
-        return await _professorRepository.GetAllAsync();
-    }
-    
+
     public async Task<(List<ProfessorDTO>, int TotalRegistro)> GetByFilters(FiltroPessoaDTO filtrodto)
     {
         var filtro = new FiltroPessoas
@@ -22,23 +18,19 @@ public class ProfessorService(IProfessorRepository repo)
         };
 
         var (professores, total) = await _professorRepository.GetByFilters(filtro);
-        List<ProfessorDTO> professoresDTO = [];
-        foreach(var professor in professores)
+        List<ProfessorDTO> professoresDTO = professores.Select(professores => new ProfessorDTO(professores)
         {
-            var dto = new ProfessorDTO(professor)
-            {
-                Registro = professor.Registro,
-                Nome = professor.Nome,
-                Email = professor.Email,
-                Telefone = professor.Telefone,
-                Status = professor.Status,
-                Nasc = professor.Nasc,
-                Endereco = professor.Endereco,
-                Cpf = professor.Cpf,
-                ContatoEmergencia = professor.ContatoEmergencia
-            };
-            professoresDTO.Add(dto);
-        }
+            Registro = professores.Registro,
+            Nome = professores.Nome,
+            Email = professores.Email,
+            Telefone = professores.Telefone,
+            Status = professores.Status,
+            Nasc = professores.Nasc,
+            Endereco = professores.Endereco,
+            Cpf = professores.Cpf,
+            ContatoEmergencia = professores.ContatoEmergencia
+        }).ToList();
+       
         return (professoresDTO, total);
     }
 

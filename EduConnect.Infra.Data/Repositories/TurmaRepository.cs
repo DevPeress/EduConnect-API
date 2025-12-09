@@ -8,9 +8,32 @@ public class TurmaRepository(EduContext context) : ITurmaRepository
 {
     private readonly EduContext _context = context;
 
-    public async Task<List<Turma>> GetTurmasAsync()
+    private IQueryable<Turma> QueryFiltroTurma(FiltroPessoas filtro)
     {
-        return await _context.Turmas.ToListAsync();
+        var query = _context.Turmas.AsNoTracking();
+
+        if (filtro.Status != null && filtro.Status != "Todos os Status")
+        {
+            query = query.Where(dados => dados.Status == filtro.Status);
+        }
+
+        if (filtro.Turno != null && filtro.Turno != "Todos os Turnos")
+        {
+            query = query.Where(dados => dados.Status == filtro.Status);
+        }
+
+        return query;
+    }
+
+    public async Task<(IEnumerable<Turma>, int TotalRegistro)> GetByFilters(FiltroPessoas filtro)
+    {
+        var query = QueryFiltroTurma(filtro);
+        var total = await query.CountAsync();
+
+        query = query.Skip(filtro.Offset).Take(6);
+        var result = await query.ToListAsync();
+
+        return (result, total);
     }
 
     public async Task<Turma?> GetTurmaByIdAsync(int id)

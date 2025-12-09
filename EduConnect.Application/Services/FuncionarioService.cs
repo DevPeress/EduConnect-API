@@ -7,14 +7,43 @@ namespace EduConnect.Application.Services;
 public class FuncionarioService(IFuncionarioRepository repo)
 {
     private readonly IFuncionarioRepository _funcionarioRepository = repo;
-    public async Task<List<Funcionario>> GetAllFuncionariosAsync()
+
+    public async Task<(List<FuncionarioDTO>, int TotalRegistro)> GetByFilters(FiltroPessoaDTO filtrodto)
     {
-        return await _funcionarioRepository.GetAllAsync();
+        var filtro = new FiltroPessoas
+        {
+            Page = filtrodto.Page,
+            Status = filtrodto.Status
+        };
+
+        var (funcionarios, totalRegistro) = await _funcionarioRepository.GetByFilters(filtro);
+        List<FuncionarioDTO> funcionarioDTO = funcionarios.Select(f => new FuncionarioDTO(f)
+        {
+            Id = f.Id,
+            Nome = f.Nome,
+            Email = f.Email,
+            Telefone = f.Telefone,
+            Status = f.Status,
+            Nasc = f.Nasc,
+            Endereco = f.Endereco,
+            Cpf = f.Cpf,
+            ContatoEmergencia = f.ContatoEmergencia,
+            Registro = f.Registro,
+        }).ToList();
+
+        return (funcionarioDTO, totalRegistro);
     }
+
     public async Task<Funcionario?> GetFuncionarioByIdAsync(int id)
     {
         return await _funcionarioRepository.GetByIdAsync(id);
     }
+
+    public async Task<Funcionario?> GetLastFuncionarioAsync()
+    {
+        return await _funcionarioRepository.GetLastFuncionarioAsync();
+    }
+
     public async Task AddFuncionarioAsync(FuncionarioDTO dto)
     {
         var funcionario = new Funcionario
@@ -37,6 +66,7 @@ public class FuncionarioService(IFuncionarioRepository repo)
         };
         await _funcionarioRepository.AddAsync(funcionario);
     }
+
     public async Task UpdateFuncionarioAsync(FuncionarioDTO dto)
     {
         var funcionario = new Funcionario
@@ -60,6 +90,7 @@ public class FuncionarioService(IFuncionarioRepository repo)
         };
         await _funcionarioRepository.UpdateAsync(funcionario);
     }
+
     public async Task DeleteFuncionarioAsync(int id)
     {
         await _funcionarioRepository.DeleteAsync(id);

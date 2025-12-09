@@ -1,4 +1,6 @@
-﻿namespace EduConnect.Application.DTO;
+﻿using EduConnect.Domain.Entities;
+
+namespace EduConnect.Application.DTO;
 public record TurmaDTO
 {
     public int Registro { get; set; }
@@ -11,4 +13,23 @@ public record TurmaDTO
     public required string Horario { get; set; }
     public int Capacidade { get; set; }
     public DateOnly AnoLetivo { get; set; }
+    public DateOnly DataCriacao { get; set; }
+    public string Status { get; set; } = "Ativa";
+
+    public TurmaDTO() { }
+
+    public TurmaDTO(Turma dados)
+    {
+        Nome = dados.Nome;
+        Turno = dados.Turno;
+        ProfessorID = dados.ProfessorID;
+        Alunos = dados.Alunos;
+        SalaID = dados.SalaID;
+        DisciplinaID = dados.DisciplinaID;
+        Horario = dados.Horario;
+        Capacidade = dados.Capacidade;
+        AnoLetivo = dados.AnoLetivo;
+        DataCriacao = dados.DataCriacao;
+        Status = dados.Status;
+    }
 }

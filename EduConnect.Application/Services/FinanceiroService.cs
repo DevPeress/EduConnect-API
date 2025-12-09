@@ -7,10 +7,6 @@ namespace EduConnect.Application.Services;
 public class FinanceiroService(IFinanceiroRepository repo)
 {
     private readonly IFinanceiroRepository _financeiroRepository = repo;
-    public async Task<List<Financeiro>> GetAllFinanceirosAsync()
-    {
-        return await _financeiroRepository.GetAll();
-    }
 
     public async Task<List<Financeiro>> GetByAlunoId(int id)
     {
