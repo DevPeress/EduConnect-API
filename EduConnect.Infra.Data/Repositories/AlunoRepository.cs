@@ -11,7 +11,7 @@ public class AlunoRepository(EduContext context) : IAlunoRepository
 
     private IQueryable<Aluno> QueryFiltroAluno(FiltroPessoas filtro)
     {
-        var query = _context.Alunos.AsNoTracking();
+        var query = _context.Alunos.AsNoTracking().Where(p => p.Deletado == false);
         
         if (filtro.Status != null && filtro.Status != "Todos os Status")
         {
@@ -61,8 +61,12 @@ public class AlunoRepository(EduContext context) : IAlunoRepository
         var aluno = await GetByIdAsync(id);
         if (aluno != null)
         {
-            _context.Alunos.Remove(aluno);
-            await _context.SaveChangesAsync();
+            await Task.Run(() =>
+            {
+                aluno.Deletado = true;
+                _context.Alunos.Update(aluno);
+                _context.SaveChanges();
+            });
         }
     }
 }
