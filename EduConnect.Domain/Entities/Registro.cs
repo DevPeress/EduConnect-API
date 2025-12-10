@@ -10,4 +10,5 @@ public class Registro
     public required string Descricao { get; set; }
     public required DateTime Horario { get; set; }
     public required int PessoaId { get; set; }
+    public bool Deletado { get; set; } = false;
 }

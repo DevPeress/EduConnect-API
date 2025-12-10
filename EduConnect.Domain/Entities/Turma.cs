@@ -17,4 +17,5 @@ public class Turma
     public DateOnly AnoLetivo { get; set; }
     public DateOnly DataCriacao { get; set; } = DateOnly.FromDateTime(DateTime.Today);
     public required string Status { get; set; }
+    public bool Deletado { get; set; } = false;
 }

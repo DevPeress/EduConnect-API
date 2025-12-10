@@ -14,6 +14,7 @@ public class Financeiro
     public DateOnly DataVencimento { get; set; }
     public bool Pago { get; set; }
     public bool Cancelado { get; set; }
+    public bool Deletado { get; set; } = false;
     public DateOnly? DataPagamento { get; set; }
     public string? Observacoes { get; set; }
 }
