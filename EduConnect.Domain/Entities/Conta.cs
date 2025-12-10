@@ -8,4 +8,5 @@ public class Conta
     public int Id { get; set; }
     public string Registro { get; set; } = null!;
     public string Senha { get; set; } = null!;
+    public bool Deletado { get; set; } = false;
 }

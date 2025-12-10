@@ -1,5 +1,6 @@
 ﻿using EduConnect.Application.DTO;
 using EduConnect.Application.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EduConnect.Controllers
@@ -10,6 +11,7 @@ namespace EduConnect.Controllers
     {
         private readonly TurmaService _turmaService = TurmaService;
 
+        [Authorize(Roles = "Administrador, Funcionario, Professor")]
         [HttpGet("filtro/selecionada/{selecionada}/status/{status}/page/{page}")]
         public async Task<IActionResult> GetAllTurmas(string selecionada, string status, int page)
         {
@@ -33,6 +35,7 @@ namespace EduConnect.Controllers
             });
         }
 
+        [Authorize(Roles = "Administrador, Funcionario, Professor")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetTurmaById(int id)
         {
@@ -44,6 +47,7 @@ namespace EduConnect.Controllers
             return Ok(turma);
         }
 
+        [Authorize(Roles = "Administrador, Funcionario")]
         [HttpPost]
         public async Task<IActionResult> CreateTurma(TurmaDTO turmaDTO)
         {
@@ -51,6 +55,7 @@ namespace EduConnect.Controllers
             return Ok();
         }
 
+        [Authorize(Roles = "Administrador, Funcionario")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateTurma(int id, TurmaDTO turmaDTO)
         {
@@ -62,6 +67,7 @@ namespace EduConnect.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = "Administrador, Funcionario")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTurma(int id)
         {

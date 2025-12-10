@@ -11,7 +11,7 @@ public class FuncionarioRepository(EduContext context) : IFuncionarioRepository
 
     private IQueryable<Funcionario> QueryFiltroProfessor(FiltroPessoas filtro)
     {
-        var query = _context.Funcionarios.AsNoTracking();
+        var query = _context.Funcionarios.AsNoTracking().Where(p => p.Deletado == false);
 
         if (filtro.Status != null && filtro.Status != "Todos os Status")
         {
@@ -34,12 +34,12 @@ public class FuncionarioRepository(EduContext context) : IFuncionarioRepository
 
     public async Task<Funcionario?> GetByIdAsync(int id)
     {
-        return await _context.Funcionarios.FirstOrDefaultAsync(a => a.Id == id);
+        return await _context.Funcionarios.Where(p => p.Deletado == false).FirstOrDefaultAsync(a => a.Id == id);
     }
 
     public async Task<Funcionario?> GetLastFuncionarioAsync()
     {
-        return await _context.Funcionarios
+        return await _context.Funcionarios.Where(p => p.Deletado == false)
         .OrderBy(a => a.Registro)
         .LastAsync();
     }
@@ -61,8 +61,12 @@ public class FuncionarioRepository(EduContext context) : IFuncionarioRepository
         var funcionario = await GetByIdAsync(id);
         if (funcionario != null)
         {
-            _context.Funcionarios.Remove(funcionario);
-            await _context.SaveChangesAsync();
+            await Task.Run(() =>
+            {
+                funcionario.Deletado = true;
+                _context.Funcionarios.Update(funcionario);
+                _context.SaveChanges();
+            });
         }
     }
 }

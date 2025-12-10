@@ -13,7 +13,7 @@ public class FinanceiroRepository(EduContext context) : IFinanceiroRepository
 
     private IQueryable<Financeiro> QueryFiltroFinanceiro(FinanceiroFiltro filtro)
     {
-        var query = _context.Financeiros.AsNoTracking();
+        var query = _context.Financeiros.AsNoTracking().Where(p => p.Deletado == false);
 
         if (filtro.Categoria != "Todas as Categorias")
         {
@@ -56,12 +56,12 @@ public class FinanceiroRepository(EduContext context) : IFinanceiroRepository
 
     public async Task<List<Financeiro>> GetByAlunoId(int alunoId)
     {
-        return await _context.Financeiros.Where(dados => dados.AlunoId == alunoId).ToListAsync();
+        return await _context.Financeiros.Where(dados => dados.AlunoId == alunoId && dados.Deletado == false).ToListAsync();
     }
 
     public async Task<(decimal TotalRecebido, decimal TotalPendente, decimal TotalAtrasado)> GetDashBoard()
     {
-        var query = _context.Financeiros.AsNoTracking();
+        var query = _context.Financeiros.AsNoTracking().Where(p => p.Deletado == false);
         decimal totalRecebido = query.Where(p => p.Pago == true).Sum(p => p.Valor);
 
         query = query.Where(p => p.Pago == false);
@@ -85,7 +85,7 @@ public class FinanceiroRepository(EduContext context) : IFinanceiroRepository
 
     public async Task<Financeiro?> GetById(int id)
     {
-        return await _context.Financeiros.FirstOrDefaultAsync(dados => dados.Registro == id);
+        return await _context.Financeiros.FirstOrDefaultAsync(dados => dados.Registro == id && dados.Deletado == false);
     }
 
     public async Task Add(Financeiro financeiro)
@@ -105,8 +105,12 @@ public class FinanceiroRepository(EduContext context) : IFinanceiroRepository
         var financeiro = await GetById(id);
         if (financeiro != null)
         {
-            _context.Financeiros.Remove(financeiro);
-            await _context.SaveChangesAsync();
+            await Task.Run(() =>
+            {
+                financeiro.Deletado = true;
+                _context.Financeiros.Update(financeiro);
+                _context.SaveChanges();
+            });
         }
     }
 }

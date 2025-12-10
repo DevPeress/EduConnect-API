@@ -1,6 +1,7 @@
 ﻿using EduConnect.Application.DTO;
 using EduConnect.Application.Services;
 using EduConnect.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EduConnect.Controllers
@@ -11,6 +12,7 @@ namespace EduConnect.Controllers
     {
         private readonly FuncionarioService _funcionarioService = service;
 
+        [Authorize(Roles = "Administrador, Funcionario")]
         [HttpGet("filtro/status/{status}/page/{page}")]
         public async Task<IActionResult> GetAllFuncionarios(string status, int page)
         {
@@ -33,6 +35,7 @@ namespace EduConnect.Controllers
             });
         }
 
+        [Authorize(Roles = "Administrador, Funcionario")]
         [HttpGet("{matricula}")]
         public async Task<IActionResult> GetFuncionarioById(int id)
         {
@@ -44,6 +47,7 @@ namespace EduConnect.Controllers
             return Ok(funcionarios);
         }
 
+        [Authorize(Roles = "Administrador")]
         [HttpGet("Cadastro")]
         public async Task<IActionResult> GetLastFuncionarioAsync()
         {
@@ -71,6 +75,7 @@ namespace EduConnect.Controllers
             return Ok("F" + proximoFormatado);
         }
 
+        [Authorize(Roles = "Administrador")]
         [HttpPost]
         public async Task<IActionResult> AddFuncionario(FuncionarioDTO dto)
         {
@@ -78,6 +83,7 @@ namespace EduConnect.Controllers
             return Ok();
         }
 
+        [Authorize(Roles = "Administrador)")]
         [HttpPut("{matricula}")]
         public async Task<IActionResult> UpdateFuncionario(int id, FuncionarioDTO dto)
         {
@@ -94,6 +100,7 @@ namespace EduConnect.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = "Administrador")]
         [HttpDelete("{matricula}")]
         public async Task<IActionResult> DeleteFuncionario(int id)
         {

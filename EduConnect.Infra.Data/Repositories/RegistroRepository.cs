@@ -10,12 +10,12 @@ public class RegistroRepository(EduContext context) : IRegistroRepository
 
     public async Task<List<Registro>> GetRegistrosAsync()
     {
-        return await _context.Registros.ToListAsync();
+        return await _context.Registros.Where(p => p.Deletado == false).ToListAsync();
     }
 
     public async Task<List<Registro>> GetLastRegistrosAync()
     {
-        return await _context.Registros
+        return await _context.Registros.Where(p => p.Deletado == false)
             .OrderBy(r => r.Horario)
             .Take(10)
             .ToListAsync();
@@ -23,7 +23,7 @@ public class RegistroRepository(EduContext context) : IRegistroRepository
 
     public async Task<Registro?> GetRegistroByIdAsync(int registro)
     {
-        return await _context.Registros.FirstOrDefaultAsync(r => r.Id == registro);
+        return await _context.Registros.Where(p => p.Deletado == false).FirstOrDefaultAsync(r => r.Id == registro);
     }
 
     public async Task AddRegistroAsync(Registro registro)
@@ -43,8 +43,12 @@ public class RegistroRepository(EduContext context) : IRegistroRepository
         var registro = await GetRegistroByIdAsync(id);
         if (registro != null)
         {
-            _context.Registros.Remove(registro);
-            await _context.SaveChangesAsync();
+            await Task.Run(() =>
+            {
+                registro.Deletado = false;
+                _context.Registros.Update(registro);
+                _context.SaveChanges();
+            });
         }
     }
 }

@@ -28,28 +28,28 @@ public class DashBoardAdminRepository(EduContext context) : IDashboardAdminRepos
 
     public async Task<int> GetAumentoAlunos()
     {
-        List<Aluno> Alunos = await _context.Alunos.ToListAsync();
+        List<Aluno> Alunos = await _context.Alunos.Where(p => p.Deletado == false).ToListAsync();
         int Aumento = Alunos.Count(a => a.DataMatricula.Month.ToString("00") == MesAtual) - Alunos.Count(a => a.DataMatricula.Month.ToString("00") == MesAnterior);
         return Aumento;
     }
 
     public async Task<int> GetAumentProfessores()
     {
-        List<Professor> Professores = await _context.Professores.ToListAsync();
+        List<Professor> Professores = await _context.Professores.Where(p => p.Deletado == false).ToListAsync();
         int Aumento = Professores.Count(a => a.Contratacao.Month.ToString("00") == MesAtual) - Professores.Count(a => a.Contratacao.Month.ToString("00") == MesAnterior);
         return Aumento;
     }
 
     public async Task<int> GetAumentTurmas()
     {
-        List<Turma> Turmas = await _context.Turmas.ToListAsync();
+        List<Turma> Turmas = await _context.Turmas.Where(p => p.Deletado == false).ToListAsync();
         int Aumento = Turmas.Count(a => a.DataCriacao.Month.ToString("00") == MesAtual) - Turmas.Count(a => a.DataCriacao.Month.ToString("00") == MesAnterior);
         return Aumento;
     }
 
     public async Task<double> GetPorcentagemAlunos()
     {
-        List<Aluno> alunos = await _context.Alunos.ToListAsync();
+        List<Aluno> alunos = await _context.Alunos.Where(p => p.Deletado == false).ToListAsync();
         int aumento = alunos.Count(a => a.DataMatricula.Month.ToString("00") == MesAtual);
         int decremento = alunos.Count(a => a.DataMatricula.Month.ToString("00") == MesAnterior);
 
@@ -65,7 +65,7 @@ public class DashBoardAdminRepository(EduContext context) : IDashboardAdminRepos
 
     public async Task<double> GetPorcentagemProfessores()
     {
-        List<Professor> professor = await _context.Professores.ToListAsync();
+        List<Professor> professor = await _context.Professores.Where(p => p.Deletado == false).ToListAsync();
         int aumento = professor.Count(a => a.Contratacao.Month.ToString("00") == MesAtual);
         int decremento = professor.Count(a => a.Contratacao.Month.ToString("00") == MesAnterior);
 
@@ -81,7 +81,7 @@ public class DashBoardAdminRepository(EduContext context) : IDashboardAdminRepos
 
     public async Task<double> GetPorcentagemTurmas()
     {
-        List<Turma> turma = await _context.Turmas.ToListAsync();
+        List<Turma> turma = await _context.Turmas.Where(p => p.Deletado == false).ToListAsync();
         int aumento = turma.Count(a => a.DataCriacao.Month.ToString("00") == MesAtual);
         int decremento = turma.Count(a => a.DataCriacao.Month.ToString("00") == MesAnterior);
 

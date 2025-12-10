@@ -11,7 +11,7 @@ public class ProfessorRepository(EduContext context) : IProfessorRepository
 
     private IQueryable<Professor> QueryFiltroProfessor(FiltroPessoas filtro)
     {
-        var query = _context.Professores.AsNoTracking();
+        var query = _context.Professores.AsNoTracking().Where(p => p.Deletado == false);
 
         if (filtro.Status != null && filtro.Status != "Todos os Status")
         {
@@ -34,12 +34,12 @@ public class ProfessorRepository(EduContext context) : IProfessorRepository
 
     public async Task<Professor?> GetByIdAsync(int id)
     {
-        return await _context.Professores.FirstOrDefaultAsync(a => a.Id == id);
+        return await _context.Professores.Where(p => p.Deletado == false).FirstOrDefaultAsync(a => a.Id == id);
     }
 
     public async Task<Professor?> GetLastProfessorAsync()
     {
-        return await _context.Professores
+        return await _context.Professores.Where(p => p.Deletado == false)
         .OrderBy(a => a.Registro)
         .LastAsync();
     }
@@ -61,8 +61,12 @@ public class ProfessorRepository(EduContext context) : IProfessorRepository
         var professor = await GetByIdAsync(id);
         if (professor != null)
         {
-            _context.Professores.Remove(professor);
-            await _context.SaveChangesAsync();
+            await Task.Run(() =>
+            {
+                professor.Deletado = false;
+                _context.Professores.Update(professor);
+                _context.SaveChanges();
+            });
         }
     }
 }

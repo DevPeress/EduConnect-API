@@ -1,6 +1,7 @@
 ﻿using EduConnect.Application.DTO;
 using EduConnect.Application.Services;
 using EduConnect.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EduConnect.Controllers
@@ -33,8 +34,9 @@ namespace EduConnect.Controllers
                 financeiroDTOs.Add(dto);
             }
             return financeiroDTOs;
-        } 
+        }
 
+        [Authorize(Roles = "Administrador, Funcionario")]
         [HttpGet("Dashboard")] 
         public async Task<IActionResult> TestGetFinanceiros()
         {
@@ -64,6 +66,7 @@ namespace EduConnect.Controllers
             });
         }
 
+        [Authorize(Roles = "Administrador, Funcionario")]
         [HttpGet("filtro/categoria/{categoria}/status/{status}/data/{data}/page/{page}")]
         public async Task<IActionResult> GetByFilters(string categoria, string status, string data, int page)
         {
@@ -91,6 +94,7 @@ namespace EduConnect.Controllers
             );
         }
 
+        [Authorize(Roles = "Administrador, Funcionario")]
         [HttpGet("aluno/{alunoId}")]
         public async Task<IActionResult> GetByAlunoId(int alunoId)
         {
@@ -101,6 +105,7 @@ namespace EduConnect.Controllers
             return Ok(financeiroDTOs);
         }
 
+        [Authorize(Roles = "Administrador, Funcionario")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -126,6 +131,7 @@ namespace EduConnect.Controllers
             return Ok(financeiroDTO);
         }
 
+        [Authorize(Roles = "Administrador, Funcionario")]
         [HttpPost]
         public async Task<IActionResult> AddFinanceiro(FinanceiroDTO dto)
         {
@@ -139,6 +145,7 @@ namespace EduConnect.Controllers
             return Ok();
         }
 
+        [Authorize(Roles = "Administrador, Funcionario")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateFinanceiro(int id, FinanceiroDTO dto)
         {
@@ -156,6 +163,7 @@ namespace EduConnect.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = "Administrador, Funcionario")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteFinanceiro(int id)
         {

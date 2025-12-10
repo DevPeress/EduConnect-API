@@ -10,7 +10,7 @@ public class TurmaRepository(EduContext context) : ITurmaRepository
 
     private IQueryable<Turma> QueryFiltroTurma(FiltroPessoas filtro)
     {
-        var query = _context.Turmas.AsNoTracking();
+        var query = _context.Turmas.AsNoTracking().Where(p => p.Deletado == false);
 
         if (filtro.Status != null && filtro.Status != "Todos os Status")
         {
@@ -38,7 +38,7 @@ public class TurmaRepository(EduContext context) : ITurmaRepository
 
     public async Task<Turma?> GetTurmaByIdAsync(int id)
     {
-        return await _context.Turmas.FindAsync(id);
+        return await _context.Turmas.FirstOrDefaultAsync(dados => dados.Registro == id && dados.Deletado == false);
     }
 
     public async Task AddTurmaAsync(Turma turma)
@@ -58,8 +58,12 @@ public class TurmaRepository(EduContext context) : ITurmaRepository
         var turma = await _context.Turmas.FindAsync(id);
         if (turma != null)
         {
-            _context.Turmas.Remove(turma);
-            await _context.SaveChangesAsync();
+            await Task.Run(() =>
+            {
+                turma.Deletado = true;
+                _context.Turmas.Update(turma);
+                _context.SaveChanges();
+            });
         }
     }
 }

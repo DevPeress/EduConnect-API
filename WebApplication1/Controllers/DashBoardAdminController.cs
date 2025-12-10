@@ -1,5 +1,6 @@
 ﻿using EduConnect.Application.DTO;
 using EduConnect.Application.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EduConnect.Controllers
@@ -9,6 +10,8 @@ namespace EduConnect.Controllers
     public class DashBoardAdminController(DashBoardAdminService service) : ControllerBase
     {
         private readonly DashBoardAdminService _dashBoardAdminService = service;
+
+        [Authorize(Roles = "Administrador, Funcionario")]
         [HttpGet("Cards")]
         public async Task<IActionResult> GetCardsData()
         {
