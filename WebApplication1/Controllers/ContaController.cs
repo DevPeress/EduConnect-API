@@ -44,6 +44,7 @@ namespace EduConnect.Controllers
             return Ok("Login bem-sucedido.");
         }
 
+        [Authorize]
         [HttpPost("logout")]
         public IActionResult Logout()
         {

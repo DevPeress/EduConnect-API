@@ -1,5 +1,6 @@
 ﻿using EduConnect.Application.DTO;
 using EduConnect.Application.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EduConnect.Controllers
@@ -11,6 +12,7 @@ namespace EduConnect.Controllers
         private readonly AlunoService _alunoService = service;
         private readonly ContaService _contaService = conta;
 
+        [Authorize(Roles = "Administrador, Funcionario, Professor")]
         [HttpGet("filtro/selecionada/{selecionada}/status/{status}/page/{page}")]
         public async Task<IActionResult> GetAlunos(string selecionada, string status, int page)
         {
@@ -35,6 +37,7 @@ namespace EduConnect.Controllers
             );
         }
 
+        [Authorize(Roles = "Administrador, Funcionario, Professor")]
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetAlunoById(int id)
         {
@@ -46,6 +49,7 @@ namespace EduConnect.Controllers
             return Ok(aluno);
         }
 
+        [Authorize(Roles = "Administrador, Funcionario")]
         [HttpGet("Cadastro")]
         public async Task<IActionResult> GetAlunosByCadastro()
         {
@@ -72,6 +76,7 @@ namespace EduConnect.Controllers
             return Ok("A" + proximoFormatado);
         }
 
+        [Authorize(Roles = "Administrador, Funcionario")]
         [HttpPost]
         public async Task<IActionResult> AddAluno([FromBody] AlunoDTO dto)
         {
@@ -85,6 +90,7 @@ namespace EduConnect.Controllers
             return Ok();
         }
 
+        [Authorize(Roles = "Administrador, Funcionario")]
         [HttpPut("{id:int}")]
         public async Task<IActionResult> UpdateAluno(int id, AlunoDTO dto)
         {
@@ -99,6 +105,7 @@ namespace EduConnect.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = "Administrador, Funcionario")]
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteAluno(int id)
         {
