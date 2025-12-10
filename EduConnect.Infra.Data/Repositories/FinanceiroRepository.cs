@@ -85,7 +85,7 @@ public class FinanceiroRepository(EduContext context) : IFinanceiroRepository
 
     public async Task<Financeiro?> GetById(int id)
     {
-        return await _context.Financeiros.FirstOrDefaultAsync(dados => dados.Registro == id && dados.Deletado == false)
+        return await _context.Financeiros.FirstOrDefaultAsync(dados => dados.Registro == id && dados.Deletado == false);
     }
 
     public async Task Add(Financeiro financeiro)

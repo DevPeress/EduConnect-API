@@ -66,7 +66,7 @@ public class FuncionarioRepository(EduContext context) : IFuncionarioRepository
                 funcionario.Deletado = true;
                 _context.Funcionarios.Update(funcionario);
                 _context.SaveChanges();
-            })
+            });
         }
     }
 }

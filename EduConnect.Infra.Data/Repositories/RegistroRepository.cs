@@ -48,7 +48,7 @@ public class RegistroRepository(EduContext context) : IRegistroRepository
                 registro.Deletado = false;
                 _context.Registros.Update(registro);
                 _context.SaveChanges();
-            })
+            });
         }
     }
 }

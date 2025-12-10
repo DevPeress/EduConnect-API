@@ -66,7 +66,7 @@ public class ProfessorRepository(EduContext context) : IProfessorRepository
                 professor.Deletado = false;
                 _context.Professores.Update(professor);
                 _context.SaveChanges();
-            })
+            });
         }
     }
 }

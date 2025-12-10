@@ -63,7 +63,7 @@ public class TurmaRepository(EduContext context) : ITurmaRepository
                 turma.Deletado = true;
                 _context.Turmas.Update(turma);
                 _context.SaveChanges();
-            })
+            });
         }
     }
 }
