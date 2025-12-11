@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace EduConnect.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/turma")]
     public class TurmaController(TurmaService TurmaService) : ControllerBase
     {
         private readonly TurmaService _turmaService = TurmaService;
