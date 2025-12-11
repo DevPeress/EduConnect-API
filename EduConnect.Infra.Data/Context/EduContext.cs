@@ -22,12 +22,25 @@ public class EduContext(DbContextOptions<EduContext> options) : DbContext(option
             typeof(Funcionario)
         };
 
-        // 🔒 Impede que existam 2 tipos com a mesma matrícula
+        // Impede que existam 2 tipos com a mesma matrícula
         foreach (var tipo in tipos)
         {
             modelBuilder.Entity(tipo)
                 .HasIndex("Registro")
             .IsUnique();
+        }
+
+        // CONFIGURAÇÃO GLOBAL PARA TODOS OS DECIMAIS
+        foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+        {
+            var decimalProperties = entityType.GetProperties()
+                .Where(p => p.ClrType == typeof(decimal) || p.ClrType == typeof(decimal?));
+
+            foreach (var property in decimalProperties)
+            {
+                property.SetPrecision(18);
+                property.SetScale(2);
+            }
         }
     }
 }
