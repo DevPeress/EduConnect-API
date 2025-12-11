@@ -19,12 +19,16 @@ namespace EduConnect.Infra.IoC
             services.AddScoped<AlunoService>();
             services.AddScoped<IProfessorRepository, ProfessorRepository>();
             services.AddScoped<ProfessorService>();
+            services.AddScoped<IFuncionarioRepository, FuncionarioRepository>();
+            services.AddScoped<FuncionarioService>();
             services.AddScoped<IDashboardAdminRepository, DashBoardAdminRepository>();
             services.AddScoped<DashBoardAdminService>();
             services.AddScoped<IRegistroRepository, RegistroRepository>();
             services.AddScoped<RegistroService>();
             services.AddScoped<IFinanceiroRepository, FinanceiroRepository>();
             services.AddScoped<FinanceiroService>();
+            services.AddScoped<ITurmaRepository, TurmaRepository>();
+            services.AddScoped<TurmaService>();
             services.AddScoped<IContaRepository, ContaRepository>();
             services.AddScoped<ContaService>();
             services.AddScoped<JWTService>();   
