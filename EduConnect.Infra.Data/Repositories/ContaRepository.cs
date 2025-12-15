@@ -20,6 +20,38 @@ public class ContaRepository(EduContext context) : IContaRepository
         return await _context.Contas.AnyAsync(c => c.Registro == registro);
     }
 
+    public async Task<(string nome, string foto)> GetInfos(string cargo, string registro)
+    {
+        switch(cargo) 
+        {
+            case "Aluno":
+                var aluno = await _context.Alunos
+                    .FirstOrDefaultAsync(a => a.Registro == registro);
+                if (aluno != null)
+                {
+                    return (aluno.Nome, aluno.Foto);
+                }
+                break;
+            case "Professor":
+                var professor = await _context.Professores
+                    .FirstOrDefaultAsync(p => p.Registro == registro);
+                if (professor != null)
+                {                     
+                    return (professor.Nome, professor.Foto);
+                }
+                break;
+            default:
+                var funcionario = await _context.Funcionarios
+                    .FirstOrDefaultAsync(f => f.Registro == registro);
+                if (funcionario != null)
+                {
+                    return (funcionario.Nome, funcionario.Foto);
+                }
+                break;
+        }
+        return (string.Empty, string.Empty);
+    }
+
     public async Task<bool> ChancePassword(string registro, string senhaNova)
     {
         var conta = await _context.Contas.FindAsync(registro);
