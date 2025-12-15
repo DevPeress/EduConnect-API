@@ -9,7 +9,7 @@ public class AlunoRepository(EduContext context) : IAlunoRepository
 {
     private readonly EduContext _context = context;
 
-    private IQueryable<Aluno> QueryFiltroAluno(FiltroPessoas filtro)
+    private IQueryable<Aluno> QueryFiltroAluno(Filtro filtro)
     {
         var query = _context.Alunos.AsNoTracking().Where(p => p.Deletado == false);
         
@@ -21,7 +21,7 @@ public class AlunoRepository(EduContext context) : IAlunoRepository
         return query;
     }
 
-    public async Task<(IEnumerable<Aluno>, int TotalRegistro)> GetByFilters(FiltroPessoas filtro)
+    public async Task<(IEnumerable<Aluno>, int TotalRegistro)> GetByFilters(Filtro filtro)
     {
         var query = QueryFiltroAluno(filtro);
         var total = await query.CountAsync();

@@ -11,16 +11,16 @@ public class FinanceiroRepository(EduContext context) : IFinanceiroRepository
     private readonly EduContext _context = context;
     private readonly DateOnly today = DateOnly.FromDateTime(DateTime.Today);
 
-    private IQueryable<Financeiro> QueryFiltroFinanceiro(FinanceiroFiltro filtro)
+    private IQueryable<Financeiro> QueryFiltroFinanceiro(Filtro filtro)
     {
         var query = _context.Financeiros.AsNoTracking().Where(p => p.Deletado == false);
 
-        if (filtro.Categoria != "Todas as Categorias")
+        if (filtro.Categoria != null && filtro.Categoria != "Todas as Categorias")
         {
             query = query.Where(dados => dados.Categoria == filtro.Categoria);
         }
 
-        if (filtro.Status != "Todos os Status")
+        if (filtro.Status != null && filtro.Status != "Todos os Status")
         {
             if (filtro.Status == "Pago")
             {
@@ -40,7 +40,7 @@ public class FinanceiroRepository(EduContext context) : IFinanceiroRepository
             }
         }
 
-        if (filtro.Data != "Todos os Meses")
+        if (filtro.Data != null && filtro.Data != "Todos os Meses")
         {
             int mesSelecionado = DateTime.ParseExact(
                 filtro.Data,
@@ -72,7 +72,7 @@ public class FinanceiroRepository(EduContext context) : IFinanceiroRepository
         return (totalRecebido, totalPendente, totalAtrasado);
     }
 
-    public async Task<(IEnumerable<Financeiro>, int TotalRegistro)> GetByFilters(FinanceiroFiltro filtro)
+    public async Task<(IEnumerable<Financeiro>, int TotalRegistro)> GetByFilters(Filtro filtro)
     {
         var query = QueryFiltroFinanceiro(filtro);
         var total = await query.CountAsync();
