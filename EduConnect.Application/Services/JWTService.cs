@@ -9,11 +9,13 @@ namespace EduConnect.Application.Services;
 public class JWTService(IConfiguration config)
 {
     private readonly IConfiguration _config = config;
-    public string GenerateToken(string registro, string role, bool? lembrar)
+    public string GenerateToken(string registro, string role, string nome, string foto, bool? lembrar)
     {
         var claims = new[]
         {
             new Claim("Registro", registro),
+            new Claim("Nome", nome),
+            new Claim("Foto", foto),
             new Claim(ClaimTypes.Role, role)
         };
 
