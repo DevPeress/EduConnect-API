@@ -9,10 +9,10 @@ namespace EduConnect.Infra.Data.Repositories;
 public class ContaRepository(EduContext context) : IContaRepository
 {
     private readonly EduContext _context = context;
-    public async Task<Conta> GetConta(string registro, string senha)
+    public async Task<Conta?> GetConta(string registro, string senha)
     {
         return await _context.Contas
-            .FirstAsync(c => c.Registro == registro && c.Senha == senha);
+            .FirstOrDefaultAsync(c => c.Registro == registro && c.Senha == senha);
     }
 
     public async Task<bool> EmailExistsAsync(string registro)
