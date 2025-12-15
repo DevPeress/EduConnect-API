@@ -21,23 +21,23 @@ namespace EduConnect.Controllers
             var totalTurmas = await _dashBoardAdminService.GetTotalTurmasAsync();
             var (aumentoAlunos, aumentoProfessores, aumentoTurmas) = await _dashBoardAdminService.GetAumentoAsync();
             var (porcentagemAlunos, porcentagemProfessores, porcentagemTurmas) = await _dashBoardAdminService.GetPorcentagemAsync();
-            return Ok(new List<CardsAdminRespondeViewModel>
+            return Ok(new List<CardsAdminResponseViewModel>
             {
-                new CardsAdminRespondeViewModel
+                new CardsAdminResponseViewModel
                 {
                     Dado = "Alunos",
                     Total = totalAlunos,
                     Aumento = aumentoAlunos,
                     Porcentagem = porcentagemAlunos
                 },
-                new CardsAdminRespondeViewModel
+                new CardsAdminResponseViewModel
                 {
                     Dado = "Professores",
                     Total = totalProfessores,
                     Aumento = aumentoProfessores,
                     Porcentagem = porcentagemProfessores
                 },
-                new CardsAdminRespondeViewModel
+                new CardsAdminResponseViewModel
                 {
                     Dado = "Turmas",
                     Total = totalTurmas,

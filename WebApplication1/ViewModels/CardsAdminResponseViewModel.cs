@@ -1,6 +1,6 @@
 ﻿namespace EduConnect.ViewModels;
 
-public class CardsAdminRespondeViewModel
+public class CardsAdminResponseViewModel
 {
     public string Dado { get; set; }
     public int Total { get; set; }
