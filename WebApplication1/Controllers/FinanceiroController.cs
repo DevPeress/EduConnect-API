@@ -1,6 +1,7 @@
 ﻿using EduConnect.Application.DTO;
 using EduConnect.Application.Services;
 using EduConnect.Domain.Entities;
+using EduConnect.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -41,24 +42,24 @@ namespace EduConnect.Controllers
         public async Task<IActionResult> TestGetFinanceiros()
         {
             var (totalRecebido, totalPendente, totalAtrasado) = await _financeiroService.GetDashBoard();
-            return Ok(new List<CardsFinanceiroDTO>
+            return Ok(new List<CardsFinanceiroResponseViewModel>
             {
-                new CardsFinanceiroDTO()
+                new CardsFinanceiroResponseViewModel()
                 {
                     Dado = "Recebido",
                     Total = totalRecebido
                 },
-                new CardsFinanceiroDTO()
+                new CardsFinanceiroResponseViewModel()
                 {
                     Dado = "Pendente",
                     Total = totalPendente
                 },
-                new CardsFinanceiroDTO()
+                new CardsFinanceiroResponseViewModel()
                 {
                     Dado = "Atrasado",
                     Total = totalAtrasado
                 },
-                new CardsFinanceiroDTO()
+                new CardsFinanceiroResponseViewModel()
                 {
                     Dado = "Total",
                     Total = totalAtrasado + totalPendente + totalRecebido

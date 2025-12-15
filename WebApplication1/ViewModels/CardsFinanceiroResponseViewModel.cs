@@ -1,6 +1,6 @@
-﻿namespace EduConnect.Application.DTO;
+﻿namespace EduConnect.ViewModels;
 
-public record CardsFinanceiroDTO
+public class CardsFinanceiroResponseViewModel
 {
     public required string Dado { get; init; }
     public decimal Total { get; init; }
