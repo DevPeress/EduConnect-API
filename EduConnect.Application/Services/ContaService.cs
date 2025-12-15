@@ -24,6 +24,11 @@ public class ContaService(IContaRepository contaRepository)
         await _contaRepository.AddContaAsync(conta);
     }
 
+    public async Task<(string nome, string foto)> GetInfos(string cargo, string registro)
+    {
+        return await _contaRepository.GetInfos(cargo, registro);
+    }
+
     public async Task<bool> ChancePassword(string registro, string senhaNova)
     {
         return await _contaRepository.ChancePassword(registro, senhaNova);

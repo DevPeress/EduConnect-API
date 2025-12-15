@@ -33,6 +33,7 @@ public class AlunoService(IAlunoRepository repo)
                 Endereco = aluno.Endereco,
                 Cpf = aluno.Cpf,
                 ContatoEmergencia = aluno.ContatoEmergencia,
+                Foto = aluno.Foto
             };
             alunosDTO.Add(dto);
         }
@@ -62,7 +63,8 @@ public class AlunoService(IAlunoRepository repo)
             Registro = dto.Registro,
             Turma = dto.Turma,
             Media = dto.Media,
-            DataMatricula = dto.DataMatricula
+            DataMatricula = dto.DataMatricula,
+            Foto = dto.Foto
         };
         await _alunoRepository.AddAsync(aluno);
     }
@@ -81,7 +83,8 @@ public class AlunoService(IAlunoRepository repo)
             Registro = dto.Registro,
             Turma = dto.Turma,
             Media = dto.Media,
-            DataMatricula = dto.DataMatricula
+            DataMatricula = dto.DataMatricula,
+            Foto = dto.Foto
         };
         await _alunoRepository.UpdateAsync(aluno);
     }

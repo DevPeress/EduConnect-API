@@ -29,6 +29,7 @@ public class FuncionarioService(IFuncionarioRepository repo)
             Cpf = f.Cpf,
             ContatoEmergencia = f.ContatoEmergencia,
             Registro = f.Registro,
+            Foto = f.Foto
         }).ToList();
 
         return (funcionarioDTO, totalRegistro);
@@ -62,7 +63,8 @@ public class FuncionarioService(IFuncionarioRepository repo)
             Salario = dto.Salario,
             Departamento = dto.Departamento,
             Supervisor = dto.Supervisor,
-            Turno = dto.Turno
+            Turno = dto.Turno,
+            Foto = dto.Foto
         };
         await _funcionarioRepository.AddAsync(funcionario);
     }
@@ -86,7 +88,8 @@ public class FuncionarioService(IFuncionarioRepository repo)
             Salario = dto.Salario,
             Departamento = dto.Departamento,
             Supervisor = dto.Supervisor,
-            Turno = dto.Turno
+            Turno = dto.Turno,
+            Foto = dto.Foto
         };
         await _funcionarioRepository.UpdateAsync(funcionario);
     }

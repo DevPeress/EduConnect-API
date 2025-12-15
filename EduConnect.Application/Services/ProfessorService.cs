@@ -28,7 +28,8 @@ public class ProfessorService(IProfessorRepository repo)
             Nasc = professores.Nasc,
             Endereco = professores.Endereco,
             Cpf = professores.Cpf,
-            ContatoEmergencia = professores.ContatoEmergencia
+            ContatoEmergencia = professores.ContatoEmergencia,
+            Foto = professores.Foto
         }).ToList();
        
         return (professoresDTO, total);
@@ -62,6 +63,7 @@ public class ProfessorService(IProfessorRepository repo)
             Formacao = dto.Formacao,
             Contratacao = dto.Contratacao,
             Salario = dto.Salario,
+            Foto = dto.Foto
         };
         await _professorRepository.AddAsync(professor);
     }
@@ -85,6 +87,7 @@ public class ProfessorService(IProfessorRepository repo)
             Formacao = dto.Formacao,
             Contratacao = dto.Contratacao,
             Salario = dto.Salario,
+            Foto = dto.Foto
         };
         await _professorRepository.UpdateAsync(professor);
     }
