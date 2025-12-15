@@ -1,6 +1,6 @@
 ﻿
 namespace EduConnect.Domain.Entities;
-public class FiltroPessoas : FiltroBase
+public class Filtro : FiltroBase
 {
     public string? Status { get; set; }
     public string? Categoria { get; set; }
