@@ -13,10 +13,12 @@ public class ContaService(IContaRepository contaRepository)
     }
     public async Task AddContaAsync(ContaDTO contadtp)
     {
+        var Cargo = contadtp.Cargo != null ? contadtp.Cargo : "Aluno";
         var conta = new Conta
         {
             Registro = contadtp.Registro,
-            Senha = contadtp.Senha
+            Senha = contadtp.Senha,
+            Cargo = Cargo
         };
         await _contaRepository.AddContaAsync(conta);
     }
