@@ -36,12 +36,13 @@ namespace EduConnect.Controllers
             }
 
             var token = _jwtService.GenerateToken(contaDto.Registro, conta.Cargo, conta.Nome, conta.Foto, contaDto.Lembrar);
+            var tempo = contaDto.Lembrar != null && contaDto.Lembrar == true ? 9 : 1;
             Response.Cookies.Append("auth", token, new CookieOptions
             {
                 HttpOnly = true,
                 Secure = false,       // Requer HTTPS
                 SameSite = SameSiteMode.Lax,
-                Expires = DateTimeOffset.UtcNow.AddHours(2)
+                Expires = DateTimeOffset.UtcNow.AddHours(tempo)
             });
 
             return Ok("Login bem-sucedido.");
