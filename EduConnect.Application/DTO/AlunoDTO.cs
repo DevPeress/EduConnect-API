@@ -21,5 +21,6 @@ public class AlunoDTO : PessoaDTO
         Turma = dados.Turma;
         Media = dados.Media;
         DataMatricula = dados.DataMatricula;
+        Foto = dados.Foto;
     }
 }

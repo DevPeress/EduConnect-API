@@ -29,5 +29,6 @@ public class FuncionarioDTO : PessoaDTO
         Departamento = dados.Departamento;
         Supervisor = dados.Supervisor;
         Turno = dados.Turno;
+        Foto = dados.Foto;
     }
 }
