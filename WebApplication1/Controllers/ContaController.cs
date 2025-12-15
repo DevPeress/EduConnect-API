@@ -19,8 +19,10 @@ namespace EduConnect.Controllers
         {
             var id = User.FindFirst("Registro")?.Value;
             var role = User.FindFirst(ClaimTypes.Role)?.Value;
+            var nome = User.FindFirst("Nome")?.Value;
+            var foto = User.FindFirst("Foto")?.Value;
 
-            return Ok(new { id, role });
+            return Ok(new { id, role, nome, foto });
         }
 
         [HttpPost("login")]
@@ -32,7 +34,7 @@ namespace EduConnect.Controllers
                 return Unauthorized("Credenciais inválidas.");
             }
 
-            var token = _jwtService.GenerateToken(contaDto.Registro, "Administrador", contaDto.Lembrar);
+            var token = _jwtService.GenerateToken(contaDto.Registro, conta.Cargo, "Fabrício Peres", conta.Foto, contaDto.Lembrar);
             Response.Cookies.Append("auth", token, new CookieOptions
             {
                 HttpOnly = true,
