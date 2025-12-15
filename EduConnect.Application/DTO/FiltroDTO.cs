@@ -2,7 +2,7 @@
 
 namespace EduConnect.Application.DTO;
 
-public class FiltroPessoaDTO : FiltroBase
+public class FiltroDTO : FiltroBase
 {
     public string? Categoria { get; set; }
     public string? Data { get; set; }
