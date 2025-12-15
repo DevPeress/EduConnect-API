@@ -71,8 +71,7 @@ namespace EduConnect.Controllers
         [HttpGet("filtro/categoria/{categoria}/status/{status}/data/{data}/page/{page}")]
         public async Task<IActionResult> GetByFilters(string categoria, string status, string data, int page)
         {
-            // Pega os Financeiros pelos Filtros e adiciona o Nome do Aluno e o Status no DTO
-            var filtro = new FinanceiroFiltroDTO
+            var filtro = new FiltroDTO
             {
                 Categoria = categoria,
                 Status = status,
