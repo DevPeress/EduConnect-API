@@ -14,21 +14,17 @@ namespace EduConnect.Controllers
         private readonly ContaService _contaService = conta;
 
         [Authorize(Roles = "Administrador, Funcionario, Professor")]
-        [HttpGet("filtro/selecionada/{selecionada}/status/{status}/page/{page}")]
-        public async Task<IActionResult> GetAlunos(string selecionada, string status, int page)
+        [HttpGet("filtro/selecionada/{categoria}/status/{status}/page/{page}")]
+        public async Task<IActionResult> GetAlunos(string categoria, string status, int page)
         {
             var filtro = new FiltroPessoaDTO
             {
-                Categoria = selecionada,
+                Categoria = categoria,
                 Status = status,
                 Page = page
             };
 
             var (alunos, total) = await _alunoService.GetByFilters(filtro);
-            if (alunos == null)
-            {
-                return NotFound();
-            }
 
             return Ok(new FiltroResponseViewModel<AlunoDTO>
             {

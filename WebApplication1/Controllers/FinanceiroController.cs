@@ -81,10 +81,6 @@ namespace EduConnect.Controllers
             };
 
             var (financeiros, total) = await _financeiroService.GetByFilters(filtro);
-            if (financeiros == null || !financeiros.Any())
-            {
-                return NotFound();
-            }
             var financeiroDTOs = Filtro(financeiros.ToList());
 
             return Ok(new FiltroResponseViewModel<FinanceiroDTO>

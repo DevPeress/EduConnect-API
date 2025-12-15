@@ -24,10 +24,6 @@ namespace EduConnect.Controllers
             };
 
             var (turmas, total) = await _turmaService.GetByFilters(filtro);
-            if (turmas == null)
-            {
-                return NotFound();
-            }
 
             return Ok(new FiltroResponseViewModel<TurmaDTO>
             {

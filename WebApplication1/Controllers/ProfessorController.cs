@@ -24,10 +24,6 @@ namespace EduConnect.Controllers
             };
 
             var (professores, total) = await _professorService.GetByFilters(filtro);
-            if (professores == null)
-            {
-                return NotFound();
-            }
 
             return Ok(new FiltroResponseViewModel<ProfessorDTO>
             {

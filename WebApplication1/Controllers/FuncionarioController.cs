@@ -25,10 +25,6 @@ namespace EduConnect.Controllers
             };
 
             var (funcionarios, total) = await _funcionarioService.GetByFilters(filtro);
-            if (funcionarios == null)
-            {
-                return NotFound();
-            }
 
             return Ok(new FiltroResponseViewModel<FuncionarioDTO>
             {
