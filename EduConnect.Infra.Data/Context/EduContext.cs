@@ -1,4 +1,5 @@
-﻿using EduConnect.Domain.Entities;
+﻿using EduConnect.Domain;
+using EduConnect.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace EduConnect.Infra.Data.Context;
@@ -15,6 +16,7 @@ public class EduContext(DbContextOptions<EduContext> options) : DbContext(option
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
         var tipos = new List<Type>
         {
             typeof(Aluno),
@@ -26,8 +28,10 @@ public class EduContext(DbContextOptions<EduContext> options) : DbContext(option
         foreach (var tipo in tipos)
         {
             modelBuilder.Entity(tipo)
-                .HasIndex("Registro")
-            .IsUnique();
+                .HasOne(typeof(Conta), "Conta")
+                .WithOne()
+                .HasForeignKey(tipo, "ContaId")
+                .OnDelete(DeleteBehavior.Restrict);
         }
 
         // CONFIGURAÇÃO GLOBAL PARA TODOS OS DECIMAIS
