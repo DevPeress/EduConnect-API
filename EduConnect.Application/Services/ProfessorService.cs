@@ -8,9 +8,9 @@ public class ProfessorService(IProfessorRepository repo)
 {
     private readonly IProfessorRepository _professorRepository = repo;
 
-    public async Task<(List<ProfessorDTO>, int TotalRegistro)> GetByFilters(FiltroPessoaDTO filtrodto)
+    public async Task<(List<ProfessorDTO>, int TotalRegistro)> GetByFilters(FiltroDTO filtrodto)
     {
-        var filtro = new FiltroPessoas
+        var filtro = new Filtro
         {
             Page = filtrodto.Page,
             Categoria = filtrodto.Categoria,

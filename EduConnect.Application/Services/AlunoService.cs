@@ -8,9 +8,9 @@ public class AlunoService(IAlunoRepository repo)
 {
     private readonly IAlunoRepository _alunoRepository = repo;
 
-    public async Task<(List<AlunoDTO>, int TotalRegistro)> GetByFilters(FiltroPessoaDTO filtrodto)
+    public async Task<(List<AlunoDTO>, int TotalRegistro)> GetByFilters(FiltroDTO filtrodto)
     {
-        var filtro = new FiltroPessoas
+        var filtro = new Filtro
         {
             Page = filtrodto.Page,
             Categoria = filtrodto.Categoria,
