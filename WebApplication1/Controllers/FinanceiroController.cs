@@ -87,7 +87,7 @@ namespace EduConnect.Controllers
             }
             var financeiroDTOs = Filtro(financeiros.ToList());
 
-            return Ok(new RetornoFiltro<FinanceiroDTO>
+            return Ok(new FiltroResponseViewModel<FinanceiroDTO>
                 {
                     Total = total,
                     Dados = financeiroDTOs

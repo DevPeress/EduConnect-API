@@ -1,6 +1,7 @@
 ﻿using EduConnect.Application.DTO;
 using EduConnect.Application.Services;
 using EduConnect.Domain.Entities;
+using EduConnect.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EduConnect.Controllers
@@ -28,7 +29,7 @@ namespace EduConnect.Controllers
                 return NotFound();
             }
 
-            return Ok(new RetornoFiltro<ProfessorDTO>
+            return Ok(new FiltroResponseViewModel<ProfessorDTO>
             {
                 Dados = professores,
                 Total = total

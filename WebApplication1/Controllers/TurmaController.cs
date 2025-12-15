@@ -1,5 +1,6 @@
 ﻿using EduConnect.Application.DTO;
 using EduConnect.Application.Services;
+using EduConnect.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -28,7 +29,7 @@ namespace EduConnect.Controllers
                 return NotFound();
             }
 
-            return Ok(new RetornoFiltro<TurmaDTO>
+            return Ok(new FiltroResponseViewModel<TurmaDTO>
             {
                 Dados = turmas,
                 Total = total
