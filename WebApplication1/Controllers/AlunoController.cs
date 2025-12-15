@@ -85,6 +85,7 @@ namespace EduConnect.Controllers
             {
                 Registro = dto.Registro,
                 Senha = "Teste",
+                Cargo = "Aluno"
             };
             await _contaService.AddContaAsync(conta);
             return Ok();

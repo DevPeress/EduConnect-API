@@ -7,9 +7,10 @@ namespace EduConnect.Controllers
 {
     [ApiController]
     [Route("api/professores")]
-    public class ProfessorController(ProfessorService service) : ControllerBase
+    public class ProfessorController(ProfessorService service, ContaService conta) : ControllerBase
     {
         private readonly ProfessorService _professorService = service;
+        private readonly ContaService _contaService = conta;
 
         [HttpGet("filtro/selecionada/{selecionada}/status/{status}/page/{page}")]
         public async Task<IActionResult> GetAllProfessor(string selecionada, string status, int page)
@@ -75,6 +76,13 @@ namespace EduConnect.Controllers
         public async Task<IActionResult> AddProfessor(ProfessorDTO dto)
         {
             await _professorService.AddProfessorAsync(dto);
+            var conta = new ContaDTO
+            {
+                Registro = dto.Registro,
+                Senha = "Teste",
+                Cargo = "Professor"
+            };
+            await _contaService.AddContaAsync(conta);
             return Ok();
         }
 

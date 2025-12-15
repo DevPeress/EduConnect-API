@@ -8,9 +8,10 @@ namespace EduConnect.Controllers
 {
     [ApiController]
     [Route("api/funcionarios")]
-    public class FuncionarioController(FuncionarioService service) : ControllerBase
+    public class FuncionarioController(FuncionarioService service, ContaService conta) : ControllerBase
     {
         private readonly FuncionarioService _funcionarioService = service;
+        private readonly ContaService _contaService = conta;
 
         [Authorize(Roles = "Administrador, Funcionario")]
         [HttpGet("filtro/status/{status}/page/{page}")]
@@ -80,6 +81,13 @@ namespace EduConnect.Controllers
         public async Task<IActionResult> AddFuncionario(FuncionarioDTO dto)
         {
             await _funcionarioService.AddFuncionarioAsync(dto);
+            var conta = new ContaDTO
+            {
+                Registro = dto.Registro,
+                Senha = "Teste",
+                Cargo = "Funcionario"
+            };
+            await _contaService.AddContaAsync(conta);
             return Ok();
         }
 
