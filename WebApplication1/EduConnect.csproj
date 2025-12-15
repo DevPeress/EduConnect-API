@@ -18,10 +18,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ViewModels\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\EduConnect.Application\EduConnect.Application.csproj" />
     <ProjectReference Include="..\EduConnect.Infra.Data\EduConnect.Infra.Data.csproj" />
     <ProjectReference Include="..\EduConnect.Infra.IoC\EduConnect.Infra.IoC.csproj" />

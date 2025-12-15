@@ -1,5 +1,6 @@
 ﻿using EduConnect.Application.DTO;
 using EduConnect.Application.Services;
+using EduConnect.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,23 +21,23 @@ namespace EduConnect.Controllers
             var totalTurmas = await _dashBoardAdminService.GetTotalTurmasAsync();
             var (aumentoAlunos, aumentoProfessores, aumentoTurmas) = await _dashBoardAdminService.GetAumentoAsync();
             var (porcentagemAlunos, porcentagemProfessores, porcentagemTurmas) = await _dashBoardAdminService.GetPorcentagemAsync();
-            return Ok(new List<CardsAdminDto>
+            return Ok(new List<CardsAdminRespondeViewModel>
             {
-                new CardsAdminDto                 
+                new CardsAdminRespondeViewModel
                 {
                     Dado = "Alunos",
                     Total = totalAlunos,
                     Aumento = aumentoAlunos,
                     Porcentagem = porcentagemAlunos
                 },
-                new CardsAdminDto
+                new CardsAdminRespondeViewModel
                 {
                     Dado = "Professores",
                     Total = totalProfessores,
                     Aumento = aumentoProfessores,
                     Porcentagem = porcentagemProfessores
                 },
-                new CardsAdminDto
+                new CardsAdminRespondeViewModel
                 {
                     Dado = "Turmas",
                     Total = totalTurmas,
