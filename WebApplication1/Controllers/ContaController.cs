@@ -35,7 +35,15 @@ namespace EduConnect.Controllers
                 return Unauthorized("Credenciais inválidas.");
             }
 
-            var token = _jwtService.GenerateToken(contaDto.Registro, conta.Cargo, conta.Nome, conta.Foto, contaDto.Lembrar);
+            (string nome, string foto) = await _contaService.GetInfos(conta.Cargo, conta.Registro);
+            if (nome == null || foto == null)
+            {
+                return Unauthorized("Credenciais inválidas.");
+            }
+            Console.WriteLine("Nome: " + nome);
+            Console.WriteLine("Foto: " + foto);
+
+            var token = _jwtService.GenerateToken(contaDto.Registro, conta.Cargo, nome, foto, contaDto.Lembrar);
             var tempo = contaDto.Lembrar != null && contaDto.Lembrar == true ? 9 : 1;
             Response.Cookies.Append("auth", token, new CookieOptions
             {
