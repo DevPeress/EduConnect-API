@@ -3,7 +3,7 @@
 namespace EduConnect.Domain.Interfaces;
 public interface IProfessorRepository
 {
-    Task<(IEnumerable<Professor>, int TotalRegistro)> GetByFilters(FiltroPessoas filtro);
+    Task<(IEnumerable<Professor>, int TotalRegistro)> GetByFilters(Filtro filtro);
     Task<Professor?> GetByIdAsync(int id);
     Task<Professor?> GetLastProfessorAsync();
     Task AddAsync(Professor professor);

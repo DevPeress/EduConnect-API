@@ -4,7 +4,7 @@ namespace EduConnect.Domain.Interfaces;
 
 public interface IAlunoRepository
 {
-    Task<(IEnumerable<Aluno>, int TotalRegistro)> GetByFilters(FiltroPessoas filtro);
+    Task<(IEnumerable<Aluno>, int TotalRegistro)> GetByFilters(Filtro filtro);
     Task<Aluno?> GetByIdAsync(int id);
     Task<Aluno?> GetLastAlunoAsync();
     Task AddAsync(Aluno aluno);
