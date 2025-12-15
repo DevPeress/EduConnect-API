@@ -20,7 +20,7 @@ public class ContaService(IContaRepository contaRepository)
         };
         await _contaRepository.AddContaAsync(conta);
     }
-    public async Task<Conta> GetConta(string email, string senha)
+    public async Task<Conta?> GetConta(string email, string senha)
     {
         return await _contaRepository.GetConta(email, senha);
     }
