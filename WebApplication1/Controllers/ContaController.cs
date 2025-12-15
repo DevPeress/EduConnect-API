@@ -3,6 +3,7 @@ using EduConnect.Application.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace EduConnect.Controllers
 {
@@ -44,6 +45,19 @@ namespace EduConnect.Controllers
             });
 
             return Ok("Login bem-sucedido.");
+        }
+
+        [Authorize]
+        [HttpPost("redefinir")]
+        public async Task<IActionResult> Redefinir(string registro, string senha, string senhaNova)
+        {
+            var conta = await _contaService.GetConta(registro, senha);
+            if (conta == null)
+            {
+                return Unauthorized("Credenciais inválidas.");
+            }
+            await _contaService.ChancePassword(registro, senhaNova);
+            return BadRequest();
         }
 
         [Authorize]

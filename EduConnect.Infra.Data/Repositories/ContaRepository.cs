@@ -20,6 +20,19 @@ public class ContaRepository(EduContext context) : IContaRepository
         return await _context.Contas.AnyAsync(c => c.Registro == registro);
     }
 
+    public async Task<bool> ChancePassword(string registro, string senhaNova)
+    {
+        var conta = await _context.Contas.FindAsync(registro);
+        if (conta != null)
+        {
+            conta.Senha = senhaNova;
+            _context.Contas.Update(conta);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        return false;
+    }
+
     public async Task AddContaAsync(Conta conta)
     {
         await _context.Contas.AddAsync(conta);
