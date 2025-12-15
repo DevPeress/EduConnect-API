@@ -1,7 +1,11 @@
-﻿namespace EduConnect.Domain.Entities;
+﻿using EduConnect.Domain.Interfaces;
 
-public class Professor : Pessoa
+namespace EduConnect.Domain.Entities;
+
+public class Professor : Pessoa, IPessoaComConta
 {
+    public int ContaId { get; set; }
+    public Conta Conta { get; set; } = null!;
     public required List<string> Turmas { get; set; }
     public required string Disciplina { get; set; }
     public required DateOnly Contratacao { get; set; }

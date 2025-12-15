@@ -1,14 +1,18 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using EduConnect.Domain.Entities;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EduConnect.Domain;
 
-public class Pessoa
+[NotMapped]
+public abstract class Pessoa
 {
     [Key]
     public int Id { get; set; }
     public required string Registro { get; set; }
     public required string Nome { get; set; }
     public required string Email { get; set; }
+    public required string Foto { get; set; }
     public required string Telefone { get; set; }
     public required string Status { get; set; }
     public required DateOnly Nasc { get; set; }
