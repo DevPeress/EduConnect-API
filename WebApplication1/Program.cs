@@ -16,6 +16,8 @@ builder.Services.AddAuthorization();
 
 var app = builder.Build();  
 
+app.UseMiddleware<ErrorHandlingMiddleware>();
+
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
