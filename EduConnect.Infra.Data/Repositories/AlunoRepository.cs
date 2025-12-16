@@ -1,5 +1,6 @@
 ﻿using EduConnect.Domain.Entities;
 using EduConnect.Domain.Interfaces;
+using EduConnect.Infra.CrossCutting.Utils;
 using EduConnect.Infra.Data.Context;
 using Microsoft.EntityFrameworkCore;
 
@@ -51,6 +52,18 @@ public class AlunoRepository(EduContext context) : IAlunoRepository
 
     public async Task AddAsync(Aluno aluno)
     {
+        var conta = new Conta
+        {
+            Registro = aluno.Registro,
+            Senha = SegurancaManager.GerarSenha(),
+            Cargo = "Aluno"
+        };
+        await _context.Contas.AddAsync(conta);
+        await _context.SaveChangesAsync();
+
+        aluno.ContaId = conta.Id;
+        aluno.Conta = conta;
+
         await _context.Alunos.AddAsync(aluno);
         await _context.SaveChangesAsync();
     }

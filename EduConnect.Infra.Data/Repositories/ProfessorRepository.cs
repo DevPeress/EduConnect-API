@@ -1,5 +1,6 @@
 ﻿using EduConnect.Domain.Entities;
 using EduConnect.Domain.Interfaces;
+using EduConnect.Infra.CrossCutting.Utils;
 using EduConnect.Infra.Data.Context;
 using Microsoft.EntityFrameworkCore;
 
@@ -46,6 +47,18 @@ public class ProfessorRepository(EduContext context) : IProfessorRepository
 
     public async Task AddAsync(Professor professor)
     {
+        var conta = new Conta
+        {
+            Registro = professor.Registro,
+            Senha = SegurancaManager.GerarSenha(),
+            Cargo = "Aluno"
+        };
+        await _context.Contas.AddAsync(conta);
+        await _context.SaveChangesAsync();
+
+        professor.ContaId = conta.Id;
+        professor.Conta = conta;
+
         await _context.Professores.AddAsync(professor);
         await _context.SaveChangesAsync();
     }
