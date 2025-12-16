@@ -74,13 +74,6 @@ namespace EduConnect.Controllers
         public async Task<IActionResult> AddProfessor(ProfessorDTO dto)
         {
             await _professorService.AddProfessorAsync(dto);
-            var conta = new ContaDTO
-            {
-                Registro = dto.Registro,
-                Senha = SegurancaManager.GerarSenha(),
-                Cargo = "Professor"
-            };
-            await _contaService.AddContaAsync(conta);
             return Ok();
         }
 

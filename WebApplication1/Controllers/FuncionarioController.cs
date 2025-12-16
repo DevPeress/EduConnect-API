@@ -79,13 +79,6 @@ namespace EduConnect.Controllers
         public async Task<IActionResult> AddFuncionario(FuncionarioDTO dto)
         {
             await _funcionarioService.AddFuncionarioAsync(dto);
-            var conta = new ContaDTO
-            {
-                Registro = dto.Registro,
-                Senha = SegurancaManager.GerarSenha(),
-                Cargo = "Funcionario"
-            };
-            await _contaService.AddContaAsync(conta);
             return Ok();
         }
 

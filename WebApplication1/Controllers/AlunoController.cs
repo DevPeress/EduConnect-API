@@ -1,6 +1,5 @@
 ﻿using EduConnect.Application.DTO;
 using EduConnect.Application.Services;
-using EduConnect.Infra.CrossCutting.Utils;
 using EduConnect.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -74,18 +73,10 @@ namespace EduConnect.Controllers
             return Ok("A" + proximoFormatado);
         }
 
-        [Authorize(Roles = "Administrador, Funcionario")]
         [HttpPost]
         public async Task<IActionResult> AddAluno([FromBody] AlunoDTO dto)
         {
             await _alunoService.AddAlunoAsync(dto);
-            var conta = new ContaDTO
-            {
-                Registro = dto.Registro,
-                Senha = SegurancaManager.GerarSenha(),
-                Cargo = "Aluno"
-            };
-            await _contaService.AddContaAsync(conta);
             return Ok();
         }
 
