@@ -16,11 +16,6 @@ public record FinanceiroDTO
     public bool Cancelado { get; init; }
     public string? Observacoes { get; init; }
 
-    // Dados opcionais relacionados ao aluno (preenchidos no serviço, não na entidade)
-    public string? Aluno { get; init; }
-    public DateOnly? Nasc { get; init; }
-    public string? Status { get; init; }
-
     public FinanceiroDTO() { }
 
     public FinanceiroDTO(Financeiro u)
