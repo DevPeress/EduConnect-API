@@ -1,5 +1,6 @@
 ﻿using EduConnect.Domain.Entities;
 using EduConnect.Domain.Interfaces;
+using EduConnect.Infra.CrossCutting.Utils;
 using EduConnect.Infra.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32;
@@ -11,8 +12,14 @@ public class ContaRepository(EduContext context) : IContaRepository
     private readonly EduContext _context = context;
     public async Task<Conta?> GetConta(string registro, string senha)
     {
-        return await _context.Contas
-            .FirstOrDefaultAsync(c => c.Registro == registro && c.Senha == senha);
+
+        var conta = await _context.Contas.FirstOrDefaultAsync(c => c.Registro == registro);
+        if (conta != null)
+        {
+            return SegurancaManager.VerificarHash(senha, conta.Senha) ? conta : null;
+        }
+
+        return null;
     }
 
     public async Task<bool> EmailExistsAsync(string registro)

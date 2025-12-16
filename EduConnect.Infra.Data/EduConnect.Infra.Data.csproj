@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\EduConnect.Domain\EduConnect.Domain.csproj" />
+    <ProjectReference Include="..\EduConnect.Infra.CrossCutting.Utils\EduConnect.Infra.CrossCutting.Utils.csproj" />
   </ItemGroup>
 
 </Project>
