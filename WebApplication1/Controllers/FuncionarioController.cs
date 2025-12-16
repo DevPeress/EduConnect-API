@@ -1,6 +1,7 @@
 ﻿using EduConnect.Application.DTO;
 using EduConnect.Application.Services;
 using EduConnect.Domain.Entities;
+using EduConnect.Infra.CrossCutting.Utils;
 using EduConnect.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -81,7 +82,7 @@ namespace EduConnect.Controllers
             var conta = new ContaDTO
             {
                 Registro = dto.Registro,
-                Senha = "Teste",
+                Senha = SegurancaManager.GerarSenha(),
                 Cargo = "Funcionario"
             };
             await _contaService.AddContaAsync(conta);
