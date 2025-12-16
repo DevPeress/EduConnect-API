@@ -13,10 +13,10 @@ namespace EduConnect.Controllers
     {
         private readonly FinanceiroService _financeiroService = service;
         private readonly AlunoService _alunoService = alunoService;
-        private List<FinanceiroDTO> Filtro(List<Financeiro> lista)
+        private List<FinanceiroResponseViewModel> Filtro(List<Financeiro> lista)
         {
             // Recebe a Lista do Financeiro e adiciona o Nome do Aluno e o Status no DTO
-            var financeiroDTOs = new List<FinanceiroDTO>();
+            var financeiroDTOs = new List<FinanceiroResponseViewModel>();
             foreach (var f in lista)
             {
                 var aluno = _alunoService.GetAlunoByIdAsync(f.AlunoId).Result;
@@ -26,11 +26,18 @@ namespace EduConnect.Controllers
                 }
                 // Verifica o Status do Pagamento
                 var verificarStatus = f.Pago ? "Pago" : f.Cancelado ? "Cancelado" : f.DataVencimento < DateOnly.FromDateTime(DateTime.Now) ? "Atrasado" : "Pendente";
-                var dto = new FinanceiroDTO(f)
+                var dto = new FinanceiroResponseViewModel
                 {
+                    Registro = f.Registro,
+                    Categoria = f.Categoria,
+                    Valor = f.Valor,
+                    DataVencimento = f.DataVencimento,
+                    DataPagamento = f.DataPagamento,
                     Aluno = aluno.Nome,
+                    Foto = aluno.Foto,
                     Nasc = aluno.Nasc,
-                    Status = verificarStatus
+                    Status = verificarStatus,
+                    Mes = f.DataVencimento.ToString("MMMM")
                 };
                 financeiroDTOs.Add(dto);
             }
@@ -82,7 +89,7 @@ namespace EduConnect.Controllers
             var (financeiros, total) = await _financeiroService.GetByFilters(filtro);
             var financeiroDTOs = Filtro(financeiros.ToList());
 
-            return Ok(new FiltroResponseViewModel<FinanceiroDTO>
+            return Ok(new FiltroResponseViewModel<FinanceiroResponseViewModel>
                 {
                     Total = total,
                     Dados = financeiroDTOs
@@ -118,13 +125,20 @@ namespace EduConnect.Controllers
             }
             // Verifica o Status do Pagamento
             var verificarStatus = financeiro.Pago ? "Pago" : financeiro.Cancelado ? "Cancelado" : financeiro.DataVencimento < DateOnly.FromDateTime(DateTime.Now) ? "Atrasado" : "Pendente";
-            var financeiroDTO = new FinanceiroDTO(financeiro)
+            var dto = new FinanceiroResponseViewModel
             {
+                Registro = financeiro.Registro,
+                Categoria = financeiro.Categoria,
+                Valor = financeiro.Valor,
+                DataVencimento = financeiro.DataVencimento,
+                DataPagamento = financeiro.DataPagamento,
                 Aluno = aluno.Nome,
+                Foto = aluno.Foto,
                 Nasc = aluno.Nasc,
-                Status = verificarStatus
+                Status = verificarStatus,
+                Mes = financeiro.DataVencimento.ToString("MMMM")
             };
-            return Ok(financeiroDTO);
+            return Ok(dto);
         }
 
         [Authorize(Roles = "Administrador, Funcionario")]
