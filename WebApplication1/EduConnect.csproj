@@ -20,6 +20,8 @@
   <ItemGroup>
     <ProjectReference Include="..\EduConnect.Application\EduConnect.Application.csproj" />
     <ProjectReference Include="..\EduConnect.Infra.CrossCutting.Entities\EduConnect.Infra.CrossCutting.Entities.csproj" />
+	  <ProjectReference Include="..\EduConnect.Infra.CrossCutting.Utils\EduConnect.Infra.CrossCutting.Entities.Utils" />
+	  <ProjectReference Include="..\EduConnect.Infra.CrossCutting.Utils\EduConnect.Infra.CrossCutting.Utils.csproj" />
     <ProjectReference Include="..\EduConnect.Infra.Data\EduConnect.Infra.Data.csproj" />
     <ProjectReference Include="..\EduConnect.Infra.IoC\EduConnect.Infra.IoC.csproj" />
   </ItemGroup>

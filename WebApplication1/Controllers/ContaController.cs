@@ -1,9 +1,9 @@
 ﻿using EduConnect.Application.DTO;
 using EduConnect.Application.Services;
+using EduConnect.Infra.CrossCutting.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace EduConnect.Controllers
 {
@@ -58,12 +58,12 @@ namespace EduConnect.Controllers
         [HttpPost("redefinir")]
         public async Task<IActionResult> Redefinir(string registro, string senha, string senhaNova)
         {
-            var conta = await _contaService.GetConta(registro, senha);
+            var conta = await _contaService.GetConta(registro, SegurancaManager.GerarHash(senha));
             if (conta == null)
             {
                 return Unauthorized("Credenciais inválidas.");
             }
-            await _contaService.ChancePassword(registro, senhaNova);
+            await _contaService.ChancePassword(registro, SegurancaManager.GerarHash(senhaNova));
             return BadRequest();
         }
 
