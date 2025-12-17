@@ -42,7 +42,7 @@ public class FuncionarioService(IFuncionarioRepository repo)
 
     public async Task<Funcionario?> GetLastFuncionarioAsync()
     {
-        return await _funcionarioRepository.GetLastFuncionarioAsync();
+        return await _funcionarioRepository.GetLastPessoaAsync();
     }
 
     public async Task AddFuncionarioAsync(FuncionarioDTO dto)

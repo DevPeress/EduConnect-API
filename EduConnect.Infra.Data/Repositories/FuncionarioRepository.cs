@@ -38,7 +38,7 @@ public class FuncionarioRepository(EduContext context) : IFuncionarioRepository
         return await _context.Funcionarios.Where(p => p.Deletado == false).FirstOrDefaultAsync(a => a.Id == id);
     }
 
-    public async Task<Funcionario?> GetLastFuncionarioAsync()
+    public async Task<Funcionario?> GetLastPessoaAsync()
     {
         return await _context.Funcionarios.Where(p => p.Deletado == false)
         .OrderBy(a => a.Registro)
