@@ -10,10 +10,9 @@ namespace EduConnect.Controllers
 {
     [ApiController]
     [Route("api/funcionarios")]
-    public class FuncionarioController(FuncionarioService service, ContaService conta) : ControllerBase
+    public class FuncionarioController(FuncionarioService service) : ControllerBase
     {
         private readonly FuncionarioService _funcionarioService = service;
-        private readonly ContaService _contaService = conta;
 
         [Authorize(Roles = "Administrador, Funcionario")]
         [HttpGet("filtro/status/{status}/page/{page}")]
