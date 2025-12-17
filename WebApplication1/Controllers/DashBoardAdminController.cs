@@ -16,9 +16,7 @@ namespace EduConnect.Controllers
         [HttpGet("Cards")]
         public async Task<IActionResult> GetCardsData()
         {
-            var totalAlunos = await _dashBoardAdminService.GetTotalAlunosAsync();
-            var totalProfessores = await _dashBoardAdminService.GetTotalProfessoresAsync();
-            var totalTurmas = await _dashBoardAdminService.GetTotalTurmasAsync();
+            var (totalAlunos, totalProfessores, totalTurmas) = await _dashBoardAdminService.GetTotalsAsync();
             var (aumentoAlunos, aumentoProfessores, aumentoTurmas) = await _dashBoardAdminService.GetAumentoAsync();
             var (porcentagemAlunos, porcentagemProfessores, porcentagemTurmas) = await _dashBoardAdminService.GetPorcentagemAsync();
             return Ok(new List<CardsAdminResponseViewModel>
