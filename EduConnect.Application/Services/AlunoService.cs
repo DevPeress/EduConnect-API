@@ -46,7 +46,7 @@ public class AlunoService(IAlunoRepository repo)
     }
     public async Task<Aluno?> GetLastAluno()
     {
-        return await _alunoRepository.GetLastAlunoAsync();
+        return await _alunoRepository.GetLastPessoaAsync();
     }
     public async Task AddAlunoAsync(AlunoDTO dto)
     {

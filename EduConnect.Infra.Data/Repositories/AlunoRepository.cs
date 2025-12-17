@@ -43,7 +43,7 @@ public class AlunoRepository(EduContext context) : IAlunoRepository
         return await _context.Alunos.FirstOrDefaultAsync(a => a.Id == id);
     }
 
-    public async Task<Aluno?> GetLastAlunoAsync()
+    public async Task<Aluno?> GetLastPessoaAsync()
     {
         return await _context.Alunos
         .OrderBy(a => a.Id)
