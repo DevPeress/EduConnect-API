@@ -42,7 +42,7 @@ public class ProfessorService(IProfessorRepository repo)
 
     public async Task<Professor?> GetLastProfessorAsync()
     {
-        return await _professorRepository.GetLastProfessorAsync();
+        return await _professorRepository.GetLastPessoaAsync();
     }
 
     public async Task AddProfessorAsync(ProfessorDTO dto)

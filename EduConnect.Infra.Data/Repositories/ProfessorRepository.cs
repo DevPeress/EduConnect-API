@@ -38,7 +38,7 @@ public class ProfessorRepository(EduContext context) : IProfessorRepository
         return await _context.Professores.Where(p => p.Deletado == false).FirstOrDefaultAsync(a => a.Id == id);
     }
 
-    public async Task<Professor?> GetLastProfessorAsync()
+    public async Task<Professor?> GetLastPessoaAsync()
     {
         return await _context.Professores.Where(p => p.Deletado == false)
         .OrderBy(a => a.Registro)
