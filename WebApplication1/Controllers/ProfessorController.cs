@@ -9,10 +9,9 @@ namespace EduConnect.Controllers
 {
     [ApiController]
     [Route("api/professores")]
-    public class ProfessorController(ProfessorService service, ContaService conta) : ControllerBase
+    public class ProfessorController(ProfessorService service) : ControllerBase
     {
         private readonly ProfessorService _professorService = service;
-        private readonly ContaService _contaService = conta;
 
         [HttpGet("filtro/selecionada/{selecionada}/status/{status}/page/{page}")]
         public async Task<IActionResult> GetAllProfessor(string selecionada, string status, int page)
