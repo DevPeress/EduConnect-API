@@ -51,7 +51,7 @@ namespace EduConnect.Controllers
                 Expires = DateTimeOffset.UtcNow.AddHours(tempo)
             });
 
-            return Ok("Login bem-sucedido.");
+            return Ok(conta.Cargo);
         }
 
         [Authorize]
