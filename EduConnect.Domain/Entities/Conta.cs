@@ -10,6 +10,8 @@ public class Conta
     public string Senha { get; set; } = null!;
     public string Cargo { get; set; } = null!;
     public bool Deletado { get; set; } = false;
+    public int LimiteLogin { get; set; } = 0;
+    public DateTime? DataLogin { get; set; }
 
     // Relacionamento
     public Pessoa Pessoa { get; set; } = null!;

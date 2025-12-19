@@ -4,6 +4,7 @@ using EduConnect.Infra.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EduConnect.Infra.Data.Migrations
 {
     [DbContext(typeof(EduContext))]
-    partial class EduContextModelSnapshot : ModelSnapshot
+    [Migration("20251219123653_LimiteLogin")]
+    partial class LimiteLogin
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -105,14 +108,8 @@ namespace EduConnect.Infra.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateOnly?>("DataLogin")
-                        .HasColumnType("date");
-
                     b.Property<bool>("Deletado")
                         .HasColumnType("bit");
-
-                    b.Property<int>("LimiteLogin")
-                        .HasColumnType("int");
 
                     b.Property<string>("Registro")
                         .IsRequired()

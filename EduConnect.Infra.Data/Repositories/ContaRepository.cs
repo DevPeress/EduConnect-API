@@ -3,20 +3,66 @@ using EduConnect.Domain.Interfaces;
 using EduConnect.Infra.CrossCutting.Utils;
 using EduConnect.Infra.Data.Context;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Win32;
 
 namespace EduConnect.Infra.Data.Repositories;
 
 public class ContaRepository(EduContext context) : IContaRepository
 {
     private readonly EduContext _context = context;
-    public async Task<Conta?> GetConta(string registro, string senha)
+    private bool VerifyDate(DateTime dataLogin)
+    {
+        var currentDate = DateTime.Now;
+        return dataLogin > currentDate;
+    }
+
+    public async Task<(bool, int)> VerifyLogin(string registro, string senha)
+    {
+        var conta = await _context.Contas.FirstOrDefaultAsync(c => c.Registro == registro);
+        if (conta != null)
+        {
+            if (conta.DataLogin != null)
+            {
+                var isBlocked = VerifyDate(conta.DataLogin.Value);
+                if (isBlocked)
+                {
+                    return (false, -1);
+                }
+                else
+                {
+                    conta.LimiteLogin = 0;
+                    conta.DataLogin = null;
+                    _context.Contas.Update(conta);
+                    _context.SaveChanges();
+                }
+            }
+
+            var verify = SegurancaManager.VerificarHash(senha, conta.Senha);
+            if (verify)
+            {
+                return (true, 0);
+            } 
+            else
+            {
+                conta.LimiteLogin += 1;
+                if (conta.LimiteLogin >= 5)
+                {
+                    conta.DataLogin = DateTime.Now.AddMinutes(60);
+                    _context.Contas.Update(conta);
+                    _context.SaveChanges();
+                }
+                return (false, conta.LimiteLogin);
+            }
+        }
+        return (false, 0);
+    }
+
+    public async Task<Conta?> GetConta(string registro)
     {
 
         var conta = await _context.Contas.FirstOrDefaultAsync(c => c.Registro == registro);
         if (conta != null)
         {
-            return SegurancaManager.VerificarHash(senha, conta.Senha) ? conta : null;
+            return conta;
         }
 
         return null;
