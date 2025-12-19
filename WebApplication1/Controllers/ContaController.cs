@@ -35,7 +35,7 @@ namespace EduConnect.Controllers
                 return Unauthorized("Credenciais inválidas.");
             }
 
-            var (login, tentativas) = await _contaService.VerifyLogin(contaDto.Registro, contaDto.Senha);
+            var (login, tentativas) = await _contaService.VerifyLogin(conta.Registro, conta.Senha);
             if (login == false)
             {
                 return Unauthorized(tentativas);
@@ -64,8 +64,8 @@ namespace EduConnect.Controllers
         [HttpPost("redefinir")]
         public async Task<IActionResult> Redefinir(string registro, string senha, string senhaNova)
         {
-            var conta = await _contaService.GetConta(registro, SegurancaManager.GerarHash(senha));
-            if (conta == null)
+            var (conta, tentativas) = await _contaService.VerifyLogin(registro, SegurancaManager.GerarHash(senha));
+            if (conta == false)
             {
                 return Unauthorized("Credenciais inválidas.");
             }
