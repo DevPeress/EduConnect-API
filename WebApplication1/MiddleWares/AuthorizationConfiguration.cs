@@ -1,16 +1,25 @@
-﻿namespace EduConnect.MiddleWares;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+
+namespace EduConnect.MiddleWares;
 
 public static class AuthorizationConfiguration
 {
     public static IServiceCollection AddAuthorizationConfiguration(this IServiceCollection services)
     {
-        services.AddAuthorization(options =>
+        services.AddAuthorization(auth =>
         {
-            options.AddPolicy("AdminPolicy", policy =>
-                policy.RequireRole("Admin"));
-            options.AddPolicy("UserPolicy", policy =>
-                policy.RequireRole("User", "Admin"));
+            auth.FallbackPolicy = new AuthorizationPolicyBuilder()
+                .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+                .RequireAuthenticatedUser()
+                .Build();
+
+            auth.AddPolicy("Bearer", new AuthorizationPolicyBuilder()
+                .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+                .RequireAuthenticatedUser()
+                .Build());
         });
+
         return services;
     }
 }
