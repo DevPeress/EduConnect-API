@@ -13,6 +13,7 @@ namespace EduConnect.Controllers
     {
         private readonly ContaService _contaService = service;
         private readonly JWTService _jwtService = jwt;
+        private const int maxTentativas = 5;
 
         [Authorize]
         [HttpGet("usuario")]
@@ -29,7 +30,6 @@ namespace EduConnect.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] ContaDTO contaDto)
         {
-            int maxTentativas = 5;
             var conta = await _contaService.GetConta(contaDto.Registro);
             if (conta == null)
             {
@@ -65,7 +65,7 @@ namespace EduConnect.Controllers
         [HttpPost("redefinir")]
         public async Task<IActionResult> Redefinir(string registro, string senha, string senhaNova)
         {
-            var (conta, tentativas) = await _contaService.VerifyLogin(registro, SegurancaManager.GerarHash(senha));
+            var (conta, tentativas) = await _contaService.VerifyLogin(registro, SegurancaManager.GerarHash(senha), maxTentativas);
             if (conta == false)
             {
                 return Unauthorized("Credenciais inválidas.");
