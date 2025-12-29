@@ -29,16 +29,17 @@ namespace EduConnect.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] ContaDTO contaDto)
         {
+            int maxTentativas = 5;
             var conta = await _contaService.GetConta(contaDto.Registro);
             if (conta == null)
             {
                 return Unauthorized("Credenciais inválidas.");
             }
 
-            var (login, tentativas) = await _contaService.VerifyLogin(conta.Registro, conta.Senha);
+            var (login, tentativas) = await _contaService.VerifyLogin(conta.Registro, conta.Senha, maxTentativas);
             if (login == false)
             {
-                return Unauthorized(tentativas);
+                return Unauthorized(tentativas - maxTentativas);
             }
 
             (string nome, string foto) = await _contaService.GetInfos(conta.Cargo, conta.Registro);

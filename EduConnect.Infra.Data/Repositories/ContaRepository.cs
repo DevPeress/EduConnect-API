@@ -15,7 +15,7 @@ public class ContaRepository(EduContext context) : IContaRepository
         return dataLogin > currentDate;
     }
 
-    public async Task<(bool, int)> VerifyLogin(string registro, string senha)
+    public async Task<(bool, int)> VerifyLogin(string registro, string senha, int maxTentativas)
     {
         var conta = await _context.Contas.FirstOrDefaultAsync(c => c.Registro == registro);
         if (conta != null)
@@ -44,7 +44,7 @@ public class ContaRepository(EduContext context) : IContaRepository
             else
             {
                 conta.LimiteLogin += 1;
-                if (conta.LimiteLogin >= 5)
+                if (conta.LimiteLogin >= maxTentativas)
                 {
                     conta.DataLogin = DateTime.Now.AddMinutes(60);
                     _context.Contas.Update(conta);

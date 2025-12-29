@@ -8,9 +8,9 @@ public class ContaService(IContaRepository contaRepository)
 {
     private readonly IContaRepository _contaRepository = contaRepository;
 
-    public async Task<(bool, int)> VerifyLogin(string registro, string senha)
+    public async Task<(bool, int)> VerifyLogin(string registro, string senha, int maxTentativas)
     {
-        return await _contaRepository.VerifyLogin(registro, senha);
+        return await _contaRepository.VerifyLogin(registro, senha, maxTentativas);
     }
 
     public async Task<(string nome, string foto)> GetInfos(string cargo, string registro)
