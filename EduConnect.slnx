@@ -19,5 +19,7 @@
     <Project Path="EduConnect.Infra.CrossCutting.Entities/EduConnect.Infra.CrossCutting.Entities.csproj" Id="0079047c-cbf1-4de9-b54d-7554d8af08f7" />
     <Project Path="EduConnect.Infra.CrossCutting.Utils/EduConnect.Infra.CrossCutting.Utils.csproj" Id="fac48c57-3bcc-4ede-85d7-85c67492b247" />
   </Folder>
-  <Folder Name="/5 - Tests/" />
+  <Folder Name="/5 - Tests/">
+    <Project Path="EduConnect.Tests/EduConnect.Tests.csproj" Id="fc45ce70-eb43-4306-9847-e60a82ad72ff" />
+  </Folder>
 </Solution>
