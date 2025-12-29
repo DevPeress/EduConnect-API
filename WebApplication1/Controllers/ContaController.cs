@@ -39,7 +39,7 @@ namespace EduConnect.Controllers
             var (login, tentativas) = await _contaService.VerifyLogin(conta.Registro, conta.Senha, maxTentativas);
             if (login == false)
             {
-                return Unauthorized(tentativas - maxTentativas);
+                return Unauthorized(maxTentativas - tentativas);
             }
 
             (string nome, string foto) = await _contaService.GetInfos(conta.Cargo, conta.Registro);
