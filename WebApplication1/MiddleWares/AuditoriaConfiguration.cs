@@ -1,4 +1,5 @@
-﻿using EduConnect.Application.Services;
+﻿using EduConnect.Application.Common.Auditing;
+using EduConnect.Application.Services;
 using EduConnect.Domain.Entities;
 using EduConnect.Domain.Enums;
 using System.Security.Claims;
@@ -41,19 +42,19 @@ public class AuditoriaConfiguration(RequestDelegate next)
         if (userIdClaim == null || userName == null || userRole == null)
             return;
 
-        var action = context.Items.TryGetValue("AuditAction", out var act) && act is AuditAction auditAction
+        var action = context.Items.TryGetValue(AuditKeys.Action, out var act) && act is AuditAction auditAction
             ? auditAction
             : 0;
 
-        var entity = context.Items.TryGetValue("Entity", out var ent)
+        var entity = context.Items.TryGetValue(AuditKeys.Entity, out var ent)
             ? ent?.ToString()
             : null;
 
-        var entityId = context.Items.TryGetValue("EntityId", out var entId)
+        var entityId = context.Items.TryGetValue(AuditKeys.EntityId, out var entId)
             ? entId?.ToString()
             : null;
 
-        var detalhes = context.Items.TryGetValue("Detalhes", out var det)
+        var detalhes = context.Items.TryGetValue(AuditKeys.Details, out var det)
             ? det?.ToString()
             : null;
 
