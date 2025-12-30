@@ -8,34 +8,26 @@ public class RegistroRepository(EduContext context) : IRegistroRepository
 {
     private readonly EduContext _context = context;
 
-    public async Task<List<Registro>> GetRegistrosAsync()
+    private IQueryable<Registro> QueryFiltroRegistro(Filtro filtro)
     {
-        return await _context.Registros.Where(p => p.Deletado == false).ToListAsync();
+        var query = _context.Registros.AsNoTracking().Where(p => p.Deletado == false);
+        return query;
     }
 
-    public async Task<List<Registro>> GetLastRegistrosAync()
+    public async Task<(IEnumerable<Registro>, int TotalRegistro)> GetRegistrosAsync(Filtro filtro)
     {
-        return await _context.Registros.Where(p => p.Deletado == false)
-            .OrderBy(r => r.Horario)
-            .Take(10)
-            .ToListAsync();
+        var query = QueryFiltroRegistro(filtro);
+        var total = await query.CountAsync();
+
+        query = query.Skip(filtro.Offset).Take(6);
+        var result = await query.ToListAsync();
+
+        return (result, total);
     }
 
     public async Task<Registro?> GetRegistroByIdAsync(int registro)
     {
         return await _context.Registros.Where(p => p.Deletado == false).FirstOrDefaultAsync(r => r.Id == registro);
-    }
-
-    public async Task AddRegistroAsync(Registro registro)
-    {
-        await _context.Registros.AddAsync(registro);
-        await _context.SaveChangesAsync();
-    }
-
-    public async Task UpdateRegistroAsync(Registro registro)
-    {
-        _context.Registros.Update(registro);
-        await _context.SaveChangesAsync();
     }
 
     public async Task DeleteRegistroAsync(int id)
