@@ -1,12 +1,15 @@
-﻿using EduConnect.Application.DTO;
+﻿using EduConnect.Application.Common.Auditing;
+using EduConnect.Application.DTO;
 using EduConnect.Domain.Entities;
+using EduConnect.Domain.Enums;
 using EduConnect.Domain.Interfaces;
 
 namespace EduConnect.Application.Services;
 
-public class AlunoService(IAlunoRepository repo)
+public class AlunoService(IAlunoRepository repo, AuditContext context)
 {
     private readonly IAlunoRepository _alunoRepository = repo;
+    private readonly AuditContext _auditContext = context;
 
     public async Task<(List<AlunoDTO>, int TotalRegistro)> GetByFilters(FiltroDTO filtrodto)
     {
@@ -40,14 +43,17 @@ public class AlunoService(IAlunoRepository repo)
 
         return (alunosDTO, total);
     }
+
     public async Task<Aluno?> GetAlunoByIdAsync(int id)
     {
         return await _alunoRepository.GetByIdAsync(id);
     }
+
     public async Task<Aluno?> GetLastAluno()
     {
         return await _alunoRepository.GetLastPessoaAsync();
     }
+
     public async Task AddAlunoAsync(AlunoDTO dto)
     {
         var aluno = new Aluno
@@ -67,7 +73,14 @@ public class AlunoService(IAlunoRepository repo)
             Foto = dto.Foto
         };
         await _alunoRepository.AddAsync(aluno);
+        _auditContext.Set(
+           action: AuditAction.Create,
+           entity: "Aluno",
+           entityId: dto.Registro,
+           details: "Criação dos dados do aluno"
+       );
     }
+
     public async Task UpdateAlunoAsync(AlunoDTO dto)
     {
         var aluno = new Aluno
@@ -87,9 +100,22 @@ public class AlunoService(IAlunoRepository repo)
             Foto = dto.Foto
         };
         await _alunoRepository.UpdateAsync(aluno);
+        _auditContext.Set(
+           action: AuditAction.Update,
+           entity: "Aluno",
+           entityId: dto.Registro,
+           details: "Atualização dos dados do aluno"
+       );
     }
+
     public async Task DeleteAlunoAsync(int id)
     {
         await _alunoRepository.DeleteAsync(id);
+        _auditContext.Set(
+            action: AuditAction.Delete,
+            entity: "Aluno",
+            entityId: id,
+            details: "Deletado os dados do aluno"
+        );
     }
 }
