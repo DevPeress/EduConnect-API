@@ -31,6 +31,9 @@ namespace EduConnect.Infra.IoC
             services.AddScoped<TurmaService>();
             services.AddScoped<IContaRepository, ContaRepository>();
             services.AddScoped<ContaService>();
+            services.AddScoped<IAuditRepository, AuditoriaRepository>();
+            services.AddScoped<AuditoriaService>(); 
+
             services.AddScoped<JWTService>();   
         }
     }
