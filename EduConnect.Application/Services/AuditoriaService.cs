@@ -1,10 +1,9 @@
 ﻿using EduConnect.Domain.Entities;
 using EduConnect.Domain.Interfaces;
-using Microsoft.AspNetCore.Http;
 
 namespace EduConnect.Application.Services;
 
-public class AuditoriaService(IAuditRepository repo, IHttpContextAccessor httpContext)
+public class AuditoriaService(IAuditRepository repo)
 {
     private readonly IAuditRepository _auditRepository = repo;
 
