@@ -4,9 +4,9 @@ using System.Security.Claims;
 
 namespace EduConnect.Application.Common.Auditing;
 
-public class AuditContext : IAuditContext
+public class AuditContext(IHttpContextAccessor http) : IAuditContext
 {
-    private readonly IHttpContextAccessor _http;
+    private readonly IHttpContextAccessor _http = http;
 
     public bool IsAuthenticated =>
         _http.HttpContext?.User.Identity?.IsAuthenticated ?? false;
