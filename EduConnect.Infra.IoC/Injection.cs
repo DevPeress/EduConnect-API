@@ -1,4 +1,5 @@
-﻿using EduConnect.Application.Services;
+﻿using EduConnect.Application.Common.Auditing;
+using EduConnect.Application.Services;
 using EduConnect.Domain.Interfaces;
 using EduConnect.Infra.Data.Context;
 using EduConnect.Infra.Data.Repositories;
@@ -32,7 +33,8 @@ namespace EduConnect.Infra.IoC
             services.AddScoped<IContaRepository, ContaRepository>();
             services.AddScoped<ContaService>();
             services.AddScoped<IAuditRepository, AuditoriaRepository>();
-            services.AddScoped<AuditoriaService>(); 
+            services.AddScoped<AuditoriaService>();
+            services.AddScoped<IAuditContext, AuditContext>();
 
             services.AddScoped<JWTService>();   
         }
