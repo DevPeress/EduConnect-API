@@ -13,6 +13,12 @@ builder.Services.AddProblemDetails();
 builder.Services.AddJsonConverterConfiguration();
 builder.Services.AddJWTConfiguration(builder.Configuration);
 builder.Services.AddAuthorization();
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddControllers(opt =>
+{
+    opt.Filters.Add<AuditoriaConfiguration>();
+});
 
 var app = builder.Build();  
 
