@@ -2,6 +2,7 @@
 using Bogus.Extensions.Brazil;
 using EduConnect.Infra.CrossCutting.Utils.Validations;
 using FluentAssertions;
+using Xunit;
 
 namespace EduConnect.Tests.CrossCutting.Utils;
 
