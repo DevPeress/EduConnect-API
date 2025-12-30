@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace EduConnect.MiddleWares;
 
-public class AuditoriaConfiguration(AuditoriaService service)
+public class AuditoriaConfiguration(AuditoriaService service) : IAsyncActionFilter
 {
     private readonly AuditoriaService _service = service;
 
