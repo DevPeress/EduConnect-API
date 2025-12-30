@@ -1,5 +1,6 @@
 ﻿using EduConnect.Application.DTO;
 using EduConnect.Application.Services;
+using EduConnect.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,19 +13,21 @@ namespace EduConnect.Controllers
         private readonly RegistroService _registroService = service;
 
         [Authorize(Roles = "Administrador, Funcionario")]
-        [HttpGet]
-        public async Task<IActionResult> GetAllRegistrosAsync()
+        [HttpGet("filtro/page/{page}")]
+        public async Task<IActionResult> GetRegistros(int page)
         {
-            var registros = await _registroService.GetAllRegistrosAsync();
-            return Ok(registros);
-        }
+            var filtro = new FiltroDTO
+            {
+                Page = page
+            };
 
-        [Authorize(Roles = "Administrador, Funcionario")]
-        [HttpGet("DashBoard")]
-        public async Task<IActionResult> GetLastRegistrosAsync()
-        {
-            var registros = await _registroService.GetLastRegistrosAsync();
-            return Ok(registros);
+            var (registros, total) = await _registroService.GetRegistros(filtro);
+
+            return Ok(new FiltroResponseViewModel<RegistroDTO>
+            {
+                Dados = registros,
+                Total = total
+            });
         }
 
         [Authorize(Roles = "Administrador, Funcionario")]
@@ -33,31 +36,6 @@ namespace EduConnect.Controllers
         {
             var registro = await _registroService.GetRegistroByIdAsync(id);
             return Ok(registro);
-        }
-
-        [Authorize(Roles = "Administrador, Funcionario")]
-        [HttpPost]
-        public async Task<IActionResult> AddRegistro(RegistroDTO dto)
-        {
-            await _registroService.AddRegistroAsync(dto);
-            return Ok();
-        }
-
-        [Authorize(Roles = "Administrador")]
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateRegistro(int id, RegistroDTO dto)
-        {
-            if (id != dto.Id)
-            {
-                return BadRequest();
-            }
-            var existingRegistro = await _registroService.GetRegistroByIdAsync(id);
-            if (existingRegistro == null)
-            {
-                return NotFound();
-            }
-            await _registroService.UpdateRegistroAsync(dto);
-            return Ok();
         }
 
         [Authorize(Roles = "Administrador")]
