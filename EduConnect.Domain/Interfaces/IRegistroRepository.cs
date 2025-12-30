@@ -4,10 +4,7 @@ namespace EduConnect.Domain.Interfaces;
 
 public interface IRegistroRepository
 {
-    Task<List<Registro>> GetRegistrosAsync();
-    Task<List<Registro>> GetLastRegistrosAync();
+    Task<(IEnumerable<Registro>, int TotalRegistro)> GetRegistrosAsync(Filtro filtro);
     Task<Registro?> GetRegistroByIdAsync(int registro);
-    Task AddRegistroAsync(Registro registro);
-    Task UpdateRegistroAsync(Registro registro);
     Task DeleteRegistroAsync(int registro);
 }
