@@ -1,7 +1,5 @@
 ﻿using EduConnect.Application.DTO;
 using EduConnect.Application.Services;
-using EduConnect.Attributes;
-using EduConnect.Domain.Enums;
 using EduConnect.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
