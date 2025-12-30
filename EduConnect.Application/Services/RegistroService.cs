@@ -7,41 +7,39 @@ namespace EduConnect.Application.Services;
 public class RegistroService(IRegistroRepository repo)
 {
     private readonly IRegistroRepository _registroRepository = repo;
-    public async Task<List<Registro>> GetAllRegistrosAsync()
+    public async Task<(List<RegistroDTO>, int TotalRegistro)> GetRegistros(FiltroDTO filtrodto)
     {
-        return await _registroRepository.GetRegistrosAsync();
+        var filtro = new Filtro
+        {
+            Page = filtrodto.Page,
+            Categoria = filtrodto.Categoria,
+            Status = filtrodto.Status
+        };
+
+        var (registros, total) = await _registroRepository.GetRegistrosAsync(filtro);
+
+        List<RegistroDTO> registrosDTO = [];
+        foreach (var registro in registros)
+        {
+            registrosDTO.Add(new RegistroDTO
+            {
+                UserName = registro.UserName,
+                UserRole = registro.UserRole,
+                Action = registro.Action.ToString(),
+                Entity = registro.Entity,
+                Description = registro.Detalhes,
+                CreatedAt = registro.CreatedAt
+            });
+        }
+
+        return (registrosDTO, total);
     }
-    public async Task<List<Registro>> GetLastRegistrosAsync()
-    {
-        return await _registroRepository.GetLastRegistrosAync();
-    }
+
     public async Task<Registro?> GetRegistroByIdAsync(int id)
     {
         return await _registroRepository.GetRegistroByIdAsync(id);
     }
-    public async Task AddRegistroAsync(RegistroDTO dto)
-    {
-        var registro = new Registro
-        {
-            Tipo = dto.Tipo,
-            Descricao = dto.Descricao,
-            Horario = DateTime.Now,
-            PessoaId = dto.PessoaId
-        };
-        await _registroRepository.AddRegistroAsync(registro);
-    }
-    public async Task UpdateRegistroAsync(RegistroDTO dto)
-    {
-        var registro = new Registro
-        {
-            Id = dto.Id,
-            Tipo = dto.Tipo,
-            Descricao = dto.Descricao,
-            Horario = dto.Horario,
-            PessoaId = dto.Id
-        };
-        await _registroRepository.UpdateRegistroAsync(registro);
-    }
+
     public async Task DeleteRegistroAsync(int id)
     {
         await _registroRepository.DeleteRegistroAsync(id);
