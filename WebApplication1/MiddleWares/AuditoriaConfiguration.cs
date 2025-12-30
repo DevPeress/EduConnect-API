@@ -1,34 +1,86 @@
 ﻿using EduConnect.Application.Services;
-using EduConnect.Attributes;
-using Microsoft.AspNetCore.Mvc.Filters;
+using EduConnect.Domain.Entities;
+using EduConnect.Domain.Enums;
+using System.Security.Claims;
 
 namespace EduConnect.MiddleWares;
 
-public class AuditoriaConfiguration(AuditoriaService service) : IAsyncActionFilter
+public class AuditoriaConfiguration(RequestDelegate next)
 {
-    private readonly AuditoriaService _service = service;
+    private readonly RequestDelegate _next = next;
+    private static readonly HashSet<PathString> RotasBloqueadas =
+    [
+        new PathString("/api/auth/login"),
+        new PathString("/api/auth/refresh-token")
+    ];
 
-    public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
+    public async Task InvokeAsync(HttpContext context, AuditoriaService auditoriaService)
     {
-        var executedContext = await next();
+        await _next(context);
 
-        if (executedContext != null)
+        if (RotasBloqueadas.Any(r =>
+            context.Request.Path.StartsWithSegments(r)))
             return;
 
-        var auditAttr = context.ActionDescriptor.EndpointMetadata
-            .OfType<AuditAttribute>()
-            .FirstOrDefault();
-
-        if (auditAttr == null)
+        var method = context.Request.Method;
+        if (method is not ("POST" or "PUT" or "DELETE"))
             return;
 
-        var entityId = context.ActionArguments
-            .FirstOrDefault().Value?.ToString() ?? "-";
+        if (context.Response.StatusCode >= 400)
+            return;
 
-        await _service.LogAsync(
-            auditAttr.Action,
-            auditAttr.Entity,
-            entityId,
-            "Ação executada com sucesso");
+        if (!context.User.Identity?.IsAuthenticated ?? true)
+            return;
+
+
+        var user = context.User;
+        var userIdClaim = user.FindFirst(ClaimTypes.NameIdentifier);
+        var userName = user.Identity?.Name;
+        var userRole = user.FindFirst(ClaimTypes.Role);
+
+        if (userIdClaim == null || userName == null || userRole == null)
+            return;
+
+        var action = context.Items.TryGetValue("AuditAction", out var act) && act is AuditAction auditAction
+            ? auditAction
+            : 0;
+
+        var entity = context.Items.TryGetValue("Entity", out var ent)
+            ? ent?.ToString()
+            : null;
+
+        var entityId = context.Items.TryGetValue("EntityId", out var entId)
+            ? entId?.ToString()
+            : null;
+
+        var detalhes = context.Items.TryGetValue("Detalhes", out var det)
+            ? det?.ToString()
+            : null;
+
+        if (entity == null || entityId == null || detalhes == null)
+            return;
+
+        var audit = new Registro
+        {
+            UserId = userIdClaim.Value,
+            UserName = userName,
+            UserRole = userRole.Value,
+            Action = action,
+            Entity = entity,
+            EntityId = entityId,
+            Detalhes = detalhes,
+
+            CreatedAt = DateTime.UtcNow,
+            IpAddress = context.Connection.RemoteIpAddress?.ToString() ?? "-"
+        };
+
+        try
+        {
+            await auditoriaService.LogAsync(audit);
+        } 
+        catch (Exception)
+        {
+            // Log exception if needed
+        }
     }
 }
