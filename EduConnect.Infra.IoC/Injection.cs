@@ -16,6 +16,8 @@ namespace EduConnect.Infra.IoC
             services.AddDbContext<EduContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddHttpContextAccessor();
+
             services.AddScoped<IAlunoRepository, AlunoRepository>();
             services.AddScoped<AlunoService>();
             services.AddScoped<IProfessorRepository, ProfessorRepository>();

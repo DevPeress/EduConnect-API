@@ -13,7 +13,6 @@ builder.Services.AddProblemDetails();
 builder.Services.AddJsonConverterConfiguration();
 builder.Services.AddJWTConfiguration(builder.Configuration);
 builder.Services.AddAuthorization();
-builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();  
 
