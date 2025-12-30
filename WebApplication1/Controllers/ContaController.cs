@@ -19,9 +19,9 @@ namespace EduConnect.Controllers
         [HttpGet("usuario")]
         public IActionResult Get()
         {
-            var id = User.FindFirst("Registro")?.Value;
+            var id = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var role = User.FindFirst(ClaimTypes.Role)?.Value;
-            var nome = User.FindFirst("Nome")?.Value;
+            var nome = User.FindFirst(ClaimTypes.Name)?.Value;
             var foto = User.FindFirst("Foto")?.Value;
 
             return Ok(new { id, role, nome, foto });
