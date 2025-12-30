@@ -1,5 +1,7 @@
 ﻿using EduConnect.Application.DTO;
 using EduConnect.Application.Services;
+using EduConnect.Attributes;
+using EduConnect.Domain.Enums;
 using EduConnect.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -73,6 +75,7 @@ namespace EduConnect.Controllers
         }
 
         [HttpPost]
+        [Audit(AuditAction.Create, "Aluno")]
         public async Task<IActionResult> AddAluno([FromBody] AlunoDTO dto)
         {
             await _alunoService.AddAlunoAsync(dto);
@@ -81,6 +84,7 @@ namespace EduConnect.Controllers
 
         [Authorize(Roles = "Administrador, Funcionario")]
         [HttpPut("{id:int}")]
+        [Audit(AuditAction.Update, "Aluno")]
         public async Task<IActionResult> UpdateAluno(int id, AlunoDTO dto)
         {
             if (id != dto.Id)
@@ -96,6 +100,7 @@ namespace EduConnect.Controllers
 
         [Authorize(Roles = "Administrador, Funcionario")]
         [HttpDelete("{id:int}")]
+        [Audit(AuditAction.Delete, "Aluno")]
         public async Task<IActionResult> DeleteAluno(int id)
         {
             var existingAluno = await _alunoService.GetAlunoByIdAsync(id);
