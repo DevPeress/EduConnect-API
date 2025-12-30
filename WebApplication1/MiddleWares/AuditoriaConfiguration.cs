@@ -11,8 +11,7 @@ public class AuditoriaConfiguration(RequestDelegate next)
     private readonly RequestDelegate _next = next;
     private static readonly HashSet<PathString> RotasBloqueadas =
     [
-        new PathString("/api/auth/login"),
-        new PathString("/api/auth/refresh-token")
+        new PathString("/api/auth")
     ];
 
     public async Task InvokeAsync(HttpContext context, AuditoriaService auditoriaService)
@@ -33,18 +32,18 @@ public class AuditoriaConfiguration(RequestDelegate next)
         if (!context.User.Identity?.IsAuthenticated ?? true)
             return;
 
+        var auditService = context.RequestServices
+            .GetRequiredService<AuditoriaService>();
 
-        var user = context.User;
-        var userIdClaim = user.FindFirst(ClaimTypes.NameIdentifier);
-        var userName = user.Identity?.Name;
-        var userRole = user.FindFirst(ClaimTypes.Role);
+        var auditContext = context.RequestServices
+            .GetRequiredService<IAuditContext>();
 
-        if (userIdClaim == null || userName == null || userRole == null)
+        if (!auditContext.IsAuthenticated)
             return;
 
-        var action = context.Items.TryGetValue(AuditKeys.Action, out var act) && act is AuditAction auditAction
-            ? auditAction
-            : 0;
+        var action = context.Items.TryGetValue(AuditKeys.Action, out var act)
+            ? act as AuditAction?
+            : null;
 
         var entity = context.Items.TryGetValue(AuditKeys.Entity, out var ent)
             ? ent?.ToString()
@@ -58,26 +57,17 @@ public class AuditoriaConfiguration(RequestDelegate next)
             ? det?.ToString()
             : null;
 
-        if (entity == null || entityId == null || detalhes == null)
+        if (action is null || entity is null || entityId is null || detalhes is null)
             return;
-
-        var audit = new Registro
-        {
-            UserId = userIdClaim.Value,
-            UserName = userName,
-            UserRole = userRole.Value,
-            Action = action,
-            Entity = entity,
-            EntityId = entityId,
-            Detalhes = detalhes,
-
-            CreatedAt = DateTime.UtcNow,
-            IpAddress = context.Connection.RemoteIpAddress?.ToString() ?? "-"
-        };
 
         try
         {
-            await auditoriaService.LogAsync(audit);
+            await auditService.LogAsync(
+                action: action.Value,
+                entity: entity,
+                entityId: entityId,
+                detalhes: detalhes
+            );
         } 
         catch (Exception)
         {
