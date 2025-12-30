@@ -1,5 +1,6 @@
 ﻿using EduConnect.Domain.Enums;
 using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace EduConnect.Application.Common.Auditing;
 
@@ -7,19 +8,22 @@ public class AuditContext : IAuditContext
 {
     private readonly IHttpContextAccessor _http;
 
-    public AuditContext(IHttpContextAccessor http)
-    {
-        _http = http;
-    }
+    public bool IsAuthenticated =>
+        _http.HttpContext?.User.Identity?.IsAuthenticated ?? false;
 
-    public void Set(AuditAction action, string entity, object entityId, string? details = null)
-    {
-        var items = _http.HttpContext?.Items;
-        if (items == null) return;
+    public string UserId =>
+        _http.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value
+        ?? "Sistema";
 
-        items[AuditKeys.Action] = action;
-        items[AuditKeys.Entity] = entity;
-        items[AuditKeys.EntityId] = entityId;
-        items[AuditKeys.Details] = details;
-    }
+    public string UserName =>
+        _http.HttpContext?.User.Identity?.Name
+        ?? "Sistema";
+
+    public string UserRole =>
+        _http.HttpContext?.User.FindFirst(ClaimTypes.Role)?.Value
+        ?? "N/A";
+
+    public string IpAddress =>
+        _http.HttpContext?.Connection.RemoteIpAddress?.ToString()
+        ?? "-";
 }
