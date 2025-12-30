@@ -1,5 +1,7 @@
-﻿using EduConnect.Application.DTO;
+﻿using EduConnect.Application.Common.Auditing;
+using EduConnect.Application.DTO;
 using EduConnect.Application.Services;
+using EduConnect.Domain.Enums;
 using EduConnect.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -76,6 +78,14 @@ namespace EduConnect.Controllers
         public async Task<IActionResult> AddAluno([FromBody] AlunoDTO dto)
         {
             await _alunoService.AddAlunoAsync(dto);
+
+            HttpContext.SetAudit(
+                AuditAction.Create,
+                "Aluno",
+                dto.Id,
+                $"Aluno {dto.Nome} criado."
+            );
+
             return Ok();
         }
 
