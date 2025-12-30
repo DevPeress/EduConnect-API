@@ -13,8 +13,8 @@ public class JWTService(IConfiguration config)
     {
         var claims = new[]
         {
-            new Claim("Registro", registro),
-            new Claim("Nome", nome),
+            new Claim(ClaimTypes.NameIdentifier, registro),
+            new Claim(ClaimTypes.Name, nome),
             new Claim("Foto", foto),
             new Claim(ClaimTypes.Role, role)
         };
