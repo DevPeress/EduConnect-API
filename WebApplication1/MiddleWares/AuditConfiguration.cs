@@ -12,7 +12,7 @@ public class AuditConfiguration(RequestDelegate next)
         new PathString("/api/auth")
     ];
 
-    public async Task InvokeAsync(HttpContext context, AuditService auditoriaService)
+    public async Task InvokeAsync(HttpContext context)
     {
         await _next(context);
 
