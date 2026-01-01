@@ -24,14 +24,21 @@ public class DashBoardAdminRepository(EduContext context) : IDashboardAdminRepos
 
     public async Task<(int, int, int, int)> GetTotalsAsync()
     {
-        int totalAlunos = await _context.Alunos.CountAsync(a => a.Deletado == false);
-        int totalProfessores = await _context.Professores.CountAsync(p => p.Deletado == false);
-        int totalTurmas = await _context.Turmas.CountAsync(t => t.Deletado == false);
-        var Presencas = await _context.Presencas.ToListAsync();
-        int DecrementoPresencas = Presencas.Count(t => t.Presente == false && t.Justificada == false);
-        Presencas = Presencas.Where(t => t.Presente == true || t.Justificada == true).ToList();
-        int totalPresenca = Presencas.Count - DecrementoPresencas;
-        return (totalAlunos, totalProfessores, totalTurmas, totalPresenca);
+        // executa a SP e traz para memória como lista
+        var resultList = await _context.DashboardTotais
+            .FromSqlRaw("EXEC sp_GetTotal")
+            .AsNoTracking()
+            .ToListAsync(); // async e funciona com SP não-composable
+
+        var result = resultList.First(); // pega a primeira linha
+
+
+        return (
+            result.TotalAlunos,
+            result.TotalProfessores,
+            result.TotalTurmas,
+            result.TotalPresencas
+        );
     }
 
     public async Task<(int, int, int, int)> GetAumentoAsync()
