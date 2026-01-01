@@ -16,9 +16,9 @@ namespace EduConnect.Controllers
         [HttpGet("Cards")]
         public async Task<IActionResult> GetCardsData()
         {
-            var (totalAlunos, totalProfessores, totalTurmas) = await _dashBoardAdminService.GetTotalsAsync();
-            var (aumentoAlunos, aumentoProfessores, aumentoTurmas) = await _dashBoardAdminService.GetAumentoAsync();
-            var (porcentagemAlunos, porcentagemProfessores, porcentagemTurmas) = await _dashBoardAdminService.GetPorcentagemAsync();
+            var (totalAlunos, totalProfessores, totalTurmas, totalPresenca) = await _dashBoardAdminService.GetTotalsAsync();
+            var (aumentoAlunos, aumentoProfessores, aumentoTurmas, aumentoPresenca) = await _dashBoardAdminService.GetAumentoAsync();
+            var (porcentagemAlunos, porcentagemProfessores, porcentagemTurmas, porcentagemPresenca) = await _dashBoardAdminService.GetPorcentagemAsync();
             return Ok(new List<CardsAdminResponseViewModel>
             {
                 new CardsAdminResponseViewModel
@@ -41,6 +41,13 @@ namespace EduConnect.Controllers
                     Total = totalTurmas,
                     Aumento = aumentoTurmas,
                     Porcentagem = porcentagemTurmas
+                },
+                new CardsAdminResponseViewModel
+                {
+                    Dado = "Presença",
+                    Total = totalPresenca,
+                    Aumento = aumentoPresenca,
+                    Porcentagem = porcentagemPresenca
                 }
             });
         }
