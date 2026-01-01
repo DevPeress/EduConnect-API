@@ -34,20 +34,21 @@ public class TurmaService(ITurmaRepository repo)
         return await _turmaRepository.GetTurmaByIdAsync(id);
     }
 
-    public async Task AddTurmaAsync(TurmaDTO turmadto)
+    public async Task AddTurmaAsync(TurmaDTO turmaDTO)
     {
         var turma = new Turma
         {
-            Nome = turmadto.Nome,
-            Turno = turmadto.Turno,
-            ProfessorID = turmadto.ProfessorID,
-            Alunos = turmadto.Alunos,
-            SalaID = turmadto.SalaID,
-            DisciplinaID = turmadto.DisciplinaID,
-            Horario = turmadto.Horario,
-            Capacidade = turmadto.Capacidade,
-            AnoLetivo = turmadto.AnoLetivo,
-            Status = turmadto.Status,
+            Registro = turmaDTO.Registro,
+            Nome = turmaDTO.Nome,
+            Turno = turmaDTO.Turno,
+            Horario = turmaDTO.Horario,
+            Capacidade = turmaDTO.Capacidade,
+            AnoLetivo = turmaDTO.AnoLetivo,
+            DataCriacao = turmaDTO.DataCriacao,
+            Status = turmaDTO.Status,
+            ProfessorId = turmaDTO.ProfessorID,
+            Alunos = turmaDTO.Alunos,
+            DisciplinaID = turmaDTO.DisciplinaID,
         };
         await _turmaRepository.AddTurmaAsync(turma);
     }
@@ -59,14 +60,14 @@ public class TurmaService(ITurmaRepository repo)
             Registro = turmaDTO.Registro,
             Nome = turmaDTO.Nome,
             Turno = turmaDTO.Turno,
-            ProfessorID = turmaDTO.ProfessorID,
-            Alunos = turmaDTO.Alunos,
-            SalaID = turmaDTO.SalaID,
-            DisciplinaID = turmaDTO.DisciplinaID,
             Horario = turmaDTO.Horario,
             Capacidade = turmaDTO.Capacidade,
             AnoLetivo = turmaDTO.AnoLetivo,
+            DataCriacao = turmaDTO.DataCriacao,
             Status = turmaDTO.Status,
+            ProfessorId = turmaDTO.ProfessorID,
+            Alunos = turmaDTO.Alunos,
+            DisciplinaID = turmaDTO.DisciplinaID,
         };
         await _turmaRepository.UpdateTurmaAsync(turma);
     }
