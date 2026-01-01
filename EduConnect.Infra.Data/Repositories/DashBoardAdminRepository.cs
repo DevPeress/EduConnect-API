@@ -27,23 +27,28 @@ public class DashBoardAdminRepository(EduContext context) : IDashboardAdminRepos
         int totalAlunos = await _context.Alunos.CountAsync(a => a.Deletado == false);
         int totalProfessores = await _context.Professores.CountAsync(p => p.Deletado == false);
         int totalTurmas = await _context.Turmas.CountAsync(t => t.Deletado == false);
-        int totalPresenca = await _context.Presencas.CountAsync();
+        var Presencas = await _context.Presencas.ToListAsync();
+        int DecrementoPresencas = Presencas.Count(t => t.Presente == false && t.Justificada == false);
+        Presencas = Presencas.Where(t => t.Presente == true || t.Justificada == true).ToList();
+        int totalPresenca = Presencas.Count - DecrementoPresencas;
         return (totalAlunos, totalProfessores, totalTurmas, totalPresenca);
     }
 
     public async Task<(int, int, int, int)> GetAumentoAsync()
     {
-        List<Aluno> Alunos = await _context.Alunos.Where(p => p.Deletado == false).ToListAsync();
+        var Alunos = await _context.Alunos.Where(p => p.Deletado == false).ToListAsync();
         int AumentoAlunos = Alunos.Count(a => a.DataMatricula.Month.ToString("00") == MesAtual) - Alunos.Count(a => a.DataMatricula.Month.ToString("00") == MesAnterior);
 
-        List<Professor> Professores = await _context.Professores.Where(p => p.Deletado == false).ToListAsync();
+        var Professores = await _context.Professores.Where(p => p.Deletado == false).ToListAsync();
         int AumentoProfessores = Professores.Count(a => a.Contratacao.Month.ToString("00") == MesAtual) - Professores.Count(a => a.Contratacao.Month.ToString("00") == MesAnterior);
 
-        List<Turma> Turmas = await _context.Turmas.Where(p => p.Deletado == false).ToListAsync();
+        var Turmas = await _context.Turmas.Where(p => p.Deletado == false).ToListAsync();
         int AumentoTurmas = Turmas.Count(a => a.DataCriacao.Month.ToString("00") == MesAtual) - Turmas.Count(a => a.DataCriacao.Month.ToString("00") == MesAnterior);
 
-        List<Presenca> Prensencas = await _context.Presencas.ToListAsync();
-        int AumentoPresencas = Prensencas.Count(a => a.Data.Month.ToString("00") == MesAtual) - Prensencas.Count(a => a.Data.Month.ToString("00") == MesAnterior);
+        var Prensencas = await _context.Presencas.Where(p => p.Data.Month.ToString("00") == MesAtual || p.Data.Month.ToString("00") == MesAnterior).ToListAsync();
+        int DecrementoPresencas = Prensencas.Count(t => (t.Presente == false && t.Justificada == false) && t.Data.Month.ToString("00") == MesAnterior);
+        Prensencas = Prensencas.Where(t => (t.Presente == true || t.Justificada == true) && t.Data.Month.ToString("00") == MesAtual).ToList();
+        int AumentoPresencas = Prensencas.Count - DecrementoPresencas;
 
         return (AumentoAlunos, AumentoProfessores, AumentoTurmas, AumentoPresencas);
     }
@@ -62,9 +67,10 @@ public class DashBoardAdminRepository(EduContext context) : IDashboardAdminRepos
         int aumentoTurma = turma.Count(a => a.DataCriacao.Month.ToString("00") == MesAtual);
         int decrementoTurma = turma.Count(a => a.DataCriacao.Month.ToString("00") == MesAnterior);
 
-        List<Presenca> presencas = await _context.Presencas.ToListAsync();
-        int aumentoPresenca = presencas.Count(a => a.Data.Month.ToString("00") == MesAtual);
-        int decrementoPresenca = presencas.Count(a => a.Data.Month.ToString("00") == MesAnterior);
+        var Prensencas = await _context.Presencas.Where(p => p.Data.Month.ToString("00") == MesAtual || p.Data.Month.ToString("00") == MesAnterior).ToListAsync();
+        int decrementoPresenca = Prensencas.Count(t => (t.Presente == false && t.Justificada == false) && t.Data.Month.ToString("00") == MesAnterior);
+        Prensencas = Prensencas.Where(t => (t.Presente == true || t.Justificada == true) && t.Data.Month.ToString("00") == MesAtual).ToList();
+        int aumentoPresenca = Prensencas.Count - decrementoPresenca;
 
         return (CalcularPorcentagem(aumentoAluno,decrementoAluno), CalcularPorcentagem(aumentoProfessore, decrementoProfessor), CalcularPorcentagem(aumentoTurma, decrementoTurma), CalcularPorcentagem(aumentoPresenca, decrementoPresenca));
     }
