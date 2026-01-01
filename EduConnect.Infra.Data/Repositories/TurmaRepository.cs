@@ -19,7 +19,7 @@ public class TurmaRepository(EduContext context) : ITurmaRepository
 
         if (filtro.Turno != null && filtro.Turno != "Todos os Turnos")
         {
-            query = query.Where(dados => dados.Status == filtro.Status);
+            query = query.Where(dados => dados.Turno == filtro.Turno);
         }
 
         return query;

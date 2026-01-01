@@ -8,12 +8,12 @@ public class Turma
     [Key]
     public int Registro { get; set; }
     public required string Nome { get; set; }
-    public Turno Turno { get; set; }
+    public required string Turno { get; set; }
     public required string Horario { get; set; }
     public int Capacidade { get; set; }
     public DateOnly AnoLetivo { get; set; }
     public DateOnly DataCriacao { get; set; } 
-    public StatusTurma Status { get; set; }
+    public required string Status { get; set; }
     public bool Deletado { get; set; } = false;
 
     // Relacionamento
