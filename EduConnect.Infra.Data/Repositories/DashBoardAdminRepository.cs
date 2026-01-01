@@ -25,8 +25,8 @@ public class DashBoardAdminRepository(EduContext context) : IDashboardAdminRepos
     public async Task<(int, int, int, int)> GetTotalsAsync()
     {
         // executa a SP e traz para memória como lista
-        var resultList = await _context.DashboardTotais
-            .FromSqlRaw("EXEC sp_GetTotal")
+        var resultList = await _context.GetTotalDashBoard
+            .FromSqlRaw("EXEC sp_GetTotalDashBoard")
             .AsNoTracking()
             .ToListAsync(); // async e funciona com SP não-composable
 
@@ -43,22 +43,21 @@ public class DashBoardAdminRepository(EduContext context) : IDashboardAdminRepos
 
     public async Task<(int, int, int, int)> GetAumentoAsync()
     {
-        var Alunos = await _context.Alunos.Where(p => p.Deletado == false).ToListAsync();
-        int AumentoAlunos = Alunos.Count(a => a.DataMatricula.Month.ToString("00") == MesAtual) - Alunos.Count(a => a.DataMatricula.Month.ToString("00") == MesAnterior);
+        // executa a SP e traz para memória como lista
+        var resultList = await _context.DashboardTotais
+            .FromSqlRaw("EXEC sp_GetAumentoDashBoard")
+            .AsNoTracking()
+            .ToListAsync(); // async e funciona com SP não-composable
 
-        var Professores = await _context.Professores.Where(p => p.Deletado == false).ToListAsync();
-        int AumentoProfessores = Professores.Count(a => a.Contratacao.Month.ToString("00") == MesAtual) - Professores.Count(a => a.Contratacao.Month.ToString("00") == MesAnterior);
+        var result = resultList.First(); // pega a primeira linha
 
-        var Turmas = await _context.Turmas.Where(p => p.Deletado == false).ToListAsync();
-        int AumentoTurmas = Turmas.Count(a => a.DataCriacao.Month.ToString("00") == MesAtual) - Turmas.Count(a => a.DataCriacao.Month.ToString("00") == MesAnterior);
 
-        var Prensencas = await _context.Presencas.ToListAsync();
-        Prensencas = Prensencas.Where(t => t.Data.Month.ToString("00") == MesAtual || t.Data.Month.ToString("00") == MesAnterior).ToList();
-        int DecrementoPresencas = Prensencas.Count(t => (t.Presente == false && t.Justificada == false) && t.Data.Month.ToString("00") == MesAnterior);
-        Prensencas = Prensencas.Where(t => (t.Presente == true || t.Justificada == true) && t.Data.Month.ToString("00") == MesAtual).ToList();
-        int AumentoPresencas = Prensencas.Count - DecrementoPresencas;
-
-        return (AumentoAlunos, AumentoProfessores, AumentoTurmas, AumentoPresencas);
+        return (
+            result.TotalAlunos,
+            result.TotalProfessores,
+            result.TotalTurmas,
+            result.TotalPresencas
+        );
     }
 
     public async Task<(double, double, double, double)> GetPorcentagemAsync()
