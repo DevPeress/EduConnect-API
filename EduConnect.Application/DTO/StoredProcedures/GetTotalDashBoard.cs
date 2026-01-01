@@ -1,6 +1,6 @@
 ﻿namespace EduConnect.Application.DTO.StoredProcedures;
 
-public class DashboardTotaisDto
+public class GetTotalDashBoard
 {
     public int TotalAlunos { get; set; }
     public int TotalProfessores { get; set; }
