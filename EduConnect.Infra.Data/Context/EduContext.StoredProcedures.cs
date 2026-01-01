@@ -10,7 +10,7 @@ public partial class EduContext
         typeof(GetAumentoDashBoard)
     };
     public DbSet<GetTotalDashBoard> GetTotalDashBoard { get; set; }
-    public DbSet<GetAumentoDashBoard> DashboardTotais { get; set; }
+    public DbSet<GetAumentoDashBoard> GetAumentoDashBoard { get; set; }
 
     partial void OnModelCreatingStoredProcedures(ModelBuilder modelBuilder)
     {

@@ -44,7 +44,7 @@ public class DashBoardAdminRepository(EduContext context) : IDashboardAdminRepos
     public async Task<(int, int, int, int)> GetAumentoAsync()
     {
         // executa a SP e traz para memória como lista
-        var resultList = await _context.DashboardTotais
+        var resultList = await _context.GetAumentoDashBoard
             .FromSqlRaw("EXEC sp_GetAumentoDashBoard")
             .AsNoTracking()
             .ToListAsync(); // async e funciona com SP não-composable
