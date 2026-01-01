@@ -30,6 +30,24 @@ namespace EduConnect.Controllers
             });
         }
 
+        [HttpGet("DashBoard")]
+        public async Task<IActionResult> GetDashBoard()
+        {
+            return Ok(new List<DashBoardRegistroResponseViewModel>
+            {
+                new() {
+                     Tipo = "Registros",
+                    Dado = "Total de Registros",
+                    Horario = 10
+                },
+                new() {
+                     Tipo = "Registros",
+                    Dado = "Total de Registros",
+                    Horario = 10
+                }
+            });
+        }
+
         [Authorize(Roles = "Administrador, Funcionario")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetRegistroById(int id)
