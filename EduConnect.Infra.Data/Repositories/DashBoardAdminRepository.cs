@@ -45,7 +45,8 @@ public class DashBoardAdminRepository(EduContext context) : IDashboardAdminRepos
         var Turmas = await _context.Turmas.Where(p => p.Deletado == false).ToListAsync();
         int AumentoTurmas = Turmas.Count(a => a.DataCriacao.Month.ToString("00") == MesAtual) - Turmas.Count(a => a.DataCriacao.Month.ToString("00") == MesAnterior);
 
-        var Prensencas = await _context.Presencas.Where(p => p.Data.Month.ToString("00") == MesAtual || p.Data.Month.ToString("00") == MesAnterior).ToListAsync();
+        var Prensencas = await _context.Presencas.ToListAsync();
+        Prensencas = Prensencas.Where(t => t.Data.Month.ToString("00") == MesAtual || t.Data.Month.ToString("00") == MesAnterior).ToList();
         int DecrementoPresencas = Prensencas.Count(t => (t.Presente == false && t.Justificada == false) && t.Data.Month.ToString("00") == MesAnterior);
         Prensencas = Prensencas.Where(t => (t.Presente == true || t.Justificada == true) && t.Data.Month.ToString("00") == MesAtual).ToList();
         int AumentoPresencas = Prensencas.Count - DecrementoPresencas;
@@ -67,7 +68,8 @@ public class DashBoardAdminRepository(EduContext context) : IDashboardAdminRepos
         int aumentoTurma = turma.Count(a => a.DataCriacao.Month.ToString("00") == MesAtual);
         int decrementoTurma = turma.Count(a => a.DataCriacao.Month.ToString("00") == MesAnterior);
 
-        var Prensencas = await _context.Presencas.Where(p => p.Data.Month.ToString("00") == MesAtual || p.Data.Month.ToString("00") == MesAnterior).ToListAsync();
+        var Prensencas = await _context.Presencas.ToListAsync();
+        Prensencas = Prensencas.Where(t => t.Data.Month.ToString("00") == MesAtual || t.Data.Month.ToString("00") == MesAnterior).ToList();
         int decrementoPresenca = Prensencas.Count(t => (t.Presente == false && t.Justificada == false) && t.Data.Month.ToString("00") == MesAnterior);
         Prensencas = Prensencas.Where(t => (t.Presente == true || t.Justificada == true) && t.Data.Month.ToString("00") == MesAtual).ToList();
         int aumentoPresenca = Prensencas.Count - decrementoPresenca;
