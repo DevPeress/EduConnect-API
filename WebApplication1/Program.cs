@@ -31,7 +31,7 @@ app.UseAuthentication();
 // Middleware de autorização
 app.UseAuthorization();
 // Middleware de Auditoria
-app.UseMiddleware<AuditoriaConfiguration>();
+app.UseMiddleware<AuditConfiguration>();
 
 // Mapeia controllers para requisições de API
 app.MapControllers();

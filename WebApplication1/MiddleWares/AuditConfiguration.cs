@@ -1,12 +1,10 @@
 ﻿using EduConnect.Application.Common.Auditing;
 using EduConnect.Application.Services;
-using EduConnect.Domain.Entities;
 using EduConnect.Domain.Enums;
-using System.Security.Claims;
 
 namespace EduConnect.MiddleWares;
 
-public class AuditoriaConfiguration(RequestDelegate next)
+public class AuditConfiguration(RequestDelegate next)
 {
     private readonly RequestDelegate _next = next;
     private static readonly HashSet<PathString> RotasBloqueadas =
@@ -14,7 +12,7 @@ public class AuditoriaConfiguration(RequestDelegate next)
         new PathString("/api/auth")
     ];
 
-    public async Task InvokeAsync(HttpContext context, AuditoriaService auditoriaService)
+    public async Task InvokeAsync(HttpContext context, AuditService auditoriaService)
     {
         await _next(context);
 
@@ -33,7 +31,7 @@ public class AuditoriaConfiguration(RequestDelegate next)
             return;
 
         var auditService = context.RequestServices
-            .GetRequiredService<AuditoriaService>();
+            .GetRequiredService<AuditService>();
 
         var auditContext = context.RequestServices
             .GetRequiredService<IAuditContext>();

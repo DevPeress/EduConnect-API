@@ -5,7 +5,7 @@ using EduConnect.Domain.Interfaces;
 
 namespace EduConnect.Application.Services;
 
-public class AuditoriaService(IAuditContext context, IAuditRepository repo)
+public class AuditService(IAuditContext context, IAuditRepository repo)
 {
     private readonly IAuditContext _context = context;
     private readonly IAuditRepository _repo = repo;

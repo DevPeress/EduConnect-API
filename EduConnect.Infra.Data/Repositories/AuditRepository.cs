@@ -4,7 +4,7 @@ using EduConnect.Infra.Data.Context;
 
 namespace EduConnect.Infra.Data.Repositories;
 
-public class AuditoriaRepository(EduContext context) : IAuditRepository
+public class AuditRepository(EduContext context) : IAuditRepository
 {
     private readonly EduContext _context = context;
 
