@@ -5,14 +5,18 @@ namespace EduConnect.Infra.Data.Context;
 
 public partial class EduContext
 {
-    public DbSet<DashboardTotaisDto> DashboardTotais { get; set; }
+    private List<Type> Lista = new List<Type> { 
+        typeof(GetTotalDashBoard),
+        typeof(GetAumentoDashBoard)
+    };
+    public DbSet<GetTotalDashBoard> GetTotalDashBoard { get; set; }
+    public DbSet<GetAumentoDashBoard> DashboardTotais { get; set; }
 
     partial void OnModelCreatingStoredProcedures(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<DashboardTotaisDto>(entity =>
+        foreach (var type in Lista)
         {
-            entity.HasNoKey();
-            entity.ToView(null);
-        });
+            modelBuilder.Entity(type).HasNoKey().ToView(null);
+        }
     }
 }
