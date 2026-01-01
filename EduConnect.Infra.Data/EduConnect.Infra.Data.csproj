@@ -20,8 +20,21 @@
   </ItemGroup>
 
   <ItemGroup>
+	
+    <ProjectReference Include="..\EduConnect.Application\EduConnect.Application.csproj" />
+	
     <ProjectReference Include="..\EduConnect.Domain\EduConnect.Domain.csproj" />
     <ProjectReference Include="..\EduConnect.Infra.CrossCutting.Utils\EduConnect.Infra.CrossCutting.Utils.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="StoredProcedures\DashBoardAdmin\" />
+	  
+  </ItemGroup>
+  <ItemGroup>
+	<Content Include="StoredProcedures\**\*.sql">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</Content>
   </ItemGroup>
 
 </Project>
