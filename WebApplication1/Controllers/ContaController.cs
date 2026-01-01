@@ -27,6 +27,7 @@ namespace EduConnect.Controllers
             return Ok(new { id, role, nome, foto });
         }
 
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] ContaDTO contaDto)
         {
@@ -35,19 +36,19 @@ namespace EduConnect.Controllers
             {
                 return Unauthorized("Credenciais inválidas.");
             }
-
+            
             var (login, tentativas) = await _contaService.VerifyLogin(conta.Registro, conta.Senha, maxTentativas);
             if (login == false)
             {
-                return Unauthorized(maxTentativas - tentativas);
+                return Ok(maxTentativas - tentativas);
             }
-
+           
             (string nome, string foto) = await _contaService.GetInfos(conta.Cargo, conta.Registro);
             if (nome == null || foto == null)
             {
                 return Unauthorized("Credenciais inválidas.");
             }
-
+         
             var token = _jwtService.GenerateToken(contaDto.Registro, conta.Cargo, nome, foto, contaDto.Lembrar);
             var tempo = contaDto.Lembrar != null && contaDto.Lembrar == true ? 9 : 1;
             Response.Cookies.Append("auth", token, new CookieOptions
