@@ -24,6 +24,7 @@ public class TurmaService(ITurmaRepository repo)
             Nome = turmas.Nome,
             Turno = turmas.Turno,
             Horario = turmas.Horario,
+            Status = turmas.Status,
         }).ToList();
 
         return (turmaDTO, total);
