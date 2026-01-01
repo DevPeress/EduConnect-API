@@ -66,6 +66,6 @@ public class DashBoardAdminRepository(EduContext context) : IDashboardAdminRepos
         int aumentoPresenca = presencas.Count(a => a.Data.Month.ToString("00") == MesAtual);
         int decrementoPresenca = presencas.Count(a => a.Data.Month.ToString("00") == MesAnterior);
 
-        return (CalcularPorcentagem(aumentoAluno,decrementoAluno), CalcularPorcentagem(aumentoProfessore, decrementoProfessor), CalcularPorcentagem(aumentoTurma, decrementoTurma), CalcularPorcentagem(aumentoPresenca, decrementoPresenca);
+        return (CalcularPorcentagem(aumentoAluno,decrementoAluno), CalcularPorcentagem(aumentoProfessore, decrementoProfessor), CalcularPorcentagem(aumentoTurma, decrementoTurma), CalcularPorcentagem(aumentoPresenca, decrementoPresenca));
     }
 }
