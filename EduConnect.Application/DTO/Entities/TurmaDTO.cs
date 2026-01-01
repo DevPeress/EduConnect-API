@@ -1,7 +1,7 @@
 ﻿using EduConnect.Domain.Entities;
 using EduConnect.Domain.Enums;
 
-namespace EduConnect.Application.DTO;
+namespace EduConnect.Application.DTO.Entities;
 public record TurmaDTO
 {
     public int Registro { get; set; }

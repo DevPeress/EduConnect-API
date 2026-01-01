@@ -1,4 +1,4 @@
-﻿using EduConnect.Application.DTO;
+﻿using EduConnect.Application.DTO.Entities;
 using EduConnect.Application.Services;
 using EduConnect.ViewModels;
 using Microsoft.AspNetCore.Authorization;

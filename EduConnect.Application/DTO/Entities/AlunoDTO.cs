@@ -1,6 +1,6 @@
 ﻿using EduConnect.Domain.Entities;
 
-namespace EduConnect.Application.DTO;
+namespace EduConnect.Application.DTO.Entities;
 public class AlunoDTO : PessoaDTO
 {
     public string Turma { get; init; } = null!;

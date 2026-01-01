@@ -1,4 +1,4 @@
-﻿namespace EduConnect.Application.DTO
+﻿namespace EduConnect.Application.DTO.Entities
 {
     public class ContaDTO
     {

@@ -1,4 +1,4 @@
-﻿using EduConnect.Application.DTO;
+﻿using EduConnect.Application.DTO.Entities;
 using EduConnect.Domain.Entities;
 using EduConnect.Domain.Interfaces;
 

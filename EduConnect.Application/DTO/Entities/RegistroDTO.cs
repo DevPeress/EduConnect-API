@@ -1,4 +1,4 @@
-﻿namespace EduConnect.Application.DTO;
+﻿namespace EduConnect.Application.DTO.Entities;
 public record RegistroDTO
 {
     public string UserName { get; set; } = null!;
