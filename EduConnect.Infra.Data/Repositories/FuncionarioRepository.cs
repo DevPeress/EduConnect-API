@@ -14,6 +14,12 @@ public class FuncionarioRepository(EduContext context) : IFuncionarioRepository
     {
         var query = _context.Funcionarios.AsNoTracking().Where(p => p.Deletado == false);
 
+        if (filtro.Ano != null && filtro.Ano != "Todos os Anos")
+        {
+            int anoLetivo = int.Parse(filtro.Ano);
+            query = query.Where(dados => dados.Nasc.Year == anoLetivo);
+        }
+
         if (filtro.Status != null && filtro.Status != "Todos os Status")
         {
             query = query.Where(dados => dados.Status == filtro.Status);

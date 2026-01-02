@@ -1,7 +1,4 @@
 ﻿using EduConnect.Application.DTO.Entities;
-using EduConnect.Application.Services;
-using EduConnect.Domain.Entities;
-using EduConnect.Infra.CrossCutting.Utils;
 using EduConnect.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,13 +12,15 @@ namespace EduConnect.Controllers
         private readonly FuncionarioService _funcionarioService = service;
 
         [Authorize(Roles = "Administrador, Funcionario")]
-        [HttpGet("filtro/status/{status}/page/{page}")]
-        public async Task<IActionResult> GetAllFuncionarios(string status, int page)
+        [HttpGet("filtro/selecionada/{selecionada}/status/{status}/page/{page}/ano/{ano}")]
+        public async Task<IActionResult> GetAllFuncionarios(string selecionada, string status, int page, int ano)
         {
-            var filtro = new FiltroDTO
+            var filtro = new FiltroPessoaDTO
             {
+                Categoria = selecionada,
                 Status = status,
-                Page = page
+                Page = page,
+                Ano = ano
             };
 
             var (funcionarios, total) = await _funcionarioService.GetByFilters(filtro);
