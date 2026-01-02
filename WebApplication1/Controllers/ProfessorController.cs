@@ -16,7 +16,7 @@ namespace EduConnect.Controllers
         [HttpGet("filtro/selecionada/{selecionada}/status/{status}/page/{page}")]
         public async Task<IActionResult> GetAllProfessor(string selecionada, string status, int page)
         {
-            var filtro = new FiltroDTO
+            var filtro = new FiltroPessoaDTO
             {
                 Categoria = selecionada,
                 Status = status,

@@ -19,7 +19,7 @@ namespace EduConnect.Controllers
         [HttpGet("filtro/selecionada/{categoria}/status/{status}/page/{page}")]
         public async Task<IActionResult> GetAlunos(string categoria, string status, int page)
         {
-            var filtro = new FiltroDTO
+            var filtro = new FiltroPessoaDTO
             {
                 Categoria = categoria,
                 Status = status,

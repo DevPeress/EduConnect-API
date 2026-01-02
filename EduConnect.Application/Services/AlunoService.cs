@@ -6,12 +6,11 @@ using EduConnect.Domain.Interfaces;
 
 namespace EduConnect.Application.Services;
 
-public class AlunoService(IAlunoRepository repo, IAuditContext context)
+public class AlunoService(IAlunoRepository repo)
 {
     private readonly IAlunoRepository _alunoRepository = repo;
-    private readonly IAuditContext _auditContext = context;
 
-    public async Task<(List<AlunoDTO>, int TotalRegistro)> GetByFilters(FiltroDTO filtrodto)
+    public async Task<(List<AlunoDTO>, int TotalRegistro)> GetByFilters(FiltroPessoaDTO filtrodto)
     {
         var filtro = new Filtro
         {
