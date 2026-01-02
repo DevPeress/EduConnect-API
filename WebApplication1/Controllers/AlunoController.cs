@@ -1,5 +1,4 @@
 ﻿using EduConnect.Application.Common.Auditing;
-using EduConnect.Application.DTO;
 using EduConnect.Application.DTO.Entities;
 using EduConnect.Application.Services;
 using EduConnect.Domain.Enums;
@@ -16,14 +15,15 @@ namespace EduConnect.Controllers
         private readonly AlunoService _alunoService = service;
 
         [Authorize(Roles = "Administrador, Funcionario, Professor")]
-        [HttpGet("filtro/selecionada/{categoria}/status/{status}/page/{page}")]
-        public async Task<IActionResult> GetAlunos(string categoria, string status, int page)
+        [HttpGet("filtro/selecionada/{categoria}/status/{status}/page/{page}/ano/{ano}")]
+        public async Task<IActionResult> GetAlunos(string categoria, string status, int page, int ano)
         {
             var filtro = new FiltroPessoaDTO
             {
                 Categoria = categoria,
                 Status = status,
-                Page = page
+                Page = page,
+                Ano = ano
             };
 
             var (alunos, total) = await _alunoService.GetByFilters(filtro);
