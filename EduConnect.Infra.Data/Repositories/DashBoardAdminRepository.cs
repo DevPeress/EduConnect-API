@@ -50,7 +50,7 @@ public class DashBoardAdminRepository(EduContext context) : IDashboardAdminRepos
             .FromSqlRaw("EXEC sp_GetAumentoDashBoard @MesAtual, @MesAnterior, @Ano",
                 new SqlParameter("@MesAtual", MesAtual),
                 new SqlParameter("@MesAnterior", MesAnterior),
-                new SqlParameter("@Ano", AnoAtual))
+                new SqlParameter("@Ano", AnoAtual)
             )
             .AsNoTracking()
             .ToListAsync(); // async e funciona com SP não-composable
@@ -72,7 +72,7 @@ public class DashBoardAdminRepository(EduContext context) : IDashboardAdminRepos
            .FromSqlRaw("EXEC sp_GetPorcentagem @MesAtual, @MesAnterior, @Ano",
                new SqlParameter("@MesAtual", MesAtual),
                new SqlParameter("@MesAnterior", MesAnterior),
-               new SqlParameter("@Ano", AnoAtual))
+               new SqlParameter("@Ano", AnoAtual)
             )
             .AsNoTracking()
             .ToListAsync(); // async e funciona com SP não-composable
