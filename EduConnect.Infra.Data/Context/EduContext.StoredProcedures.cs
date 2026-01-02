@@ -5,11 +5,11 @@ namespace EduConnect.Infra.Data.Context;
 
 public partial class EduContext
 {
-    private List<Type> Lista = new List<Type> { 
+    private readonly List<Type> Lista = [ 
         typeof(GetTotalDashBoard),
         typeof(GetAumentoDashBoard),
-        typeof(GetAumentoDashBoard)
-    };
+        typeof(GetPorcentagemDashBoard)
+    ];
     public DbSet<GetTotalDashBoard> GetTotalDashBoard { get; set; }
     public DbSet<GetAumentoDashBoard> GetAumentoDashBoard { get; set; }
     public DbSet<GetPorcentagemDashBoard> GetPorcentagemDashBoard { get; set; }
