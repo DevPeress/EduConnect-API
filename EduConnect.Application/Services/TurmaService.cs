@@ -7,7 +7,7 @@ public class TurmaService(ITurmaRepository repo)
 {
     private readonly ITurmaRepository _turmaRepository = repo;
 
-    public async Task<(List<TurmaDTO>, int TotalRegistro)> GetByFilters(FiltroPessoaDTO filtrodto)
+    public async Task<(List<TurmaDTO>, int TotalRegistro)> GetByFilters(FiltroDTO filtrodto)
     {
         var filtro = new Filtro
         {
