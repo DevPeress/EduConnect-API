@@ -16,7 +16,8 @@ public class AlunoService(IAlunoRepository repo)
         {
             Page = filtrodto.Page,
             Categoria = filtrodto.Categoria,
-            Status = filtrodto.Status
+            Status = filtrodto.Status,
+            Ano = filtrodto.Ano
         };
 
         var (alunos, total) = await _alunoRepository.GetByFilters(filtro);
