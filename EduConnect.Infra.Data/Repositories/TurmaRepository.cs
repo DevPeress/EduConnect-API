@@ -7,10 +7,17 @@ namespace EduConnect.Infra.Data.Repositories;
 public class TurmaRepository(EduContext context) : ITurmaRepository
 {
     private readonly EduContext _context = context;
+    private readonly int Ano = DateOnly.FromDateTime(DateTime.Now).Year;
 
     private IQueryable<Turma> QueryFiltroTurma(Filtro filtro)
     {
         var query = _context.Turmas.AsNoTracking().Where(p => p.Deletado == false);
+
+        if (filtro.Ano != null && filtro.Ano != "Todos os Anos")
+        {
+            int anoLetivo = int.Parse(filtro.Ano);
+            query = query.Where(dados => dados.AnoLetivo.Year == anoLetivo);
+        }
 
         if (filtro.Status != null && filtro.Status != "Todos os Status")
         {
