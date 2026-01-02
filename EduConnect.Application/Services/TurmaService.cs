@@ -7,14 +7,14 @@ public class TurmaService(ITurmaRepository repo)
 {
     private readonly ITurmaRepository _turmaRepository = repo;
 
-    public async Task<(List<TurmaDTO>, int TotalRegistro)> GetByFilters(FiltroDTO filtrodto)
+    public async Task<(List<TurmaDTO>, int TotalRegistro)> GetByFilters(FiltroTurmaDTO filtrodto)
     {
-        var filtro = new Filtro
+        var filtro = new FiltroTurma
         {
-            Page = filtrodto.Page,
-            Categoria = filtrodto.Categoria,
+            Turno = filtrodto.Turno,
             Status = filtrodto.Status,
-            Turno = filtrodto.Turno
+            Ano = filtrodto.Ano,
+            Page = filtrodto.Page
         };
 
         var (turmas, total) = await _turmaRepository.GetByFilters(filtro);
