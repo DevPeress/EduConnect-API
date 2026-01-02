@@ -14,6 +14,12 @@ public class ProfessorRepository(EduContext context) : IProfessorRepository
     {
         var query = _context.Professores.AsNoTracking().Where(p => p.Deletado == false);
 
+        if (filtro.Ano != null && filtro.Ano != "Todos os Anos")
+        {
+            int anoLetivo = int.Parse(filtro.Ano);
+            query = query.Where(dados => dados.Contratacao.Year == anoLetivo);
+        }
+
         if (filtro.Status != null && filtro.Status != "Todos os Status")
         {
             query = query.Where(dados => dados.Status == filtro.Status);

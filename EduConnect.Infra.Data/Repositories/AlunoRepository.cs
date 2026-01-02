@@ -25,11 +25,6 @@ public class AlunoRepository(EduContext context) : IAlunoRepository
             query = query.Where(dados => dados.Status == filtro.Status);
         }
 
-        if (filtro.Sala != null && filtro.Sala != "Todas as Salas")
-        {
-            query = query.Where(dados => dados.Turma == filtro.Sala);
-        }
-
         return query;
     }
 
