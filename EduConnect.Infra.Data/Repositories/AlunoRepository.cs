@@ -13,6 +13,12 @@ public class AlunoRepository(EduContext context) : IAlunoRepository
     private IQueryable<Aluno> QueryFiltroAluno(Filtro filtro)
     {
         var query = _context.Alunos.AsNoTracking().Where(p => p.Deletado == false);
+
+        if (filtro.Ano != null && filtro.Ano != "Todos os Anos")
+        {
+            int anoLetivo = int.Parse(filtro.Ano);
+            query = query.Where(dados => dados.DataMatricula.Year == anoLetivo);
+        }
         
         if (filtro.Status != null && filtro.Status != "Todos os Status")
         {
