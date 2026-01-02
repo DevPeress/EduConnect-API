@@ -8,7 +8,7 @@ public class TurmaRepository(EduContext context) : ITurmaRepository
 {
     private readonly EduContext _context = context;
 
-    private IQueryable<Turma> QueryFiltroTurma(Filtro filtro)
+    private IQueryable<Turma> QueryFiltroTurma(FiltroTurma filtro)
     {
         var query = _context.Turmas.AsNoTracking().Where(p => p.Deletado == false);
 
@@ -31,7 +31,7 @@ public class TurmaRepository(EduContext context) : ITurmaRepository
         return query;
     }
 
-    public async Task<(IEnumerable<Turma>, int TotalRegistro)> GetByFilters(Filtro filtro)
+    public async Task<(IEnumerable<Turma>, int TotalRegistro)> GetByFilters(FiltroTurma filtro)
     {
         var query = QueryFiltroTurma(filtro);
         var total = await query.CountAsync();

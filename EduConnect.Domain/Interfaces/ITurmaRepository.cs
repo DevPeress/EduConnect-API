@@ -4,7 +4,7 @@ namespace EduConnect.Domain.Interfaces;
 
 public interface ITurmaRepository
 {
-    Task<(IEnumerable<Turma>, int TotalRegistro)> GetByFilters(Filtro filtro);
+    Task<(IEnumerable<Turma>, int TotalRegistro)> GetByFilters(FiltroTurma filtro);
     Task<Turma?> GetTurmaByIdAsync(int id);
     Task AddTurmaAsync(Turma turma);
     Task UpdateTurmaAsync(Turma turma);
