@@ -16,7 +16,7 @@ namespace EduConnect.Controllers
 
         [Authorize(Roles = "Administrador, Funcionario, Professor")]
         [HttpGet("filtro/selecionada/{categoria}/status/{status}/page/{page}/ano/{ano}")]
-        public async Task<IActionResult> GetAlunos(string categoria, string status, int page, int ano)
+        public async Task<IActionResult> GetAlunos(string categoria, string status, int page, string ano)
         {
             var filtro = new FiltroPessoaDTO
             {
