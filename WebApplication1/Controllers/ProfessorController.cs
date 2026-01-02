@@ -14,7 +14,7 @@ namespace EduConnect.Controllers
         private readonly ProfessorService _professorService = service;
 
         [HttpGet("filtro/selecionada/{selecionada}/status/{status}/page/{page}/ano/{ano}")]
-        public async Task<IActionResult> GetAllProfessor(string selecionada, string status, int page, int ano)
+        public async Task<IActionResult> GetAllProfessor(string selecionada, string status, int page, string ano)
         {
             var filtro = new FiltroPessoaDTO
             {
