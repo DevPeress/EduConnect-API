@@ -20,7 +20,7 @@ public class FinanceiroService(IFinanceiroRepository repo)
 
     public async Task<(IEnumerable<Financeiro>, int totalRegistro)> GetByFilters(FiltroDTO filtrodto)
     {
-        var  filtro = new Filtro
+        var  filtro = new FiltroPessoa
         {
             Categoria = filtrodto.Categoria,
             Status = filtrodto.Status,

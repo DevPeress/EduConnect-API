@@ -8,13 +8,13 @@ public class RegistroRepository(EduContext context) : IRegistroRepository
 {
     private readonly EduContext _context = context;
 
-    private IQueryable<Registro> QueryFiltroRegistro(Filtro filtro)
+    private IQueryable<Registro> QueryFiltroRegistro(FiltroPessoa filtro)
     {
         var query = _context.Registros.AsNoTracking().Where(p => p.Deletado == false);
         return query;
     }
 
-    public async Task<(IEnumerable<Registro>, int TotalRegistro)> GetRegistrosAsync(Filtro filtro)
+    public async Task<(IEnumerable<Registro>, int TotalRegistro)> GetRegistrosAsync(FiltroPessoa filtro)
     {
         var query = QueryFiltroRegistro(filtro);
         var total = await query.CountAsync();

@@ -10,7 +10,7 @@ public class ProfessorService(IProfessorRepository repo)
 
     public async Task<(List<ProfessorDTO>, int TotalRegistro)> GetByFilters(FiltroPessoaDTO filtrodto)
     {
-        var filtro = new Filtro
+        var filtro = new FiltroPessoa
         {
             Page = filtrodto.Page,
             Categoria = filtrodto.Categoria,

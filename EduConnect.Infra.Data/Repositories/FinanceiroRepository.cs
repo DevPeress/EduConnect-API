@@ -11,7 +11,7 @@ public class FinanceiroRepository(EduContext context) : IFinanceiroRepository
     private readonly EduContext _context = context;
     private readonly DateOnly today = DateOnly.FromDateTime(DateTime.Today);
 
-    private IQueryable<Financeiro> QueryFiltroFinanceiro(Filtro filtro)
+    private IQueryable<Financeiro> QueryFiltroFinanceiro(FiltroPessoa filtro)
     {
         var query = _context.Financeiros.AsNoTracking().Where(p => p.Deletado == false);
 
@@ -72,7 +72,7 @@ public class FinanceiroRepository(EduContext context) : IFinanceiroRepository
         return (totalRecebido, totalPendente, totalAtrasado);
     }
 
-    public async Task<(IEnumerable<Financeiro>, int TotalRegistro)> GetByFilters(Filtro filtro)
+    public async Task<(IEnumerable<Financeiro>, int TotalRegistro)> GetByFilters(FiltroPessoa filtro)
     {
         var query = QueryFiltroFinanceiro(filtro);
         var total = await query.CountAsync();

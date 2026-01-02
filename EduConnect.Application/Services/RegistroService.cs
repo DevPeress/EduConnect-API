@@ -9,7 +9,7 @@ public class RegistroService(IRegistroRepository repo)
     private readonly IRegistroRepository _registroRepository = repo;
     public async Task<(List<RegistroDTO>, int TotalRegistro)> GetRegistros(FiltroDTO filtrodto)
     {
-        var filtro = new Filtro
+        var filtro = new FiltroPessoa
         {
             Page = filtrodto.Page,
             Categoria = filtrodto.Categoria,

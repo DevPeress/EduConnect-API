@@ -10,7 +10,7 @@ public class FuncionarioService(IFuncionarioRepository repo)
 
     public async Task<(List<FuncionarioDTO>, int TotalRegistro)> GetByFilters(FiltroDTO filtrodto)
     {
-        var filtro = new Filtro
+        var filtro = new FiltroPessoa
         {
             Page = filtrodto.Page,
             Status = filtrodto.Status
