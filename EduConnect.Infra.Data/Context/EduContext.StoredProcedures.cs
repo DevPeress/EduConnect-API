@@ -7,10 +7,12 @@ public partial class EduContext
 {
     private List<Type> Lista = new List<Type> { 
         typeof(GetTotalDashBoard),
+        typeof(GetAumentoDashBoard),
         typeof(GetAumentoDashBoard)
     };
     public DbSet<GetTotalDashBoard> GetTotalDashBoard { get; set; }
     public DbSet<GetAumentoDashBoard> GetAumentoDashBoard { get; set; }
+    public DbSet<GetPorcentagemDashBoard> GetPorcentagemDashBoard { get; set; }
 
     partial void OnModelCreatingStoredProcedures(ModelBuilder modelBuilder)
     {
