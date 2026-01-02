@@ -1,6 +1,7 @@
 ﻿using EduConnect.Domain.Entities;
 using EduConnect.Domain.Interfaces;
 using EduConnect.Infra.Data.Context;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace EduConnect.Infra.Data.Repositories;
@@ -8,9 +9,10 @@ namespace EduConnect.Infra.Data.Repositories;
 public class DashBoardAdminRepository(EduContext context) : IDashboardAdminRepository
 {
     private readonly EduContext _context = context;
-    private readonly string MesAtual = DateOnly.FromDateTime(DateTime.Now).ToString("MM");
-    private readonly string MesAnterior = DateOnly.FromDateTime(DateTime.Now.AddMonths(-1)).ToString("MM");
-    
+    private readonly int MesAtual = DateTime.Now.Month;
+    private readonly int MesAnterior = DateTime.Now.AddMonths(-1).Month;
+    private readonly int AnoAtual = DateTime.Now.Year;
+
     private double CalcularPorcentagem(int aumento, int decremento)
     {
         if (decremento == 0)
@@ -45,7 +47,11 @@ public class DashBoardAdminRepository(EduContext context) : IDashboardAdminRepos
     {
         // executa a SP e traz para memória como lista
         var resultList = await _context.GetAumentoDashBoard
-            .FromSqlRaw("EXEC sp_GetAumentoDashBoard")
+            .FromSqlRaw("EXEC sp_GetAumentoDashBoard @MesAtual, @MesAnterior, @Ano",
+                new SqlParameter("@MesAtual", MesAtual),
+                new SqlParameter("@MesAnterior", MesAnterior),
+                new SqlParameter("@Ano", AnoAtual))
+            )
             .AsNoTracking()
             .ToListAsync(); // async e funciona com SP não-composable
 
@@ -53,33 +59,26 @@ public class DashBoardAdminRepository(EduContext context) : IDashboardAdminRepos
 
 
         return (
-            result.TotalAlunos,
-            result.TotalProfessores,
-            result.TotalTurmas,
-            result.TotalPresencas
+            result.AumentoAlunos,
+            result.AumentoProfessores,
+            result.AumentoTurmas,
+            result.AumentoPresencas
         );
     }
 
     public async Task<(double, double, double, double)> GetPorcentagemAsync()
     {
-        List<Aluno> alunos = await _context.Alunos.Where(p => p.Deletado == false).ToListAsync();
-        int aumentoAluno = alunos.Count(a => a.DataMatricula.Month.ToString("00") == MesAtual);
-        int decrementoAluno = alunos.Count(a => a.DataMatricula.Month.ToString("00") == MesAnterior);
+        var resultList = await _context.GetPorcentagemDashBoard
+           .FromSqlRaw("EXEC sp_GetPorcentagem @MesAtual, @MesAnterior, @Ano",
+               new SqlParameter("@MesAtual", MesAtual),
+               new SqlParameter("@MesAnterior", MesAnterior),
+               new SqlParameter("@Ano", AnoAtual))
+            )
+            .AsNoTracking()
+            .ToListAsync(); // async e funciona com SP não-composable
 
-        List<Professor> professor = await _context.Professores.Where(p => p.Deletado == false).ToListAsync();
-        int aumentoProfessore = professor.Count(a => a.Contratacao.Month.ToString("00") == MesAtual);
-        int decrementoProfessor = professor.Count(a => a.Contratacao.Month.ToString("00") == MesAnterior);
+        var result = resultList.First(); // pega a primeira linha
 
-        List<Turma> turma = await _context.Turmas.Where(p => p.Deletado == false).ToListAsync();
-        int aumentoTurma = turma.Count(a => a.DataCriacao.Month.ToString("00") == MesAtual);
-        int decrementoTurma = turma.Count(a => a.DataCriacao.Month.ToString("00") == MesAnterior);
-
-        var Prensencas = await _context.Presencas.ToListAsync();
-        Prensencas = Prensencas.Where(t => t.Data.Month.ToString("00") == MesAtual || t.Data.Month.ToString("00") == MesAnterior).ToList();
-        int decrementoPresenca = Prensencas.Count(t => (t.Presente == false && t.Justificada == false) && t.Data.Month.ToString("00") == MesAnterior);
-        Prensencas = Prensencas.Where(t => (t.Presente == true || t.Justificada == true) && t.Data.Month.ToString("00") == MesAtual).ToList();
-        int aumentoPresenca = Prensencas.Count - decrementoPresenca;
-
-        return (CalcularPorcentagem(aumentoAluno,decrementoAluno), CalcularPorcentagem(aumentoProfessore, decrementoProfessor), CalcularPorcentagem(aumentoTurma, decrementoTurma), CalcularPorcentagem(aumentoPresenca, decrementoPresenca));
+        return (CalcularPorcentagem(result.AumentoAluno,result.DecrementoAluno), CalcularPorcentagem(result.AumentoProfessor, result.DecrementoProfessor), CalcularPorcentagem(result.AumentoTurma, result.DecrementoTurma), CalcularPorcentagem(result.AumentoPresenca, result.DecrementoPresenca));
     }
 }
