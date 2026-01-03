@@ -5,6 +5,7 @@ namespace EduConnect.Domain.Interfaces;
 public interface IPessoaRepository <T> where T : class
 {
     Task<(IEnumerable<T>, int TotalRegistro)> GetByFilters(FiltroPessoa filtro);
+    Task<(List<string>, List<string>?)> GetInformativos();
     Task<T?> GetByIdAsync(int id);
     Task<T?> GetLastPessoaAsync();
     Task AddAsync(T pessoa);
