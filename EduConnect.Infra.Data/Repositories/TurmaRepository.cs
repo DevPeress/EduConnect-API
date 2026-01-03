@@ -42,6 +42,15 @@ public class TurmaRepository(EduContext context) : ITurmaRepository
         return (result, total);
     }
 
+    public async Task<List<string>> GetInformativos()
+    {
+        return await _context.Turmas
+            .Where(a => a.Deletado == false)
+            .Select(a => a.DataCriacao.Year.ToString())
+            .Distinct()
+            .ToListAsync();
+    }
+
     public async Task<Turma?> GetTurmaByIdAsync(int id)
     {
         return await _context.Turmas.FirstOrDefaultAsync(dados => dados.Registro == id && dados.Deletado == false);

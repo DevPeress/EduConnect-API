@@ -30,6 +30,11 @@ public class TurmaService(ITurmaRepository repo)
         return (turmaDTO, total);
     }
 
+    public async Task<List<string>> GetInformativos()
+    {
+        return await _turmaRepository.GetInformativos();
+    }
+
     public async Task<Turma?> GetTurmaByIdAsync(int id)
     {
         return await _turmaRepository.GetTurmaByIdAsync(id);

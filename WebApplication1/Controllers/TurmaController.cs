@@ -45,6 +45,14 @@ namespace EduConnect.Controllers
             return Ok(turma);
         }
 
+        [Authorize(Roles = "Administrador, Funcionario, Professor")]
+        [HttpGet("pegarInformativos")]
+        public async Task<IActionResult> GetInformativosAlunosAsync()
+        {
+            var anos = await _turmaService.GetInformativos();
+            return Ok(anos);
+        }
+
         [Authorize(Roles = "Administrador, Funcionario")]
         [HttpPost]
         public async Task<IActionResult> CreateTurma(TurmaDTO turmaDTO)
