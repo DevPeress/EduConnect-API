@@ -1,4 +1,5 @@
 ﻿using EduConnect.Application.DTO.Entities;
+using EduConnect.Application.Services;
 using EduConnect.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +14,7 @@ namespace EduConnect.Controllers
 
         [Authorize(Roles = "Administrador, Funcionario")]
         [HttpGet("filtro/selecionada/{selecionada}/status/{status}/page/{page}/ano/{ano}")]
-        public async Task<IActionResult> GetAllFuncionarios(string selecionada, string status, int page, int ano)
+        public async Task<IActionResult> GetAllFuncionarios(string selecionada, string status, int page, string ano)
         {
             var filtro = new FiltroPessoaDTO
             {
