@@ -44,7 +44,7 @@ public class FuncionarioRepository(EduContext context) : IFuncionarioRepository
         return (result, total);
     }
 
-    public async Task<(List<string>, List<string>)> GetInformativos()
+    public async Task<(List<string>, List<string>?)> GetInformativos()
     {
         var departamentos = await _context.Funcionarios
             .Where(p => p.Deletado == false)
