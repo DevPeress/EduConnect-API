@@ -36,6 +36,11 @@ public class ProfessorService(IProfessorRepository repo)
         return (professoresDTO, total);
     }
 
+    public async Task<(List<string>, List<string>?)> GetInformativos()
+    {
+        return await _professorRepository.GetInformativos();
+    }
+
     public async Task<Professor?> GetProfessorByIdAsync(int id)
     {
         return await _professorRepository.GetByIdAsync(id);

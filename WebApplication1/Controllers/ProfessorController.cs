@@ -1,12 +1,13 @@
 ﻿using EduConnect.Application.DTO.Entities;
 using EduConnect.Application.Services;
-using EduConnect.Domain.Entities;
-using EduConnect.Infra.CrossCutting.Utils;
 using EduConnect.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
 
 namespace EduConnect.Controllers
 {
+    [Authorize(Roles = "Administrador, Funcionario")]
     [ApiController]
     [Route("api/professores")]
     public class ProfessorController(ProfessorService service) : ControllerBase
@@ -31,6 +32,13 @@ namespace EduConnect.Controllers
                 Dados = professores,
                 Total = total
             });
+        }
+
+        [HttpGet("pegarInformativos")]
+        public async Task<IActionResult> GetInformativosAlunosAsync()
+        {
+            var (anos, _) = await _professorService.GetInformativos();
+            return Ok(anos);
         }
 
         [HttpGet("{matricula}")]

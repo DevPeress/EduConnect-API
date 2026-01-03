@@ -39,6 +39,16 @@ public class ProfessorRepository(EduContext context) : IProfessorRepository
         return (result, total);
     }
 
+    public async Task<(List<string>, List<string>?)> GetInformativos()
+    {
+        var anos = await _context.Professores
+            .Where(a => a.Deletado == false)
+            .Select(a => a.Contratacao.Year.ToString())
+            .Distinct()
+            .ToListAsync();
+        return (anos, []);
+    }
+
     public async Task<Professor?> GetByIdAsync(int id)
     {
         return await _context.Professores.Where(p => p.Deletado == false).FirstOrDefaultAsync(a => a.Id == id);
