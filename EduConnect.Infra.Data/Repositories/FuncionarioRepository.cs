@@ -44,6 +44,21 @@ public class FuncionarioRepository(EduContext context) : IFuncionarioRepository
         return (result, total);
     }
 
+    public async Task<(List<string>, List<string>)> GetInformativos()
+    {
+        var departamentos = await _context.Funcionarios
+            .Where(p => p.Deletado == false)
+            .Select(f => f.Departamento)
+            .Distinct()
+            .ToListAsync();
+        var statusList = await _context.Funcionarios
+            .Where(p => p.Deletado == false)
+            .Select(f => f.DataAdmissao.Year.ToString())
+            .Distinct()
+            .ToListAsync();
+        return (departamentos, statusList);
+    }
+
     public async Task<Funcionario?> GetByIdAsync(int id)
     {
         return await _context.Funcionarios.Where(p => p.Deletado == false).FirstOrDefaultAsync(a => a.Id == id);

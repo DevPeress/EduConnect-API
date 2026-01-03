@@ -37,6 +37,11 @@ public class FuncionarioService(IFuncionarioRepository repo)
         return (funcionarioDTO, totalRegistro);
     }
 
+    public async Task<(List<string>, List<string>)> GetInformativos()
+    {
+        return await _funcionarioRepository.GetInformativos();
+    }
+
     public async Task<Funcionario?> GetFuncionarioByIdAsync(int id)
     {
         return await _funcionarioRepository.GetByIdAsync(id);
