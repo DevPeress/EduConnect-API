@@ -25,6 +25,11 @@ public class FuncionarioRepository(EduContext context) : IFuncionarioRepository
             query = query.Where(dados => dados.Status == filtro.Status);
         }
 
+        if (filtro.Categoria != null && filtro.Categoria != "Todos os Departamentos")
+        {
+            query = query.Where(dados => dados.Departamento == filtro.Categoria);
+        }
+
         return query;
     }
 
