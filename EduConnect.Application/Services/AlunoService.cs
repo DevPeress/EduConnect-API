@@ -44,6 +44,11 @@ public class AlunoService(IAlunoRepository repo)
         return (alunosDTO, total);
     }
 
+    public async Task<(List<string>, List<string>?)> GetInformativos()
+    {
+        return await _alunoRepository.GetInformativos();
+    }
+
     public async Task<Aluno?> GetAlunoByIdAsync(int id)
     {
         return await _alunoRepository.GetByIdAsync(id);
