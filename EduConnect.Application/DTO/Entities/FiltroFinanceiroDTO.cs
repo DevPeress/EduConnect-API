@@ -2,7 +2,7 @@
 
 namespace EduConnect.Application.DTO.Entities;
 
-public class FiltroTurmaDTO : FiltroBase
+public class FiltroFinanceiroDTO : FiltroBase
 {
     public required string Ano { get; set; }
     public required string Turno { get; set; }
