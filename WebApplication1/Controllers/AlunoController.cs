@@ -52,12 +52,8 @@ namespace EduConnect.Controllers
         [HttpGet("pegarInformativos")]
         public async Task<IActionResult> GetInformativosAlunosAsync()
         {
-            var (deparamentos, anos) = await _alunoService.GetInformativos();
-            return Ok(new
-            {
-                Anos = anos,
-                Departamentos = deparamentos
-            });
+            var anos = await _alunoService.GetInformativos();
+            return Ok(anos);
         }
 
         [Authorize(Roles = "Administrador, Funcionario")]
