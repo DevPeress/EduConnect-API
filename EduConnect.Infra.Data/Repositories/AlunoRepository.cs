@@ -39,14 +39,14 @@ public class AlunoRepository(EduContext context) : IAlunoRepository
         return (result, total);
     }
 
-    public async Task<List<string>> GetInformativos()
+    public async Task<(List<string>, List<string>?)> GetInformativos()
     {
         var anos = await _context.Alunos
             .Where(a => a.Deletado == false)
             .Select(a => a.DataMatricula.Year.ToString())
             .Distinct()
             .ToListAsync();
-        return anos;
+        return (anos, []);
     }
 
     public async Task<Aluno?> GetByIdAsync(int id)
