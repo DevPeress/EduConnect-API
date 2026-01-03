@@ -78,11 +78,11 @@ namespace EduConnect.Controllers
         [HttpGet("filtro/categoria/{categoria}/status/{status}/data/{data}/page/{page}")]
         public async Task<IActionResult> GetByFilters(string categoria, string status, string data, int page)
         {
-            var filtro = new FiltroDTO
+            var filtro = new FiltroFinanceiroDTO
             {
                 Categoria = categoria,
                 Status = status,
-                Data = data,
+                Meses = data,
                 Page = page
             };
 

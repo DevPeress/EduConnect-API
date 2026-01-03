@@ -18,14 +18,13 @@ public class FinanceiroService(IFinanceiroRepository repo)
         return await _financeiroRepository.GetDashBoard();
     }
 
-    public async Task<(IEnumerable<Financeiro>, int totalRegistro)> GetByFilters(FiltroDTO filtrodto)
+    public async Task<(IEnumerable<Financeiro>, int totalRegistro)> GetByFilters(FiltroFinanceiroDTO filtrodto)
     {
-        var  filtro = new FiltroPessoa
+        var  filtro = new FiltroFinanceiro
         {
-            Categoria = filtrodto.Categoria,
             Status = filtrodto.Status,
-            Data = filtrodto.Data,
-            Page = filtrodto.Page
+            Categoria = filtrodto.Categoria,
+            Meses = filtrodto.Meses,
         };
         return await _financeiroRepository.GetByFilters(filtro);
     }

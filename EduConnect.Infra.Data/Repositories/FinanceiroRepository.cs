@@ -11,7 +11,7 @@ public class FinanceiroRepository(EduContext context) : IFinanceiroRepository
     private readonly EduContext _context = context;
     private readonly DateOnly today = DateOnly.FromDateTime(DateTime.Today);
 
-    private IQueryable<Financeiro> QueryFiltroFinanceiro(FiltroPessoa filtro)
+    private IQueryable<Financeiro> QueryFiltroFinanceiro(FiltroFinanceiro filtro)
     {
         var query = _context.Financeiros.AsNoTracking().Where(p => p.Deletado == false);
 
@@ -40,10 +40,10 @@ public class FinanceiroRepository(EduContext context) : IFinanceiroRepository
             }
         }
 
-        if (filtro.Data != null && filtro.Data != "Todos os Meses")
+        if (filtro.Meses != null && filtro.Meses != "Todos os Meses")
         {
             int mesSelecionado = DateTime.ParseExact(
-                filtro.Data,
+                filtro.Meses,
                 "MMMM",
                 new CultureInfo("pt-BR"),
                 DateTimeStyles.None
@@ -72,7 +72,7 @@ public class FinanceiroRepository(EduContext context) : IFinanceiroRepository
         return (totalRecebido, totalPendente, totalAtrasado);
     }
 
-    public async Task<(IEnumerable<Financeiro>, int TotalRegistro)> GetByFilters(FiltroPessoa filtro)
+    public async Task<(IEnumerable<Financeiro>, int TotalRegistro)> GetByFilters(FiltroFinanceiro filtro)
     {
         var query = QueryFiltroFinanceiro(filtro);
         var total = await query.CountAsync();
