@@ -7,13 +7,14 @@ namespace EduConnect.Application.Services;
 public class RegistroService(IRegistroRepository repo)
 {
     private readonly IRegistroRepository _registroRepository = repo;
-    public async Task<(List<RegistroDTO>, int TotalRegistro)> GetRegistros(FiltroDTO filtrodto)
+    public async Task<(List<RegistroDTO>, int TotalRegistro)> GetRegistros(FiltroRegistroDTO filtrodto)
     {
-        var filtro = new FiltroPessoa
+        var filtro = new FiltroRegistro
         {
             Page = filtrodto.Page,
             Categoria = filtrodto.Categoria,
-            Status = filtrodto.Status
+            Status = filtrodto.Status,
+            Ano = filtrodto.Ano,
         };
 
         var (registros, total) = await _registroRepository.GetRegistrosAsync(filtro);

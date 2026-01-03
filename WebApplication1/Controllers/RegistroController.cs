@@ -16,8 +16,11 @@ namespace EduConnect.Controllers
         [HttpGet("filtro/page/{page}")]
         public async Task<IActionResult> GetRegistros(int page)
         {
-            var filtro = new FiltroDTO
+            var filtro = new FiltroRegistroDTO
             {
+                Ano = "",
+                Categoria = "",
+                Status = "",
                 Page = page
             };
 
