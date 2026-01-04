@@ -36,7 +36,8 @@ public class AlunoService(IAlunoRepository repo)
                 Endereco = aluno.Endereco,
                 Cpf = aluno.Cpf,
                 ContatoEmergencia = aluno.ContatoEmergencia,
-                Foto = aluno.Foto
+                Foto = aluno.Foto,
+                TurmaId = aluno.TurmaId,
             };
             alunosDTO.Add(dto);
         }
@@ -93,7 +94,7 @@ public class AlunoService(IAlunoRepository repo)
             Cpf = dto.Cpf,
             ContatoEmergencia = dto.ContatoEmergencia,
             Registro = dto.Registro,
-            Turma = dto.Turma,
+            TurmaId = dto.TurmaId,
             Media = dto.Media,
             DataMatricula = dto.DataMatricula,
             Foto = dto.Foto
