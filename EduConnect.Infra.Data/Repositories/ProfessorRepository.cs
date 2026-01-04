@@ -17,7 +17,7 @@ public class ProfessorRepository(EduContext context) : IProfessorRepository
         if (filtro.Ano != null && filtro.Ano != "Todos os Anos")
         {
             int anoLetivo = int.Parse(filtro.Ano);
-            query = query.Where(dados => dados.Contratacao!.Value.Year == anoLetivo);
+            query = query.Where(dados => dados.Contratacao.Year == anoLetivo);
         }
 
         if (filtro.Status != null && filtro.Status != "Todos os Status")
@@ -48,7 +48,7 @@ public class ProfessorRepository(EduContext context) : IProfessorRepository
     {
         var anos = await _context.Professores
             .Where(a => a.Deletado == false)
-            .Select(a => a.Contratacao!.Value.Year.ToString())
+            .Select(a => a.Contratacao.Year.ToString())
             .Distinct()
             .ToListAsync();
 
