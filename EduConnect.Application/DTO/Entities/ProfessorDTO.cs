@@ -5,7 +5,7 @@ namespace EduConnect.Application.DTO.Entities;
 public class ProfessorDTO : PessoaDTO
 {
     public ICollection<Turma> Turmas { get; init; } = null!;
-    public string Disciplina { get; init; } = null!;
+    public ICollection<ProfessorDisciplina> Disciplinas { get; set; } = [];
     public DateOnly Contratacao { get; init; }
     public string Formacao { get; init; } = null!;
     public decimal Salario { get; init; }
@@ -21,9 +21,9 @@ public class ProfessorDTO : PessoaDTO
         Endereco = dados.Endereco;
         Cpf = dados.Cpf;
         ContatoEmergencia = dados.ContatoEmergencia;
+        Disciplinas = dados.ProfessorDisciplinas;
         Registro = dados.Registro;
         Turmas = dados.Turmas;
-        Disciplina = dados.Disciplina;
         Contratacao = dados.Contratacao;
         Formacao = dados.Formacao;
         Salario = dados.Salario;
