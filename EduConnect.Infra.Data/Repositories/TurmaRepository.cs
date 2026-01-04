@@ -67,7 +67,7 @@ public class TurmaRepository(EduContext context) : ITurmaRepository
             .ToListAsync();
     }
 
-    public async Task<Turma?> GetTurmaByIdAsync(int id)
+    public async Task<Turma?> GetTurmaByIdAsync(string id)
     {
         return await _context.Turmas.FirstOrDefaultAsync(dados => dados.Registro == id && dados.Deletado == false);
     }
@@ -84,7 +84,7 @@ public class TurmaRepository(EduContext context) : ITurmaRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task DeleteTurmaAsync(int id)
+    public async Task DeleteTurmaAsync(string id)
     {
         var turma = await _context.Turmas.FindAsync(id);
         if (turma != null)

@@ -47,7 +47,7 @@ public class TurmaService(ITurmaRepository repo)
         return await _turmaRepository.GetInformativos();
     }
 
-    public async Task<Turma?> GetTurmaByIdAsync(int id)
+    public async Task<Turma?> GetTurmaByIdAsync(string id)
     {
         return await _turmaRepository.GetTurmaByIdAsync(id);
     }
@@ -92,7 +92,7 @@ public class TurmaService(ITurmaRepository repo)
         await _turmaRepository.UpdateTurmaAsync(turma);
     }
 
-    public async Task DeleteTurmaAsync(int id)
+    public async Task DeleteTurmaAsync(string id)
     {
         await _turmaRepository.DeleteTurmaAsync(id);
     }

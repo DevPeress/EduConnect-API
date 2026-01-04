@@ -8,8 +8,8 @@ public interface ITurmaRepository
     Task<Turma?> GetLastTurma();
     Task<List<string>> GetTurmasValidasAsync();
     Task<List<string>> GetInformativos();
-    Task<Turma?> GetTurmaByIdAsync(int id);
+    Task<Turma?> GetTurmaByIdAsync(string id);
     Task AddTurmaAsync(Turma turma);
     Task UpdateTurmaAsync(Turma turma);
-    Task DeleteTurmaAsync(int id);
+    Task DeleteTurmaAsync(string id);
 }

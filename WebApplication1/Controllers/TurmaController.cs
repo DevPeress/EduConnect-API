@@ -97,7 +97,7 @@ namespace EduConnect.Controllers
 
         [Authorize(Roles = "Administrador, Funcionario")]
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateTurma(int id, TurmaDTO turmaDTO)
+        public async Task<IActionResult> UpdateTurma(string id, TurmaDTO turmaDTO)
         {
             if (id != turmaDTO.Registro)
             {
