@@ -12,7 +12,7 @@ namespace EduConnect.Controllers
         private readonly DisciplinasService _disciplinasService = service;
 
         [Authorize(Roles = "Administrador, Funcionario")]
-        [HttpGet]
+        [HttpGet("pegarDisciplinas")]
         public async Task<IActionResult> GetAllDisciplinas()
         {
             var disciplinas = await _disciplinasService.GetAllDisciplinas();
