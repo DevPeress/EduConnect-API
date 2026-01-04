@@ -19,7 +19,7 @@ namespace EduConnect.Controllers
             var financeiroDTOs = new List<FinanceiroResponseViewModel>();
             foreach (var f in lista)
             {
-                var aluno = _alunoService.GetAlunoByIdAsync(f.AlunoId).Result;
+                var aluno = _alunoService.GetAlunoByIdAsync(f.Aluno.Registro).Result;
                 if (aluno == null)
                 {
                     continue;
@@ -118,7 +118,7 @@ namespace EduConnect.Controllers
             {
                 return NotFound();
             }
-            var aluno = _alunoService.GetAlunoByIdAsync(financeiro.AlunoId).Result;
+            var aluno = _alunoService.GetAlunoByIdAsync(financeiro.Aluno.Registro).Result;
             if (aluno == null)
             {
                 return NotFound();
@@ -145,7 +145,7 @@ namespace EduConnect.Controllers
         [HttpPost]
         public async Task<IActionResult> AddFinanceiro(FinanceiroDTO dto)
         {
-            var aluno = _alunoService.GetAlunoByIdAsync(dto.AlunoId).Result;
+            var aluno = _alunoService.GetAlunoByIdAsync(dto.AlunoId.ToString()).Result;
             if (aluno == null)
             {
                 return NotFound();
