@@ -25,6 +25,11 @@ public class AlunoRepository(EduContext context) : IAlunoRepository
             query = query.Where(dados => dados.Status == filtro.Status);
         }
 
+        if (filtro.Categoria != null && filtro.Categoria != "Todas as Salas")
+        {
+            query = query.Where(dados => dados.Turma == filtro.Categoria);
+        }
+
         return query;
     }
 
@@ -46,7 +51,12 @@ public class AlunoRepository(EduContext context) : IAlunoRepository
             .Select(a => a.DataMatricula.Year.ToString())
             .Distinct()
             .ToListAsync();
-        return (anos, []);
+        var salas = await _context.Alunos
+            .Where(a => a.Deletado == false)
+            .Select(a => a.Turma)
+            .Distinct()
+            .ToListAsync();
+        return (anos, salas);
     }
 
     public async Task<Aluno?> GetByIdAsync(int id)
