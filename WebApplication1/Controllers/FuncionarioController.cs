@@ -50,9 +50,9 @@ namespace EduConnect.Controllers
 
         [Authorize(Roles = "Administrador, Funcionario")]
         [HttpGet("{matricula}")]
-        public async Task<IActionResult> GetFuncionarioById(int id)
+        public async Task<IActionResult> GetFuncionarioById(string Registro)
         {
-            var funcionarios = await _funcionarioService.GetFuncionarioByIdAsync(id);
+            var funcionarios = await _funcionarioService.GetFuncionarioByIdAsync(Registro);
             if (funcionarios == null)
             {
                 return NotFound();
