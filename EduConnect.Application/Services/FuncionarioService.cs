@@ -26,9 +26,9 @@ public class FuncionarioService(IFuncionarioRepository repo)
         return await _funcionarioRepository.GetInformativos();
     }
 
-    public async Task<Funcionario?> GetFuncionarioByIdAsync(int id)
+    public async Task<Funcionario?> GetFuncionarioByIdAsync(string Registro)
     {
-        return await _funcionarioRepository.GetByIdAsync(id);
+        return await _funcionarioRepository.GetByIdAsync(Registro);
     }
 
     public async Task<Funcionario?> GetLastFuncionarioAsync()
@@ -85,8 +85,8 @@ public class FuncionarioService(IFuncionarioRepository repo)
         await _funcionarioRepository.UpdateAsync(funcionario);
     }
 
-    public async Task DeleteFuncionarioAsync(int id)
+    public async Task DeleteFuncionarioAsync(string Registro)
     {
-        await _funcionarioRepository.DeleteAsync(id);
+        await _funcionarioRepository.DeleteAsync(Registro);
     }
 }
