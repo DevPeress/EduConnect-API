@@ -46,9 +46,9 @@ namespace EduConnect.Controllers
         }
 
         [HttpGet("{matricula}")]
-        public async Task<IActionResult> GetProfessorById(int id)
+        public async Task<IActionResult> GetProfessorById(string Registro)
         {
-            var professores = await _professorService.GetProfessorByIdAsync(id);
+            var professores = await _professorService.GetProfessorByIdAsync(Registro);
             if (professores == null)
             {
                 return NotFound();
@@ -90,13 +90,13 @@ namespace EduConnect.Controllers
         }
 
         [HttpPut("{matricula}")]
-        public async Task<IActionResult> UpdateProfessor(int id, ProfessorDTO dto)
+        public async Task<IActionResult> UpdateProfessor(string Registro, ProfessorDTO dto)
         {
-            if (id != dto.Id)
+            if (Registro != dto.Registro)
             {
                 return BadRequest();
             }
-            var existingProfessor = await _professorService.GetProfessorByIdAsync(id);
+            var existingProfessor = await _professorService.GetProfessorByIdAsync(Registro);
             if (existingProfessor == null)
             {
                 return NotFound();
@@ -106,14 +106,14 @@ namespace EduConnect.Controllers
         }
 
         [HttpDelete("{matricula}")]
-        public async Task<IActionResult> DeleteProfessor(int id)
+        public async Task<IActionResult> DeleteProfessor(string Registro)
         {
-            var existingProfessor = await _professorService.GetProfessorByIdAsync(id);
+            var existingProfessor = await _professorService.GetProfessorByIdAsync(Registro);
             if (existingProfessor == null)
             {
                 return NotFound();
             }
-            await _professorService.DeleteProfessorAsync(id);
+            await _professorService.DeleteProfessorAsync(Registro);
             return NoContent();
         }
     }
