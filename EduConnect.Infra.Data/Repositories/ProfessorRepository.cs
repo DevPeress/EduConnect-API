@@ -61,9 +61,9 @@ public class ProfessorRepository(EduContext context) : IProfessorRepository
         return (anos, salas);
     }
 
-    public async Task<Professor?> GetByIdAsync(int id)
+    public async Task<Professor?> GetByIdAsync(string Registro)
     {
-        return await _context.Professores.Where(p => p.Deletado == false).FirstOrDefaultAsync(a => a.Id == id);
+        return await _context.Professores.Where(p => p.Deletado == false).FirstOrDefaultAsync(a => a.Registro == Registro);
     }
 
     public async Task<Professor?> GetLastPessoaAsync()
@@ -97,9 +97,9 @@ public class ProfessorRepository(EduContext context) : IProfessorRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task DeleteAsync(int id)
+    public async Task DeleteAsync(string Registro)
     {
-        var professor = await GetByIdAsync(id);
+        var professor = await GetByIdAsync(Registro);
         if (professor != null)
         {
             await Task.Run(() =>
