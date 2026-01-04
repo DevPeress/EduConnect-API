@@ -45,9 +45,7 @@ public class TurmaRepository(EduContext context) : ITurmaRepository
 
     public async Task<Turma?> GetLastTurma()
     {
-        return await _context.Turmas
-            .Where(dados => dados.Deletado == false)
-            .LastOrDefaultAsync();
+        return await _context.Turmas.OrderBy(a => a.Registro).LastOrDefaultAsync();
     }
 
     public async Task<List<string>> GetTurmasValidasAsync()

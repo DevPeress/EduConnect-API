@@ -33,6 +33,7 @@ namespace EduConnect.Controllers
             });
         }
 
+        [Authorize(Roles = "Administrador, Funcionario")]
         [HttpGet("validas")]
         public async Task<IActionResult> GetTurmasValidas()
         {
