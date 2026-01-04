@@ -38,7 +38,7 @@ namespace EduConnect.Controllers
         }
 
         [Authorize(Roles = "Administrador, Funcionario, Professor")]
-        [HttpGet("{id:int}")]
+        [HttpGet("{Registro}")]
         public async Task<IActionResult> GetAlunoById(string Registro)
         {
             var aluno = await _alunoService.GetAlunoByIdAsync(Registro);
@@ -104,13 +104,13 @@ namespace EduConnect.Controllers
         }
 
         [Authorize(Roles = "Administrador, Funcionario")]
-        [HttpPut("{id:int}")]
-        public async Task<IActionResult> UpdateAluno(string registro, AlunoUpdateDTO AlunoDTO)
+        [HttpPut("{Registro}")]
+        public async Task<IActionResult> UpdateAluno(string Registro, [FromBody] AlunoUpdateDTO AlunoDTO)
         {
-            if (registro != AlunoDTO.Registro)
+            if (Registro != AlunoDTO.Registro)
                 return BadRequest();
 
-            var existingAluno = await _alunoService.GetAlunoByIdAsync(registro);
+            var existingAluno = await _alunoService.GetAlunoByIdAsync(Registro);
             if (existingAluno == null)
                 return NotFound();
 
@@ -119,7 +119,7 @@ namespace EduConnect.Controllers
         }
 
         [Authorize(Roles = "Administrador, Funcionario")]
-        [HttpDelete("{id:int}")]
+        [HttpDelete("{Registro}")]
         public async Task<IActionResult> DeleteAluno(string Registro)
         {
             var existingAluno = await _alunoService.GetAlunoByIdAsync(Registro);
