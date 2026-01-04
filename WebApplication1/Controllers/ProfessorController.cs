@@ -101,7 +101,7 @@ namespace EduConnect.Controllers
             {
                 return NotFound();
             }
-            await _professorService.UpdateProfessorAsync(ProfessorDTO);
+            await _professorService.UpdateProfessorAsync(ProfessorDTO, existingProfessor.Contratacao);
             return NoContent();
         }
 
