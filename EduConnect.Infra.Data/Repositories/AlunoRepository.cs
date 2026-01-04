@@ -44,7 +44,7 @@ public class AlunoRepository(EduContext context) : IAlunoRepository
         return (result, total);
     }
 
-    public async Task<(List<string>, List<string>?)> GetInformativos()
+    public async Task<(List<string>, List<string>)> GetInformativos()
     {
         var anos = await _context.Alunos
             .Where(a => a.Deletado == false)

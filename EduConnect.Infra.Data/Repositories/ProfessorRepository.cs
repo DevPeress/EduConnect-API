@@ -44,7 +44,7 @@ public class ProfessorRepository(EduContext context) : IProfessorRepository
         return (result, total);
     }
 
-    public async Task<(List<string>, List<string>?)> GetInformativos()
+    public async Task<(List<string>, List<string>)> GetInformativos()
     {
         var anos = await _context.Professores
             .Where(a => a.Deletado == false)
