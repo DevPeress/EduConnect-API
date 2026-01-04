@@ -3,7 +3,7 @@
 namespace EduConnect.Application.DTO.Entities;
 public class AlunoDTO : PessoaDTO
 {
-    public string Turma { get; init; } = null!;
+    public Turma Turma { get; init; } = null!;
     public int Media { get; init; }
     public DateOnly DataMatricula { get; init; }
     public AlunoDTO() { }
