@@ -52,7 +52,7 @@ public class TurmaService(ITurmaRepository repo)
         return await _turmaRepository.GetTurmaByIdAsync(id);
     }
 
-    public async Task AddTurmaAsync(TurmaDTO turmaDTO)
+    public async Task AddTurmaAsync(TurmaCadastroDTO turmaDTO)
     {
         var turma = new Turma
         {
@@ -63,11 +63,13 @@ public class TurmaService(ITurmaRepository repo)
             Fim = turmaDTO.Fim,
             Sala = turmaDTO.Sala,
             Capacidade = turmaDTO.Capacidade,
-            AnoLetivo = turmaDTO.AnoLetivo,
-            DataCriacao = turmaDTO.DataCriacao,
+            AnoLetivo = turmaDTO.AnoEletivo,
+            DataCriacao = DateOnly.FromDateTime(DateTime.Now),
             Status = turmaDTO.Status,
-            ProfessorId = turmaDTO.ProfessorID,
-            Alunos = turmaDTO.Alunos,
+            ProfessorId = turmaDTO.ProfessorResponsavel,
+            Alunos = [],
+            TurmaDisciplinas = [],
+            Deletado = false,
         };
         await _turmaRepository.AddTurmaAsync(turma);
     }

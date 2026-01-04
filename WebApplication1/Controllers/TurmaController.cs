@@ -89,7 +89,7 @@ namespace EduConnect.Controllers
 
         [Authorize(Roles = "Administrador, Funcionario")]
         [HttpPost]
-        public async Task<IActionResult> CreateTurma(TurmaDTO turmaDTO)
+        public async Task<IActionResult> CreateTurma(TurmaCadastroDTO turmaDTO)
         {
             await _turmaService.AddTurmaAsync(turmaDTO);
             return Ok();
