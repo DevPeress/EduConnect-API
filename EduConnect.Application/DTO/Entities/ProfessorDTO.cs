@@ -4,7 +4,7 @@ namespace EduConnect.Application.DTO.Entities;
 
 public class ProfessorDTO : PessoaDTO
 {
-    public List<string> Turmas { get; init; } = null!;
+    public ICollection<Turma> Turmas { get; init; } = null!;
     public string Disciplina { get; init; } = null!;
     public DateOnly Contratacao { get; init; }
     public string Formacao { get; init; } = null!;
