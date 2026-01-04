@@ -23,7 +23,9 @@ public class TurmaService(ITurmaRepository repo)
             Registro = turmas.Registro,
             Nome = turmas.Nome,
             Turno = turmas.Turno,
-            Horario = turmas.Horario,
+            Inicio = turmas.Inicio,
+            Fim = turmas.Fim,
+            Sala = turmas.Sala,
             Status = turmas.Status,
         }).ToList();
 
