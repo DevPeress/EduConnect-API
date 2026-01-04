@@ -59,9 +59,9 @@ public class FuncionarioRepository(EduContext context) : IFuncionarioRepository
         return (departamentos, statusList);
     }
 
-    public async Task<Funcionario?> GetByIdAsync(int id)
+    public async Task<Funcionario?> GetByIdAsync(string Registro)
     {
-        return await _context.Funcionarios.Where(p => p.Deletado == false).FirstOrDefaultAsync(a => a.Id == id);
+        return await _context.Funcionarios.Where(p => p.Deletado == false).FirstOrDefaultAsync(a => a.Registro == Registro);
     }
 
     public async Task<Funcionario?> GetLastPessoaAsync()
@@ -95,9 +95,9 @@ public class FuncionarioRepository(EduContext context) : IFuncionarioRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task DeleteAsync(int id)
+    public async Task DeleteAsync(string Registro)
     {
-        var funcionario = await GetByIdAsync(id);
+        var funcionario = await GetByIdAsync(Registro);
         if (funcionario != null)
         {
             await Task.Run(() =>
