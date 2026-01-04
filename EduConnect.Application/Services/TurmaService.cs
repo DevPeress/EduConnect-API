@@ -23,11 +23,23 @@ public class TurmaService(ITurmaRepository repo)
             Registro = turmas.Registro,
             Nome = turmas.Nome,
             Turno = turmas.Turno,
-            Horario = turmas.Horario,
+            Inicio = turmas.Inicio,
+            Fim = turmas.Fim,
+            Sala = turmas.Sala,
             Status = turmas.Status,
         }).ToList();
 
         return (turmaDTO, total);
+    }
+
+    public async Task<Turma?> GetLastTurma()
+    {
+        return await _turmaRepository.GetLastTurma();
+    }
+
+    public async Task<List<string>> GetTurmasValidasAsync()
+    {
+        return await _turmaRepository.GetTurmasValidasAsync();
     }
 
     public async Task<List<string>> GetInformativos()
@@ -35,7 +47,7 @@ public class TurmaService(ITurmaRepository repo)
         return await _turmaRepository.GetInformativos();
     }
 
-    public async Task<Turma?> GetTurmaByIdAsync(int id)
+    public async Task<Turma?> GetTurmaByIdAsync(string id)
     {
         return await _turmaRepository.GetTurmaByIdAsync(id);
     }
@@ -47,14 +59,15 @@ public class TurmaService(ITurmaRepository repo)
             Registro = turmaDTO.Registro,
             Nome = turmaDTO.Nome,
             Turno = turmaDTO.Turno,
-            Horario = turmaDTO.Horario,
+            Inicio = turmaDTO.Inicio,
+            Fim = turmaDTO.Fim,
+            Sala = turmaDTO.Sala,
             Capacidade = turmaDTO.Capacidade,
             AnoLetivo = turmaDTO.AnoLetivo,
             DataCriacao = turmaDTO.DataCriacao,
             Status = turmaDTO.Status,
             ProfessorId = turmaDTO.ProfessorID,
             Alunos = turmaDTO.Alunos,
-            DisciplinaID = turmaDTO.DisciplinaID,
         };
         await _turmaRepository.AddTurmaAsync(turma);
     }
@@ -66,19 +79,20 @@ public class TurmaService(ITurmaRepository repo)
             Registro = turmaDTO.Registro,
             Nome = turmaDTO.Nome,
             Turno = turmaDTO.Turno,
-            Horario = turmaDTO.Horario,
+            Inicio = turmaDTO.Inicio,
+            Fim = turmaDTO.Fim,
+            Sala = turmaDTO.Sala,
             Capacidade = turmaDTO.Capacidade,
             AnoLetivo = turmaDTO.AnoLetivo,
             DataCriacao = turmaDTO.DataCriacao,
             Status = turmaDTO.Status,
             ProfessorId = turmaDTO.ProfessorID,
             Alunos = turmaDTO.Alunos,
-            DisciplinaID = turmaDTO.DisciplinaID,
         };
         await _turmaRepository.UpdateTurmaAsync(turma);
     }
 
-    public async Task DeleteTurmaAsync(int id)
+    public async Task DeleteTurmaAsync(string id)
     {
         await _turmaRepository.DeleteTurmaAsync(id);
     }

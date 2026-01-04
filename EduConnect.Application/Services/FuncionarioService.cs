@@ -8,7 +8,7 @@ public class FuncionarioService(IFuncionarioRepository repo)
 {
     private readonly IFuncionarioRepository _funcionarioRepository = repo;
 
-    public async Task<(List<FuncionarioDTO>, int TotalRegistro)> GetByFilters(FiltroPessoaDTO filtrodto)
+    public async Task<(IEnumerable<Funcionario>, int TotalRegistro)> GetByFilters(FiltroPessoaDTO filtrodto)
     {
         var filtro = new FiltroPessoa
         {
@@ -18,26 +18,10 @@ public class FuncionarioService(IFuncionarioRepository repo)
             Ano = filtrodto.Ano
         };
 
-        var (funcionarios, totalRegistro) = await _funcionarioRepository.GetByFilters(filtro);
-        List<FuncionarioDTO> funcionarioDTO = funcionarios.Select(f => new FuncionarioDTO(f)
-        {
-            Id = f.Id,
-            Nome = f.Nome,
-            Email = f.Email,
-            Telefone = f.Telefone,
-            Status = f.Status,
-            Nasc = f.Nasc,
-            Endereco = f.Endereco,
-            Cpf = f.Cpf,
-            ContatoEmergencia = f.ContatoEmergencia,
-            Registro = f.Registro,
-            Foto = f.Foto
-        }).ToList();
-
-        return (funcionarioDTO, totalRegistro);
+        return await _funcionarioRepository.GetByFilters(filtro);
     }
 
-    public async Task<(List<string>, List<string>)> GetInformativos()
+    public async Task<(List<string>, List<string>?)> GetInformativos()
     {
         return await _funcionarioRepository.GetInformativos();
     }

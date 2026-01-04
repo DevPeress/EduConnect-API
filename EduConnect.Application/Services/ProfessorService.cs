@@ -65,11 +65,10 @@ public class ProfessorService(IProfessorRepository repo)
             ContatoEmergencia = dto.ContatoEmergencia,
             Registro = dto.Registro,
             Turmas = dto.Turmas,
-            Disciplina = dto.Disciplina,
             Formacao = dto.Formacao,
             Contratacao = dto.Contratacao,
             Salario = dto.Salario,
-            Foto = dto.Foto
+            Foto = dto.Foto,
         };
         await _professorRepository.AddAsync(professor);
     }
@@ -89,7 +88,6 @@ public class ProfessorService(IProfessorRepository repo)
             ContatoEmergencia = dto.ContatoEmergencia,
             Registro = dto.Registro,
             Turmas = dto.Turmas,
-            Disciplina = dto.Disciplina,
             Formacao = dto.Formacao,
             Contratacao = dto.Contratacao,
             Salario = dto.Salario,

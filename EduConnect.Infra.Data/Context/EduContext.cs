@@ -14,6 +14,9 @@ public partial class EduContext(DbContextOptions<EduContext> options) : DbContex
     public DbSet<Turma> Turmas { get; set; }
     public DbSet<Conta> Contas { get; set; }
     public DbSet<Presenca> Presencas { get; set; }
+    public DbSet<Disciplinas> Disciplinas { get; set; }
+    public DbSet<ProfessorDisciplina> ProfessorDisciplinas { get; set; }
+    public DbSet<TurmaDisciplina> TurmaDisciplinas { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

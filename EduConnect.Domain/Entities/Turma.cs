@@ -6,10 +6,12 @@ namespace EduConnect.Domain.Entities;
 public class Turma
 {
     [Key]
-    public int Registro { get; set; }
+    public required string Registro { get; set; }
     public required string Nome { get; set; }
     public required string Turno { get; set; }
-    public required string Horario { get; set; }
+    public required string Inicio { get; set; }
+    public required string Fim { get; set; }
+    public required string Sala { get; set; }
     public int Capacidade { get; set; }
     public DateOnly AnoLetivo { get; set; }
     public DateOnly DataCriacao { get; set; } 
@@ -20,5 +22,5 @@ public class Turma
     public int ProfessorId { get; set; }
     public Professor Professor { get; set; } = null!;
     public ICollection<Aluno> Alunos { get; set; } = [];
-    public int DisciplinaID { get; set; }
+    public ICollection<TurmaDisciplina> TurmaDisciplinas { get; set; } = [];
 }

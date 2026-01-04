@@ -4,6 +4,7 @@ using EduConnect.Infra.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EduConnect.Infra.Data.Migrations
 {
     [DbContext(typeof(EduContext))]
-    partial class EduContextModelSnapshot : ModelSnapshot
+    [Migration("20260104021311_Disciplinas")]
+    partial class Disciplinas
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -150,10 +153,10 @@ namespace EduConnect.Infra.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("TurmaRegistro")
+                    b.Property<string>("TurmaId")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("TurmaRegistro1")
+                    b.Property<int?>("TurmaRegistro")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -161,7 +164,7 @@ namespace EduConnect.Infra.Data.Migrations
                     b.HasIndex("ContaId")
                         .IsUnique();
 
-                    b.HasIndex("TurmaRegistro1");
+                    b.HasIndex("TurmaRegistro");
 
                     b.ToTable("Alunos");
                 });
@@ -219,7 +222,12 @@ namespace EduConnect.Infra.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("TurmaRegistro")
+                        .HasColumnType("int");
+
                     b.HasKey("Registro");
+
+                    b.HasIndex("TurmaRegistro");
 
                     b.ToTable("Disciplinas");
                 });
@@ -424,6 +432,13 @@ namespace EduConnect.Infra.Data.Migrations
                     b.Property<bool>("Deletado")
                         .HasColumnType("bit");
 
+                    b.Property<string>("Disciplina")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DisciplinasRegistro")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -468,31 +483,9 @@ namespace EduConnect.Infra.Data.Migrations
                     b.HasIndex("ContaId")
                         .IsUnique();
 
+                    b.HasIndex("DisciplinasRegistro");
+
                     b.ToTable("Professores");
-                });
-
-            modelBuilder.Entity("EduConnect.Domain.Entities.ProfessorDisciplina", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("DisciplinaRegistro")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("ProfessorId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DisciplinaRegistro");
-
-                    b.HasIndex("ProfessorId");
-
-                    b.ToTable("ProfessorDisciplinas");
                 });
 
             modelBuilder.Entity("EduConnect.Domain.Entities.Registro", b =>
@@ -565,6 +558,9 @@ namespace EduConnect.Infra.Data.Migrations
                     b.Property<bool>("Deletado")
                         .HasColumnType("bit");
 
+                    b.Property<int>("DisciplinaID")
+                        .HasColumnType("int");
+
                     b.Property<string>("Fim")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -599,30 +595,6 @@ namespace EduConnect.Infra.Data.Migrations
                     b.ToTable("Turmas");
                 });
 
-            modelBuilder.Entity("EduConnect.Domain.Entities.TurmaDisciplina", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("DisciplinaRegistro")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("TurmaRegistro")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DisciplinaRegistro");
-
-                    b.HasIndex("TurmaRegistro");
-
-                    b.ToTable("TurmaDisciplinas");
-                });
-
             modelBuilder.Entity("EduConnect.Domain.Entities.Aluno", b =>
                 {
                     b.HasOne("EduConnect.Domain.Entities.Conta", "Conta")
@@ -633,11 +605,18 @@ namespace EduConnect.Infra.Data.Migrations
 
                     b.HasOne("EduConnect.Domain.Entities.Turma", "Turma")
                         .WithMany("Alunos")
-                        .HasForeignKey("TurmaRegistro1");
+                        .HasForeignKey("TurmaRegistro");
 
                     b.Navigation("Conta");
 
                     b.Navigation("Turma");
+                });
+
+            modelBuilder.Entity("EduConnect.Domain.Entities.Disciplinas", b =>
+                {
+                    b.HasOne("EduConnect.Domain.Entities.Turma", null)
+                        .WithMany("Disciplina")
+                        .HasForeignKey("TurmaRegistro");
                 });
 
             modelBuilder.Entity("EduConnect.Domain.Entities.Funcionario", b =>
@@ -678,26 +657,11 @@ namespace EduConnect.Infra.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("EduConnect.Domain.Entities.Disciplinas", null)
+                        .WithMany("Professores")
+                        .HasForeignKey("DisciplinasRegistro");
+
                     b.Navigation("Conta");
-                });
-
-            modelBuilder.Entity("EduConnect.Domain.Entities.ProfessorDisciplina", b =>
-                {
-                    b.HasOne("EduConnect.Domain.Entities.Disciplinas", "Disciplina")
-                        .WithMany("ProfessorDisciplinas")
-                        .HasForeignKey("DisciplinaRegistro")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("EduConnect.Domain.Entities.Professor", "Professor")
-                        .WithMany("ProfessorDisciplinas")
-                        .HasForeignKey("ProfessorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Disciplina");
-
-                    b.Navigation("Professor");
                 });
 
             modelBuilder.Entity("EduConnect.Domain.Entities.Turma", b =>
@@ -711,36 +675,13 @@ namespace EduConnect.Infra.Data.Migrations
                     b.Navigation("Professor");
                 });
 
-            modelBuilder.Entity("EduConnect.Domain.Entities.TurmaDisciplina", b =>
-                {
-                    b.HasOne("EduConnect.Domain.Entities.Disciplinas", "Disciplina")
-                        .WithMany("TurmaDisciplinas")
-                        .HasForeignKey("DisciplinaRegistro")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("EduConnect.Domain.Entities.Turma", "Turma")
-                        .WithMany("TurmaDisciplinas")
-                        .HasForeignKey("TurmaRegistro")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Disciplina");
-
-                    b.Navigation("Turma");
-                });
-
             modelBuilder.Entity("EduConnect.Domain.Entities.Disciplinas", b =>
                 {
-                    b.Navigation("ProfessorDisciplinas");
-
-                    b.Navigation("TurmaDisciplinas");
+                    b.Navigation("Professores");
                 });
 
             modelBuilder.Entity("EduConnect.Domain.Entities.Professor", b =>
                 {
-                    b.Navigation("ProfessorDisciplinas");
-
                     b.Navigation("Turmas");
                 });
 
@@ -748,7 +689,7 @@ namespace EduConnect.Infra.Data.Migrations
                 {
                     b.Navigation("Alunos");
 
-                    b.Navigation("TurmaDisciplinas");
+                    b.Navigation("Disciplina");
                 });
 #pragma warning restore 612, 618
         }

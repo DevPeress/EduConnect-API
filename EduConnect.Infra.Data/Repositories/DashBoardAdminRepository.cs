@@ -13,7 +13,7 @@ public class DashBoardAdminRepository(EduContext context) : IDashboardAdminRepos
     private readonly int MesAnterior = DateTime.Now.AddMonths(-1).Month;
     private readonly int AnoAtual = DateTime.Now.Year;
 
-    private double CalcularPorcentagem(int aumento, int decremento)
+    private static double CalcularPorcentagem(int aumento, int decremento)
     {
         if (decremento == 0)
             return aumento > 0 ? 100 : 0;

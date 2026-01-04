@@ -7,6 +7,7 @@ namespace EduConnect.Infra.Data.Repositories;
 public class TurmaRepository(EduContext context) : ITurmaRepository
 {
     private readonly EduContext _context = context;
+    private readonly DateOnly Year = DateOnly.FromDateTime(DateTime.Now);
 
     private IQueryable<Turma> QueryFiltroTurma(FiltroTurma filtro)
     {
@@ -42,6 +43,21 @@ public class TurmaRepository(EduContext context) : ITurmaRepository
         return (result, total);
     }
 
+    public async Task<Turma?> GetLastTurma()
+    {
+        return await _context.Turmas
+            .Where(dados => dados.Deletado == false)
+            .LastOrDefaultAsync();
+    }
+
+    public async Task<List<string>> GetTurmasValidasAsync()
+    {
+        return await _context.Turmas
+            .Where(a => a.Deletado == false && a.Status == "Ativa" && a.AnoLetivo == Year)
+            .Select(a => a.Nome)
+            .ToListAsync();
+    }
+
     public async Task<List<string>> GetInformativos()
     {
         return await _context.Turmas
@@ -51,7 +67,7 @@ public class TurmaRepository(EduContext context) : ITurmaRepository
             .ToListAsync();
     }
 
-    public async Task<Turma?> GetTurmaByIdAsync(int id)
+    public async Task<Turma?> GetTurmaByIdAsync(string id)
     {
         return await _context.Turmas.FirstOrDefaultAsync(dados => dados.Registro == id && dados.Deletado == false);
     }
@@ -68,7 +84,7 @@ public class TurmaRepository(EduContext context) : ITurmaRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task DeleteTurmaAsync(int id)
+    public async Task DeleteTurmaAsync(string id)
     {
         var turma = await _context.Turmas.FindAsync(id);
         if (turma != null)

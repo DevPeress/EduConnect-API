@@ -33,9 +33,16 @@ namespace EduConnect.Controllers
             });
         }
 
+        [HttpGet("validas")]
+        public async Task<IActionResult> GetTurmasValidas()
+        {
+            var turmas = await _turmaService.GetTurmasValidasAsync();
+            return Ok(turmas);
+        }
+
         [Authorize(Roles = "Administrador, Funcionario, Professor")]
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetTurmaById(int id)
+        public async Task<IActionResult> GetTurmaById(string id)
         {
             var turma = await _turmaService.GetTurmaByIdAsync(id);
             if (turma == null)
@@ -54,6 +61,33 @@ namespace EduConnect.Controllers
         }
 
         [Authorize(Roles = "Administrador, Funcionario")]
+        [HttpGet("Cadastro")]
+        public async Task<IActionResult> GetTurmaByCadastro()
+        {
+            var turma = await _turmaService.GetLastTurma();
+            if (turma == null)
+            {
+                return Ok("T000001");
+            }
+            // Registro vem no formato MA000123
+            var atual = turma.Registro;
+
+            // Pega somente os números (6 dígitos)
+            var numeros = atual.Substring(2);
+
+            // Converte para int
+            var numeroAtual = int.Parse(numeros);
+
+            // Incrementa
+            var proximo = numeroAtual + 1;
+
+            // Formata para sempre ter 6 dígitos
+            var proximoFormatado = proximo.ToString("D6");
+
+            return Ok("T" + proximoFormatado);
+        }
+
+        [Authorize(Roles = "Administrador, Funcionario")]
         [HttpPost]
         public async Task<IActionResult> CreateTurma(TurmaDTO turmaDTO)
         {
@@ -63,7 +97,7 @@ namespace EduConnect.Controllers
 
         [Authorize(Roles = "Administrador, Funcionario")]
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateTurma(int id, TurmaDTO turmaDTO)
+        public async Task<IActionResult> UpdateTurma(string id, TurmaDTO turmaDTO)
         {
             if (id != turmaDTO.Registro)
             {
@@ -75,7 +109,7 @@ namespace EduConnect.Controllers
 
         [Authorize(Roles = "Administrador, Funcionario")]
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTurma(int id)
+        public async Task<IActionResult> DeleteTurma(string id)
         {
             await _turmaService.DeleteTurmaAsync(id);
             return NoContent();
