@@ -1,4 +1,6 @@
-﻿namespace EduConnect.Application.DTO.Entities;
+﻿using EduConnect.Domain.Entities;
+
+namespace EduConnect.Application.DTO.Entities;
 
 public record TurmaDTO
 {
@@ -10,7 +12,7 @@ public record TurmaDTO
     public required string Sala { get; set; }
     public required string Status { get; set; }
     public TurmaDTO() { }
-    public TurmaDTO(Domain.Entities.Turma turma)
+    public TurmaDTO(Turma turma)
     {
         Registro = turma.Registro;
         Nome = turma.Nome;
