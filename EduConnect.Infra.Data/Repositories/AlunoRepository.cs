@@ -17,7 +17,7 @@ public class AlunoRepository(EduContext context) : IAlunoRepository
         if (filtro.Ano != null && filtro.Ano != "Todos os Anos")
         {
             int anoLetivo = int.Parse(filtro.Ano);
-            query = query.Where(dados => dados.DataMatricula.Year == anoLetivo);
+            query = query.Where(dados => dados.DataMatricula!.Value.Year == anoLetivo);
         }
         
         if (filtro.Status != null && filtro.Status != "Todos os Status")
@@ -48,7 +48,7 @@ public class AlunoRepository(EduContext context) : IAlunoRepository
     {
         var anos = await _context.Alunos
             .Where(a => a.Deletado == false)
-            .Select(a => a.DataMatricula.Year.ToString())
+            .Select(a => a.DataMatricula!.Value.Year.ToString())
             .Distinct()
             .ToListAsync();
         var salas = await _context.Alunos
@@ -59,9 +59,9 @@ public class AlunoRepository(EduContext context) : IAlunoRepository
         return (anos, salas);
     }
 
-    public async Task<Aluno?> GetByIdAsync(int id)
+    public async Task<Aluno?> GetByIdAsync(string Registro)
     {
-        return await _context.Alunos.FirstOrDefaultAsync(a => a.Id == id);
+        return await _context.Alunos.FirstOrDefaultAsync(a => a.Registro == Registro);
     }
 
     public async Task<Aluno?> GetLastPessoaAsync()
@@ -95,9 +95,9 @@ public class AlunoRepository(EduContext context) : IAlunoRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task DeleteAsync(int id)
+    public async Task DeleteAsync(string Registro)
     {
-        var aluno = await GetByIdAsync(id);
+        var aluno = await GetByIdAsync(Registro);
         if (aluno != null)
         {
             await Task.Run(() =>
