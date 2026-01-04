@@ -16,8 +16,9 @@ public record TurmaDTO
     public required string Status { get; set; }
     public bool Deletado { get; set; } 
     public int ProfessorID { get; set; }
+    public Professor Professor { get; set; } = null!;
     public ICollection<Aluno> Alunos { get; set; } = [];
-    public int DisciplinaID { get; set; }
+    public ICollection<TurmaDisciplina> Disciplinas { get; set; } = [];
 
     public TurmaDTO() { }
 
@@ -36,6 +37,6 @@ public record TurmaDTO
         Deletado = dados.Deletado;
         ProfessorID = dados.ProfessorId;
         Alunos = dados.Alunos;
-        DisciplinaID = dados.DisciplinaID;
+        Disciplinas = dados.TurmaDisciplinas;
     }
 }
