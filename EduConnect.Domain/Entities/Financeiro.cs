@@ -6,7 +6,6 @@ public class Financeiro
 {
     [Key]
     public int Registro { get; set; }
-    public int AlunoId { get; set; }
     public required string Categoria { get; set; }
     public string Metodo { get; init; } = "Cartão de Crédito";
     public string Descricao { get; init; } = default!;
@@ -17,4 +16,8 @@ public class Financeiro
     public bool Deletado { get; set; } = false;
     public DateOnly? DataPagamento { get; set; }
     public string? Observacoes { get; set; }
+
+    // Relacionamento
+    public int AlunoId { get; set; }
+    public Aluno Aluno { get; set; } = default!;
 }
