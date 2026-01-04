@@ -110,13 +110,13 @@ namespace EduConnect.Controllers
 
         [Authorize(Roles = "Administrador)")]
         [HttpPut("{matricula}")]
-        public async Task<IActionResult> UpdateFuncionario(int id, FuncionarioDTO dto)
+        public async Task<IActionResult> UpdateFuncionario(string Registro, FuncionarioDTO dto)
         {
-            if (id != dto.Id)
+            if (Registro != dto.Registro)
             {
                 return BadRequest();
             }
-            var existingFuncionario = await _funcionarioService.GetFuncionarioByIdAsync(id);
+            var existingFuncionario = await _funcionarioService.GetFuncionarioByIdAsync(Registro);
             if (existingFuncionario == null)
             {
                 return NotFound();
@@ -127,14 +127,14 @@ namespace EduConnect.Controllers
 
         [Authorize(Roles = "Administrador")]
         [HttpDelete("{matricula}")]
-        public async Task<IActionResult> DeleteFuncionario(int id)
+        public async Task<IActionResult> DeleteFuncionario(string Registro)
         {
-            var existingFuncionario = await _funcionarioService.GetFuncionarioByIdAsync(id);
+            var existingFuncionario = await _funcionarioService.GetFuncionarioByIdAsync(Registro);
             if (existingFuncionario == null)
             {
                 return NotFound();
             }
-            await _funcionarioService.DeleteFuncionarioAsync(id);
+            await _funcionarioService.DeleteFuncionarioAsync(Registro);
             return NoContent();
         }
     }
