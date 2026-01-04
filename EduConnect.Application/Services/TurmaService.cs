@@ -63,7 +63,6 @@ public class TurmaService(ITurmaRepository repo)
             Status = turmaDTO.Status,
             ProfessorId = turmaDTO.ProfessorID,
             Alunos = turmaDTO.Alunos,
-            DisciplinaID = turmaDTO.DisciplinaID,
         };
         await _turmaRepository.AddTurmaAsync(turma);
     }
@@ -84,7 +83,6 @@ public class TurmaService(ITurmaRepository repo)
             Status = turmaDTO.Status,
             ProfessorId = turmaDTO.ProfessorID,
             Alunos = turmaDTO.Alunos,
-            DisciplinaID = turmaDTO.DisciplinaID,
         };
         await _turmaRepository.UpdateTurmaAsync(turma);
     }
