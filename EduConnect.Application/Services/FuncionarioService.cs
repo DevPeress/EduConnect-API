@@ -64,7 +64,6 @@ public class FuncionarioService(IFuncionarioRepository repo)
     {
         var funcionario = new Funcionario
         {
-            Id = dto.Id,
             Nome = dto.Nome,
             Email = dto.Email,
             Telefone = dto.Telefone,
