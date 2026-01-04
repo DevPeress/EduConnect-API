@@ -25,6 +25,11 @@ public class ProfessorRepository(EduContext context) : IProfessorRepository
             query = query.Where(dados => dados.Status == filtro.Status);
         }
 
+        if (filtro.Categoria != null && filtro.Categoria != "Todas as Salas")
+        {
+            query = query.Where(dados => dados.Turmas.Any(turma => turma == filtro.Categoria));
+        }
+
         return query;
     }
 
@@ -46,7 +51,14 @@ public class ProfessorRepository(EduContext context) : IProfessorRepository
             .Select(a => a.Contratacao.Year.ToString())
             .Distinct()
             .ToListAsync();
-        return (anos, []);
+
+        var salas = await _context.Professores
+            .Where(a => a.Deletado == false)
+            .SelectMany(a => a.Turmas)
+            .Distinct()
+            .ToListAsync();
+
+        return (anos, salas);
     }
 
     public async Task<Professor?> GetByIdAsync(int id)

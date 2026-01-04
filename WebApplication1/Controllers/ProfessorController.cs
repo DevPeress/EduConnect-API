@@ -37,8 +37,12 @@ namespace EduConnect.Controllers
         [HttpGet("pegarInformativos")]
         public async Task<IActionResult> GetInformativosAlunosAsync()
         {
-            var (anos, _) = await _professorService.GetInformativos();
-            return Ok(anos);
+            var (anos, salas) = await _professorService.GetInformativos();
+            return Ok(new
+            {
+                Anos = anos,
+                Salas = salas
+            });
         }
 
         [HttpGet("{matricula}")]
