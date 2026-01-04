@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE sp_GetPorcentagem
+﻿CREATE OR ALTER PROCEDURE sp_GetPorcentagem
     @MesAtual INT,
     @MesAnterior INT,
     @Ano INT
