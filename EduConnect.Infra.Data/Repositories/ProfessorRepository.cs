@@ -27,7 +27,7 @@ public class ProfessorRepository(EduContext context) : IProfessorRepository
 
         if (filtro.Categoria != null && filtro.Categoria != "Todas as Salas")
         {
-            query = query.Where(dados => dados.Turmas.Any(turma => turma == filtro.Categoria));
+            query = query.Where(dados => dados.Turmas.Any(turma => turma.Nome == filtro.Categoria));
         }
 
         return query;
