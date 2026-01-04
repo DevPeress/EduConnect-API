@@ -42,7 +42,7 @@ namespace EduConnect.Controllers
 
         [Authorize(Roles = "Administrador, Funcionario, Professor")]
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetTurmaById(int id)
+        public async Task<IActionResult> GetTurmaById(string id)
         {
             var turma = await _turmaService.GetTurmaByIdAsync(id);
             if (turma == null)
@@ -109,7 +109,7 @@ namespace EduConnect.Controllers
 
         [Authorize(Roles = "Administrador, Funcionario")]
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTurma(int id)
+        public async Task<IActionResult> DeleteTurma(string id)
         {
             await _turmaService.DeleteTurmaAsync(id);
             return NoContent();
