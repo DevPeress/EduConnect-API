@@ -12,5 +12,6 @@ public class Disciplinas
     public bool Deletado { get; set; } = false;
 
     // Relacionamento
-    public ICollection<Professor> Professores { get; set; } = [];
+    public ICollection<TurmaDisciplina> TurmaDisciplinas { get; set; } = [];
+    public ICollection<ProfessorDisciplina> ProfessorDisciplinas { get; set; } = [];
 }

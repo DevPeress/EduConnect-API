@@ -10,6 +10,6 @@ public class Aluno : Pessoa, IPessoaComConta
     // Relacionamento
     public int ContaId { get; set; }
     public Conta Conta { get; set; } = null!;
-    public string? TurmaId { get; set; }
+    public string? TurmaRegistro { get; set; }
     public Turma? Turma { get; set; } = null!;
 }

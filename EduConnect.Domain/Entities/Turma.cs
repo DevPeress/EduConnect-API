@@ -22,6 +22,5 @@ public class Turma
     public int ProfessorId { get; set; }
     public Professor Professor { get; set; } = null!;
     public ICollection<Aluno> Alunos { get; set; } = [];
-    public int DisciplinaID { get; set; }
-    public ICollection<Disciplinas> Disciplina { get; set; } = []!;
+    public ICollection<TurmaDisciplina> TurmaDisciplinas { get; set; } = [];
 }
