@@ -51,22 +51,22 @@ namespace EduConnect.Controllers
             var (totalRecebido, totalPendente, totalAtrasado) = await _financeiroService.GetDashBoard();
             return Ok(new List<CardsFinanceiroResponseViewModel>
             {
-                new CardsFinanceiroResponseViewModel()
+                new()
                 {
                     Dado = "Recebido",
                     Total = totalRecebido
                 },
-                new CardsFinanceiroResponseViewModel()
+                new()
                 {
                     Dado = "Pendente",
                     Total = totalPendente
                 },
-                new CardsFinanceiroResponseViewModel()
+                new()
                 {
                     Dado = "Atrasado",
                     Total = totalAtrasado
                 },
-                new CardsFinanceiroResponseViewModel()
+                new()
                 {
                     Dado = "Total",
                     Total = totalAtrasado + totalPendente + totalRecebido
