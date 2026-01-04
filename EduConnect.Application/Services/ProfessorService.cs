@@ -51,47 +51,46 @@ public class ProfessorService(IProfessorRepository repo)
         return await _professorRepository.GetLastPessoaAsync();
     }
 
-    public async Task AddProfessorAsync(ProfessorDTO dto)
+    public async Task AddProfessorAsync(ProfessorCadastroDTO ProfessorDTO)
     {
         var professor = new Professor
         {
-            Nome = dto.Nome,
-            Email = dto.Email,
-            Telefone = dto.Telefone,
-            Status = dto.Status,
-            Nasc = dto.Nasc,
-            Endereco = dto.Endereco,
-            Cpf = dto.Cpf,
-            ContatoEmergencia = dto.ContatoEmergencia,
-            Registro = dto.Registro,
-            Turmas = dto.Turmas,
-            Formacao = dto.Formacao,
-            Contratacao = dto.Contratacao,
-            Salario = dto.Salario,
-            Foto = dto.Foto,
+            Registro = ProfessorDTO.Registro,
+            Nome = ProfessorDTO.Nome,
+            Email = ProfessorDTO.Email,
+            Telefone = ProfessorDTO.Telefone,
+            Status = ProfessorDTO.Status,
+            Nasc = ProfessorDTO.Nasc,
+            Endereco = ProfessorDTO.Endereco,
+            Cpf = ProfessorDTO.CPF,
+            ContatoEmergencia = ProfessorDTO.ContatoEmergencia,
+            Turmas = [],
+            Foto = ProfessorDTO.Foto,
+            Formacao = ProfessorDTO.Formacao,
+            Contratacao = DateOnly.FromDateTime(DateTime.Now),
+            Salario = 0m
         };
         await _professorRepository.AddAsync(professor);
     }
 
-    public async Task UpdateProfessorAsync(ProfessorDTO dto)
+    public async Task UpdateProfessorAsync(ProfessorUpdateDTO ProfessorDTO)
     {
         var professor = new Professor
         {
-            Id = dto.Id,
-            Nome = dto.Nome,
-            Email = dto.Email,
-            Telefone = dto.Telefone,
-            Status = dto.Status,
-            Nasc = dto.Nasc,
-            Endereco = dto.Endereco,
-            Cpf = dto.Cpf,
-            ContatoEmergencia = dto.ContatoEmergencia,
-            Registro = dto.Registro,
-            Turmas = dto.Turmas,
-            Formacao = dto.Formacao,
-            Contratacao = dto.Contratacao,
-            Salario = dto.Salario,
-            Foto = dto.Foto
+
+            Registro = ProfessorDTO.Registro,
+            Nome = ProfessorDTO.Nome,
+            Email = ProfessorDTO.Email,
+            Telefone = ProfessorDTO.Telefone,
+            Status = ProfessorDTO.Status,
+            Nasc = ProfessorDTO.Nasc,
+            Endereco = ProfessorDTO.Endereco,
+            Cpf = ProfessorDTO.CPF,
+            ContatoEmergencia = ProfessorDTO.ContatoEmergencia,
+            Turmas = [],
+            Foto = ProfessorDTO.Foto,
+            Formacao = ProfessorDTO.Formacao,
+            Salario = ProfessorDTO.Salario
         };
         await _professorRepository.UpdateAsync(professor);
     }

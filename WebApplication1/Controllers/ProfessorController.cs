@@ -83,16 +83,16 @@ namespace EduConnect.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddProfessor(ProfessorDTO dto)
+        public async Task<IActionResult> AddProfessor(ProfessorCadastroDTO ProfessorDTO)
         {
-            await _professorService.AddProfessorAsync(dto);
+            await _professorService.AddProfessorAsync(ProfessorDTO);
             return Ok();
         }
 
         [HttpPut("{matricula}")]
-        public async Task<IActionResult> UpdateProfessor(string Registro, ProfessorDTO dto)
+        public async Task<IActionResult> UpdateProfessor(string Registro, ProfessorUpdateDTO ProfessorDTO)
         {
-            if (Registro != dto.Registro)
+            if (Registro != ProfessorDTO.Registro)
             {
                 return BadRequest();
             }
@@ -101,7 +101,7 @@ namespace EduConnect.Controllers
             {
                 return NotFound();
             }
-            await _professorService.UpdateProfessorAsync(dto);
+            await _professorService.UpdateProfessorAsync(ProfessorDTO);
             return NoContent();
         }
 
