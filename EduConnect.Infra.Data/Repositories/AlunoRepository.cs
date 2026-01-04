@@ -27,7 +27,7 @@ public class AlunoRepository(EduContext context) : IAlunoRepository
 
         if (filtro.Categoria != null && filtro.Categoria != "Todas as Salas")
         {
-            query = query.Where(dados => dados.Turma == filtro.Categoria);
+            query = query.Where(dados => dados.Turma.Nome == filtro.Categoria);
         }
 
         return query;
@@ -53,7 +53,7 @@ public class AlunoRepository(EduContext context) : IAlunoRepository
             .ToListAsync();
         var salas = await _context.Alunos
             .Where(a => a.Deletado == false)
-            .Select(a => a.Turma)
+            .Select(a => a.Turma.Nome)
             .Distinct()
             .ToListAsync();
         return (anos, salas);
