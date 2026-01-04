@@ -14,5 +14,4 @@ public record TurmaCadastroDTO
     public required DateTime Fim { get; set; }
     public required string Sala { get; set; }
     public required string Dias { get; set; }
-    public required ICollection<Disciplinas> Disciplinas { get; set; }
 }
