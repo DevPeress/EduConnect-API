@@ -72,10 +72,10 @@ public class AlunoService(IAlunoRepository repo)
             Cpf = dto.Cpf,
             ContatoEmergencia = dto.ContatoEmergencia,
             Registro = dto.Registro,
-            Turma = dto.Turma,
             Media = dto.Media,
             DataMatricula = dto.DataMatricula,
-            Foto = dto.Foto
+            Foto = dto.Foto,
+            TurmaId = dto.TurmaId
         };
         await _alunoRepository.AddAsync(aluno);
     }
