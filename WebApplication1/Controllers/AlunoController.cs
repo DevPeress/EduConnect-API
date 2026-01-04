@@ -1,6 +1,7 @@
 ﻿using EduConnect.Application.Common.Auditing;
 using EduConnect.Application.DTO.Entities;
 using EduConnect.Application.Services;
+using EduConnect.Domain.Entities;
 using EduConnect.Domain.Enums;
 using EduConnect.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -38,9 +39,9 @@ namespace EduConnect.Controllers
 
         [Authorize(Roles = "Administrador, Funcionario, Professor")]
         [HttpGet("{id:int}")]
-        public async Task<IActionResult> GetAlunoById(int id)
+        public async Task<IActionResult> GetAlunoById(string Registro)
         {
-            var aluno = await _alunoService.GetAlunoByIdAsync(id);
+            var aluno = await _alunoService.GetAlunoByIdAsync(Registro);
             if (aluno == null)
             {
                 return NotFound();
@@ -119,13 +120,13 @@ namespace EduConnect.Controllers
 
         [Authorize(Roles = "Administrador, Funcionario")]
         [HttpDelete("{id:int}")]
-        public async Task<IActionResult> DeleteAluno(int id)
+        public async Task<IActionResult> DeleteAluno(string Registro)
         {
-            var existingAluno = await _alunoService.GetAlunoByIdAsync(id);
+            var existingAluno = await _alunoService.GetAlunoByIdAsync(Registro);
             if (existingAluno == null)
                 return NotFound();
 
-            await _alunoService.DeleteAlunoAsync(id);
+            await _alunoService.DeleteAlunoAsync(Registro);
             return NoContent();
         }
     }
