@@ -77,7 +77,7 @@ public class FinanceiroRepository(EduContext context) : IFinanceiroRepository
         var query = QueryFiltroFinanceiro(filtro);
         var total = await query.CountAsync();
 
-        query = query.Skip(filtro.Offset).Take(6);
+        query = query.Skip(filtro.Offset).Take(5);
         var result = await query.ToListAsync();
 
         return (result, total);
