@@ -24,7 +24,6 @@ public class ProfessorDTO : PessoaDTO
         Disciplinas = dados.ProfessorDisciplinas;
         Registro = dados.Registro;
         Turmas = dados.Turmas;
-        Contratacao = dados.Contratacao;
         Formacao = dados.Formacao;
         Salario = dados.Salario;
     }
