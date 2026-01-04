@@ -26,9 +26,24 @@ namespace EduConnect.Controllers
 
             var (funcionarios, total) = await _funcionarioService.GetByFilters(filtro);
 
-            return Ok(new FiltroResponseViewModel<FuncionarioDTO>
+            var funcionarioDTO = new List<FuncionarioResponseViewModel>(
+                funcionarios.Select(f => new FuncionarioResponseViewModel
+                {
+                    Registro = f.Registro,
+                    Nome = f.Nome,
+                    Nasc = f.Nasc,
+                    Cargo = f.Cargo,
+                    Departamento = f.Departamento,
+                    DataAdmissao = f.DataAdmissao,
+                    Status = f.Status,
+                    Foto = f.Foto,
+                    Telefone = f.Telefone
+                })
+            );
+
+            return Ok(new FiltroResponseViewModel<FuncionarioResponseViewModel>
             {
-                Dados = funcionarios,
+                Dados = funcionarioDTO,
                 Total = total
             });
         }
