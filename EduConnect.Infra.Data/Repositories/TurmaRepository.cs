@@ -7,6 +7,7 @@ namespace EduConnect.Infra.Data.Repositories;
 public class TurmaRepository(EduContext context) : ITurmaRepository
 {
     private readonly EduContext _context = context;
+    private readonly DateOnly Year = DateOnly.FromDateTime(DateTime.Now);
 
     private IQueryable<Turma> QueryFiltroTurma(FiltroTurma filtro)
     {
@@ -40,6 +41,14 @@ public class TurmaRepository(EduContext context) : ITurmaRepository
         var result = await query.ToListAsync();
 
         return (result, total);
+    }
+
+    public async Task<List<string>> GetTurmasValidasAsync()
+    {
+        return await _context.Turmas
+            .Where(a => a.Deletado == false && a.Status == "Ativa" && a.AnoLetivo == Year)
+            .Select(a => a.Nome)
+            .ToListAsync();
     }
 
     public async Task<List<string>> GetInformativos()

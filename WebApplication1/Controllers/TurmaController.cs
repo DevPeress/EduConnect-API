@@ -33,6 +33,13 @@ namespace EduConnect.Controllers
             });
         }
 
+        [HttpGet("validas")]
+        public async Task<IActionResult> GetTurmasValidas()
+        {
+            var turmas = await _turmaService.GetTurmasValidasAsync();
+            return Ok(turmas);
+        }
+
         [Authorize(Roles = "Administrador, Funcionario, Professor")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetTurmaById(int id)
