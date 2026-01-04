@@ -113,7 +113,7 @@ namespace EduConnect.Controllers
             if (existingAluno == null)
                 return NotFound();
 
-            await _alunoService.UpdateAlunoAsync(AlunoDTO);
+            await _alunoService.UpdateAlunoAsync(AlunoDTO, existingAluno.DataMatricula);
             return NoContent();
         }
 
