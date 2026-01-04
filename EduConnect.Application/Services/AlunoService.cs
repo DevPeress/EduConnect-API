@@ -49,9 +49,9 @@ public class AlunoService(IAlunoRepository repo)
         return await _alunoRepository.GetInformativos();
     }
 
-    public async Task<Aluno?> GetAlunoByIdAsync(int id)
+    public async Task<Aluno?> GetAlunoByIdAsync(string Registro)
     {
-        return await _alunoRepository.GetByIdAsync(id);
+        return await _alunoRepository.GetByIdAsync(Registro);
     }
 
     public async Task<Aluno?> GetLastAluno()
@@ -59,48 +59,51 @@ public class AlunoService(IAlunoRepository repo)
         return await _alunoRepository.GetLastPessoaAsync();
     }
 
-    public async Task AddAlunoAsync(AlunoDTO dto)
+    public async Task AddAlunoAsync(AlunoCadastroDTO AlunoDTO)
     {
         var aluno = new Aluno
         {
-            Nome = dto.Nome,
-            Email = dto.Email,
-            Telefone = dto.Telefone,
-            Status = dto.Status,
-            Nasc = dto.Nasc,
-            Endereco = dto.Endereco,
-            Cpf = dto.Cpf,
-            ContatoEmergencia = dto.ContatoEmergencia,
-            Registro = dto.Registro,
-            Media = dto.Media,
-            DataMatricula = dto.DataMatricula,
-            Foto = dto.Foto
+            Registro = AlunoDTO.Registro,
+            Nome = AlunoDTO.Nome,
+            Email = AlunoDTO.Email,
+            Foto = AlunoDTO.Foto,
+            Telefone = AlunoDTO.Telefone,
+            Status = AlunoDTO.Status,
+            Nasc = AlunoDTO.Nasc,
+            Endereco = AlunoDTO.Endereco,
+            Cpf = AlunoDTO.CPF,
+            ContatoEmergencia = AlunoDTO.ContatoEmergencia,
+            DataMatricula = DateOnly.FromDateTime(DateTime.Now),
+            Media = 0,
+            Deletado = false,
+            TurmaRegistro = AlunoDTO.Turma
         };
         await _alunoRepository.AddAsync(aluno);
     }
 
-    public async Task UpdateAlunoAsync(AlunoDTO dto)
+    public async Task UpdateAlunoAsync(AlunoUpdateDTO AlunoDTO)
     {
         var aluno = new Aluno
         {
-            Nome = dto.Nome,
-            Email = dto.Email,
-            Telefone = dto.Telefone,
-            Status = dto.Status,
-            Nasc = dto.Nasc,
-            Endereco = dto.Endereco,
-            Cpf = dto.Cpf,
-            ContatoEmergencia = dto.ContatoEmergencia,
-            Registro = dto.Registro,
-            Media = dto.Media,
-            DataMatricula = dto.DataMatricula,
-            Foto = dto.Foto
+            Registro = AlunoDTO.Registro,
+            Nome = AlunoDTO.Nome,
+            Email = AlunoDTO.Email,
+            Foto = AlunoDTO.Foto,
+            Telefone = AlunoDTO.Telefone,
+            Status = AlunoDTO.Status,
+            Nasc = AlunoDTO.Nasc,
+            Endereco = AlunoDTO.Endereco,
+            Cpf = AlunoDTO.Cpf,
+            ContatoEmergencia = AlunoDTO.ContatoEmergencia,
+            Deletado = AlunoDTO.Deletado,
+            Media = AlunoDTO.Media,
+            TurmaRegistro = AlunoDTO.TurmaRegistro
         };
         await _alunoRepository.UpdateAsync(aluno);
     }
 
-    public async Task DeleteAlunoAsync(int id)
+    public async Task DeleteAlunoAsync(string Registro)
     {
-        await _alunoRepository.DeleteAsync(id);
+        await _alunoRepository.DeleteAsync(Registro);
     }
 }

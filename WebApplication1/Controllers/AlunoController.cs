@@ -88,15 +88,15 @@ namespace EduConnect.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddAluno([FromBody] AlunoDTO dto)
+        public async Task<IActionResult> AddAluno([FromBody] AlunoCadastroDTO AlunoDTO)
         {
-            await _alunoService.AddAlunoAsync(dto);
+            await _alunoService.AddAlunoAsync(AlunoDTO);
 
             HttpContext.SetAudit(
                 AuditAction.Create,
                 "Aluno",
-                dto.Id,
-                $"Aluno {dto.Nome} criado."
+                AlunoDTO.Registro,
+                $"Aluno {AlunoDTO.Nome} criado."
             );
 
             return Ok();
@@ -104,16 +104,16 @@ namespace EduConnect.Controllers
 
         [Authorize(Roles = "Administrador, Funcionario")]
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> UpdateAluno(int id, AlunoDTO dto)
+        public async Task<IActionResult> UpdateAluno(string registro, AlunoUpdateDTO AlunoDTO)
         {
-            if (id != dto.Id)
+            if (registro != AlunoDTO.Registro)
                 return BadRequest();
 
-            var existingAluno = await _alunoService.GetAlunoByIdAsync(id);
+            var existingAluno = await _alunoService.GetAlunoByIdAsync(registro);
             if (existingAluno == null)
                 return NotFound();
 
-            await _alunoService.UpdateAlunoAsync(dto);
+            await _alunoService.UpdateAlunoAsync(AlunoDTO);
             return NoContent();
         }
 
