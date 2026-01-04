@@ -7,7 +7,9 @@ public record TurmaDTO
     public int Registro { get; set; }
     public required string Nome { get; set; }
     public required string Turno { get; set; }
-    public required string Horario { get; set; }
+    public required string Inicio { get; set; }
+    public required string Fim { get; set; }
+    public required string Sala { get; set; }
     public int Capacidade { get; set; }
     public DateOnly AnoLetivo { get; set; }
     public DateOnly DataCriacao { get; set; }
@@ -24,7 +26,9 @@ public record TurmaDTO
         Registro = dados.Registro;
         Nome = dados.Nome;
         Turno = dados.Turno;
-        Horario = dados.Horario;
+        Inicio = dados.Inicio;
+        Fim = dados.Fim;
+        Sala = dados.Sala;
         Capacidade = dados.Capacidade;
         AnoLetivo = dados.AnoLetivo;
         DataCriacao = dados.DataCriacao;
