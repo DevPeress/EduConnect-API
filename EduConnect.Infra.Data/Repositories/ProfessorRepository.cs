@@ -70,7 +70,7 @@ public class ProfessorRepository(EduContext context) : IProfessorRepository
     {
         return await _context.Professores.Where(p => p.Deletado == false)
         .OrderBy(a => a.Registro)
-        .LastAsync();
+        .LastOrDefaultAsync();
     }
 
     public async Task AddAsync(Professor professor)
