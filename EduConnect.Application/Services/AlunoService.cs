@@ -1,7 +1,5 @@
-﻿using EduConnect.Application.Common.Auditing;
-using EduConnect.Application.DTO.Entities;
+﻿using EduConnect.Application.DTO.Entities;
 using EduConnect.Domain.Entities;
-using EduConnect.Domain.Enums;
 using EduConnect.Domain.Interfaces;
 
 namespace EduConnect.Application.Services;
