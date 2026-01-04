@@ -1,7 +1,6 @@
 ﻿using EduConnect.Application.Common.Auditing;
 using EduConnect.Application.DTO.Entities;
 using EduConnect.Application.Services;
-using EduConnect.Domain.Entities;
 using EduConnect.Domain.Enums;
 using EduConnect.ViewModels;
 using Microsoft.AspNetCore.Authorization;
