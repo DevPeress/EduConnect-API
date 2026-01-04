@@ -61,6 +61,33 @@ namespace EduConnect.Controllers
         }
 
         [Authorize(Roles = "Administrador, Funcionario")]
+        [HttpGet("Cadastro")]
+        public async Task<IActionResult> GetTurmaByCadastro()
+        {
+            var turma = await _turmaService.GetLastTurma();
+            if (turma == null)
+            {
+                return Ok("T000001");
+            }
+            // Registro vem no formato MA000123
+            var atual = turma.Registro;
+
+            // Pega somente os números (6 dígitos)
+            var numeros = atual.Substring(2);
+
+            // Converte para int
+            var numeroAtual = int.Parse(numeros);
+
+            // Incrementa
+            var proximo = numeroAtual + 1;
+
+            // Formata para sempre ter 6 dígitos
+            var proximoFormatado = proximo.ToString("D6");
+
+            return Ok("T" + proximoFormatado);
+        }
+
+        [Authorize(Roles = "Administrador, Funcionario")]
         [HttpPost]
         public async Task<IActionResult> CreateTurma(TurmaDTO turmaDTO)
         {
