@@ -21,7 +21,7 @@ public class FuncionarioService(IFuncionarioRepository repo)
         return await _funcionarioRepository.GetByFilters(filtro);
     }
 
-    public async Task<(List<string>, List<string>)> GetInformativos()
+    public async Task<(List<string>, List<string>?)> GetInformativos()
     {
         return await _funcionarioRepository.GetInformativos();
     }
