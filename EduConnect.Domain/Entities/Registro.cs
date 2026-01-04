@@ -9,7 +9,7 @@ public class Registro
     public int Id { get; set; }
 
     // Usuário que realizou a ação
-    public string UserId { get; set; }
+    public required string UserId { get; set; }
     public string UserName { get; set; } = null!;
     public string UserRole { get; set; } = null!;
 
