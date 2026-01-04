@@ -54,7 +54,7 @@ public class ProfessorRepository(EduContext context) : IProfessorRepository
 
         var salas = await _context.Professores
             .Where(a => a.Deletado == false)
-            .SelectMany(a => a.Turmas)
+            .SelectMany(a => a.Turmas.Select(t => t.Nome))
             .Distinct()
             .ToListAsync();
 
