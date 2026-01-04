@@ -5,7 +5,7 @@ namespace EduConnect.Domain.Entities;
 public class Aluno : Pessoa, IPessoaComConta
 {
     public required int Media { get; set; }
-    public DateOnly? DataMatricula { get; set; }
+    public required DateOnly DataMatricula { get; set; }
 
     // Relacionamento
     public int ContaId { get; set; }
