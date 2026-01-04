@@ -4,7 +4,7 @@ using EduConnect.Domain.Enums;
 namespace EduConnect.Application.DTO.Entities;
 public record TurmaDTO
 {
-    public int Registro { get; set; }
+    public required string Registro { get; set; }
     public required string Nome { get; set; }
     public required string Turno { get; set; }
     public required string Inicio { get; set; }
