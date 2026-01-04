@@ -96,10 +96,10 @@ namespace EduConnect.Controllers
         }
 
         [Authorize(Roles = "Administrador, Funcionario")]
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateTurma(string id, TurmaUpdateDTO turmaDTO)
+        [HttpPut("{Registro}")]
+        public async Task<IActionResult> UpdateTurma(string Registro, TurmaUpdateDTO turmaDTO)
         {
-            if (id != turmaDTO.Registro)
+            if (Registro != turmaDTO.Registro)
             {
                 return BadRequest();
             }
@@ -108,10 +108,10 @@ namespace EduConnect.Controllers
         }
 
         [Authorize(Roles = "Administrador, Funcionario")]
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTurma(string id)
+        [HttpDelete("{Registro}")]
+        public async Task<IActionResult> DeleteTurma(string Registro)
         {
-            await _turmaService.DeleteTurmaAsync(id);
+            await _turmaService.DeleteTurmaAsync(Registro);
             return NoContent();
         }
     }
