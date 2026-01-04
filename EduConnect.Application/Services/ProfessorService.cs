@@ -75,9 +75,14 @@ public class ProfessorService(IProfessorRepository repo)
 
     public async Task UpdateProfessorAsync(ProfessorUpdateDTO ProfessorDTO)
     {
+        var disciplinas = await _professorRepository.GetDisciplinasByProfessorAsync(ProfessorDTO.Registro);
+        ICollection<ProfessorDisciplina> disciplinasDoProfessor = disciplinas != null! ? disciplinas : [];
+
+        var turmas = await _professorRepository.GetTurmasByProfessorAsync(ProfessorDTO.Registro);
+        ICollection<Turma> turmasDoProfessor = turmas != null! ? turmas : [];
+
         var professor = new Professor
         {
-
             Registro = ProfessorDTO.Registro,
             Nome = ProfessorDTO.Nome,
             Email = ProfessorDTO.Email,
@@ -87,7 +92,8 @@ public class ProfessorService(IProfessorRepository repo)
             Endereco = ProfessorDTO.Endereco,
             Cpf = ProfessorDTO.CPF,
             ContatoEmergencia = ProfessorDTO.ContatoEmergencia,
-            Turmas = [],
+            Turmas = turmasDoProfessor,
+            ProfessorDisciplinas = disciplinasDoProfessor,
             Foto = ProfessorDTO.Foto,
             Formacao = ProfessorDTO.Formacao,
             Salario = ProfessorDTO.Salario

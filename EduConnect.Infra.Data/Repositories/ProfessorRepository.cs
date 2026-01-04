@@ -61,6 +61,16 @@ public class ProfessorRepository(EduContext context) : IProfessorRepository
         return (anos, salas);
     }
 
+    public async Task<List<ProfessorDisciplina>?> GetDisciplinasByProfessorAsync(string Registro)
+    {
+        return await _context.ProfessorDisciplinas.Where(p => p.Professor.Registro == Registro).ToListAsync();
+    }
+
+    public async Task<List<Turma>?> GetTurmasByProfessorAsync(string Registro)
+    {
+        return await _context.Turmas.Where(t => t.Professor.Registro == Registro).ToListAsync();
+    }
+
     public async Task<Professor?> GetByIdAsync(string Registro)
     {
         return await _context.Professores.Where(p => p.Deletado == false).FirstOrDefaultAsync(a => a.Registro == Registro);
