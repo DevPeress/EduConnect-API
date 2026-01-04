@@ -89,7 +89,7 @@ namespace EduConnect.Controllers
             return Ok();
         }
 
-        [HttpPut("{matricula}")]
+        [HttpPut("{Registro}")]
         public async Task<IActionResult> UpdateProfessor(string Registro, ProfessorUpdateDTO ProfessorDTO)
         {
             if (Registro != ProfessorDTO.Registro)
@@ -105,7 +105,7 @@ namespace EduConnect.Controllers
             return NoContent();
         }
 
-        [HttpDelete("{matricula}")]
+        [HttpDelete("{Registro}")]
         public async Task<IActionResult> DeleteProfessor(string Registro)
         {
             var existingProfessor = await _professorService.GetProfessorByIdAsync(Registro);
