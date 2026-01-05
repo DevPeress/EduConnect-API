@@ -104,10 +104,10 @@ namespace EduConnect.Controllers
 
         [Authorize(Roles = "Administrador, Funcionario")]
         [HttpGet("aluno/{alunoId}")]
-        public async Task<IActionResult> GetByAlunoId(int alunoId)
+        public async Task<IActionResult> GetByAlunoId(string Registro)
         {
             // Pega os Financeiros pelo Id do Aluno e adiciona o Nome do Aluno e o Status no DTO
-            var financeiros = await _financeiroService.GetByAlunoId(alunoId);
+            var financeiros = await _financeiroService.GetByAlunoId(Registro);
             var financeiroDTOs = Filtro(financeiros.ToList());
 
             return Ok(financeiroDTOs);
@@ -148,15 +148,15 @@ namespace EduConnect.Controllers
 
         [Authorize(Roles = "Administrador, Funcionario")]
         [HttpPost]
-        public async Task<IActionResult> AddFinanceiro(FinanceiroDTO dto)
+        public async Task<IActionResult> AddFinanceiro(FinanceiroCadastroDTO FinanceiroDTO)
         {
-            var aluno = _alunoService.GetAlunoByIdAsync(dto.AlunoId.ToString()).Result;
+            var aluno = _alunoService.GetAlunoByIdAsync(FinanceiroDTO.Registro).Result;
             if (aluno == null)
             {
                 return NotFound();
             }
             // Adiciona um novo Financeiro
-            await _financeiroService.AddFinanceiroAsync(dto);
+            await _financeiroService.AddFinanceiroAsync(FinanceiroDTO);
             return Ok();
         }
 

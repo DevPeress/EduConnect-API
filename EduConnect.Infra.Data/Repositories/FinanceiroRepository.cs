@@ -54,9 +54,9 @@ public class FinanceiroRepository(EduContext context) : IFinanceiroRepository
         return query;
     }
 
-    public async Task<List<Financeiro>> GetByAlunoId(int alunoId)
+    public async Task<List<Financeiro>> GetByAlunoId(string Registro)
     {
-        return await _context.Financeiros.Where(dados => dados.AlunoId == alunoId && dados.Deletado == false).ToListAsync();
+        return await _context.Financeiros.Where(dados => dados.Aluno.Registro == Registro && dados.Deletado == false).ToListAsync();
     }
 
     public async Task<(decimal TotalRecebido, decimal TotalPendente, decimal TotalAtrasado)> GetDashBoard()

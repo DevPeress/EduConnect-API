@@ -8,9 +8,9 @@ public class FinanceiroService(IFinanceiroRepository repo)
 {
     private readonly IFinanceiroRepository _financeiroRepository = repo;
 
-    public async Task<List<Financeiro>> GetByAlunoId(int id)
+    public async Task<List<Financeiro>> GetByAlunoId(string Registro)
     {
-        return await _financeiroRepository.GetByAlunoId(id);
+        return await _financeiroRepository.GetByAlunoId(Registro);
     }
 
     public async Task<(decimal TotalRecebido, decimal TotalPendente, decimal TotalAtrasado)> GetDashBoard()
@@ -34,20 +34,20 @@ public class FinanceiroService(IFinanceiroRepository repo)
         return await _financeiroRepository.GetById(id);
     }
 
-    public async Task AddFinanceiroAsync(FinanceiroDTO dto)
+    public async Task AddFinanceiroAsync(FinanceiroCadastroDTO FinanceiroDTO)
     {
         var financeiro = new Financeiro
         {
-            AlunoId = dto.AlunoId,
-            Categoria = dto.Categoria,
-            Valor = dto.Valor,
-            DataVencimento = dto.DataVencimento,
-            Pago = dto.Pago,
-            DataPagamento = dto.DataPagamento,
-            Cancelado = dto.Cancelado,
-            Descricao = dto.Descricao,
-            Metodo = dto.Metodo,
-            Observacoes = dto.Observacoes
+            Registro = FinanceiroDTO.Registro,
+            Categoria = FinanceiroDTO.Categoria,
+            Metodo = FinanceiroDTO.Metodo,
+            Descricao = FinanceiroDTO.Descricao,
+            Valor = FinanceiroDTO.Valor,
+            DataVencimento = FinanceiroDTO.DataVencimento,
+            Pago = FinanceiroDTO.Pago,
+            DataPagamento = FinanceiroDTO.DataPagamento,
+            Observacoes = FinanceiroDTO.Observacoes,
+            AlunoRegistro = FinanceiroDTO.AlunoRegistro
         };
         await _financeiroRepository.Add(financeiro);
     }
