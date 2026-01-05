@@ -71,8 +71,8 @@ public class FinanceiroService(IFinanceiroRepository repo)
         };
         await _financeiroRepository.Update(financeiro);
     }
-    public async Task DeleteFinanceiroAsync(int id)
+    public async Task DeleteFinanceiroAsync(string Registro)
     {
-        await _financeiroRepository.Delete(id);
+        await _financeiroRepository.Delete(Registro);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using EduConnect.Application.DTO.Entities;
 using EduConnect.Application.Services;
 using EduConnect.Domain.Entities;
+using EduConnect.Infra.Data.Migrations;
 using EduConnect.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -114,11 +115,11 @@ namespace EduConnect.Controllers
         }
 
         [Authorize(Roles = "Administrador, Funcionario")]
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+        [HttpGet("{Registro}")]
+        public async Task<IActionResult> GetById(string Registro)
         {
             // Pega o Financeiro pelo Id e adiciona o Nome do Aluno e o Status no DTO
-            var financeiro = await _financeiroService.GetById(id);
+            var financeiro = await _financeiroService.GetById(Registro);
             if (financeiro == null)
             {
                 return NotFound();
@@ -161,7 +162,7 @@ namespace EduConnect.Controllers
         }
 
         [Authorize(Roles = "Administrador, Funcionario")]
-        [HttpPut("{id}")]
+        [HttpPut("{Registro}")]
         public async Task<IActionResult> UpdateFinanceiro(string Registro, FinanceiroUpdateDTO FinanceiroDTO)
         {
             // Atualiza um Financeiro existente
@@ -179,16 +180,16 @@ namespace EduConnect.Controllers
         }
 
         [Authorize(Roles = "Administrador, Funcionario")]
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteFinanceiro(int id)
+        [HttpDelete("{Registro}")]
+        public async Task<IActionResult> DeleteFinanceiro(string Registro)
         {
             // Deleta um Financeiro existente
-            var existingFinanceiro = await _financeiroService.GetById(id);
+            var existingFinanceiro = await _financeiroService.GetById(Registro);
             if (existingFinanceiro == null)
             {
                 return NotFound();
             }
-            await _financeiroService.DeleteFinanceiroAsync(id);
+            await _financeiroService.DeleteFinanceiroAsync(Registro);
             return NoContent();
         }
     }
