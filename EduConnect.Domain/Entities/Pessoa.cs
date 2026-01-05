@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace EduConnect.Domain;
+namespace EduConnect.Domain.Entities;
 
 [NotMapped]
 public abstract class Pessoa
