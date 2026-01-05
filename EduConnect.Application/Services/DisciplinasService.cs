@@ -16,4 +16,5 @@ namespace EduConnect.Application.Services
         {
             return await _disciplinasRepository.GetLastDisciplina();
         }
+    }
 }
