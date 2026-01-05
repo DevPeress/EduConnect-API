@@ -18,6 +18,6 @@ public class Financeiro
     public string? Observacoes { get; set; }
 
     // Relacionamento
-    public int AlunoId { get; set; }
-    public Aluno Aluno { get; set; } = default!;
+    public required int AlunoId { get; set; }
+    public required Aluno Aluno { get; set; }
 }
