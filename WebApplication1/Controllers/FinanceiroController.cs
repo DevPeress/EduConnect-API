@@ -1,7 +1,6 @@
 ﻿using EduConnect.Application.DTO.Entities;
 using EduConnect.Application.Services;
 using EduConnect.Domain.Entities;
-using EduConnect.Infra.Data.Migrations;
 using EduConnect.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,10 +13,10 @@ namespace EduConnect.Controllers
     {
         private readonly FinanceiroService _financeiroService = service;
         private readonly AlunoService _alunoService = alunoService;
-        private List<FinanceiroResponseViewModel> Filtro(List<Financeiro> lista)
+        private List<FinanceiroDTO> Filtro(List<Financeiro> lista)
         {
             // Recebe a Lista do Financeiro e adiciona o Nome do Aluno e o Status no DTO
-            var financeiroDTOs = new List<FinanceiroResponseViewModel>();
+            var financeiroDTOs = new List<FinanceiroDTO>();
             foreach (var f in lista)
             {
                 // Corrigido: aguarda a Task para obter o Aluno
@@ -32,7 +31,7 @@ namespace EduConnect.Controllers
                 }
                 // Verifica o Status do Pagamento
                 var verificarStatus = f.Pago ? "Pago" : f.Cancelado ? "Cancelado" : f.DataVencimento < DateOnly.FromDateTime(DateTime.Now) ? "Atrasado" : "Pendente";
-                var dto = new FinanceiroResponseViewModel
+                var dto = new FinanceiroDTO
                 {
                     Registro = f.Registro,
                     Categoria = f.Categoria,
@@ -95,7 +94,7 @@ namespace EduConnect.Controllers
             var (financeiros, total) = await _financeiroService.GetByFilters(filtro);
             var financeiroDTOs = Filtro(financeiros.ToList());
 
-            return Ok(new FiltroResponseViewModel<FinanceiroResponseViewModel>
+            return Ok(new FiltroResponseViewModel<FinanceiroDTO>
                 {
                     Total = total,
                     Dados = financeiroDTOs
@@ -104,7 +103,7 @@ namespace EduConnect.Controllers
         }
 
         [Authorize(Roles = "Administrador, Funcionario")]
-        [HttpGet("aluno/{alunoId}")]
+        [HttpGet("aluno/{Registro}")]
         public async Task<IActionResult> GetByAlunoId(string Registro)
         {
             // Pega os Financeiros pelo Id do Aluno e adiciona o Nome do Aluno e o Status no DTO
@@ -131,7 +130,7 @@ namespace EduConnect.Controllers
             }
             // Verifica o Status do Pagamento
             var verificarStatus = financeiro.Pago ? "Pago" : financeiro.Cancelado ? "Cancelado" : financeiro.DataVencimento < DateOnly.FromDateTime(DateTime.Now) ? "Atrasado" : "Pendente";
-            var dto = new FinanceiroResponseViewModel
+            var dto = new FinanceiroDTO
             {
                 Registro = financeiro.Registro,
                 Categoria = financeiro.Categoria,
