@@ -27,5 +27,32 @@ namespace EduConnect.Controllers
             }
             return Ok(lista);
         }
+
+        [Authorize(Roles = "Administrador, Funcionario")]
+        [HttpGet("Cadastro")]
+        public async Task<IActionResult> GetDisciplinaByCadastro()
+        {
+            var disciplinas = await _disciplinasService.GetLastDisciplina();
+            if (disciplinas == null)
+            {
+                return Ok("D000001");
+            }
+            // Registro vem no formato MA000123
+            var atual = disciplinas.Registro;
+
+            // Pega somente os números (6 dígitos)
+            var numeros = atual.Substring(2);
+
+            // Converte para int
+            var numeroAtual = int.Parse(numeros);
+
+            // Incrementa
+            var proximo = numeroAtual + 1;
+
+            // Formata para sempre ter 6 dígitos
+            var proximoFormatado = proximo.ToString("D6");
+
+            return Ok("D" + proximoFormatado);
+        }
     }
 }

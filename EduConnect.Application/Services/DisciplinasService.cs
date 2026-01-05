@@ -11,5 +11,9 @@ namespace EduConnect.Application.Services
         {
             return await _disciplinasRepository.GetAllDisciplinas();
         }
-    }
+
+        public async Task<Disciplinas?> GetLastDisciplina()
+        {
+            return await _disciplinasRepository.GetLastDisciplina();
+        }
 }

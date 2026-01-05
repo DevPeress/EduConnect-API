@@ -15,4 +15,11 @@ public class DisciplinasRepository(EduContext context) : IDisciplinasRepository
             .Where(d => d.Deletado == false)
             .ToListAsync();
     }
+
+    public async Task<Disciplinas?> GetLastDisciplina()
+    {
+        return await _context.Disciplinas
+            .OrderBy(d => d.Registro)
+            .LastOrDefaultAsync();
+    }
 }
