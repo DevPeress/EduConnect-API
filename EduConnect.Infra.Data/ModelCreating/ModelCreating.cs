@@ -1,5 +1,4 @@
-﻿using EduConnect.Domain;
-using EduConnect.Domain.Entities;
+﻿using EduConnect.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace EduConnect.Infra.Data.ModelCreating
