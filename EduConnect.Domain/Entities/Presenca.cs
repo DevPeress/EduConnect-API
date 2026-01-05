@@ -13,6 +13,6 @@ public class Presenca
     // Relacionamento
     public int AlunoId { get; set; }
     public required Aluno Aluno { get; set; }
-    public int TurmaId { get; set; }
-    public required Turma Turma { get; set; }
+    public int? TurmaId { get; set; }
+    public Turma? Turma { get; set; }
 }
