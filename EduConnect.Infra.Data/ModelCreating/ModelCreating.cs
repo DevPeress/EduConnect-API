@@ -1,4 +1,5 @@
-﻿using EduConnect.Domain.Entities;
+﻿using EduConnect.Domain;
+using EduConnect.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace EduConnect.Infra.Data.ModelCreating
@@ -23,6 +24,28 @@ namespace EduConnect.Infra.Data.ModelCreating
                     .HasForeignKey(tipo, "ContaId")
                     .OnDelete(DeleteBehavior.Restrict);
             }
+
+            modelBuilder.Entity<Pessoa>()
+                .HasAlternateKey(p => p.Registro);
+
+            modelBuilder.Entity<Aluno>()
+                .HasOne(a => a.Turma)
+                .WithMany(t => t.Alunos)
+                .HasForeignKey(a => a.TurmaRegistro)  
+                .HasPrincipalKey("Registro");
+
+            modelBuilder.Entity<Aluno>()
+                .HasOne(a => a.Turma)
+                .WithMany(t => t.Alunos)
+                .HasForeignKey(a => a.TurmaRegistro)
+                .HasPrincipalKey("Registro");
+
+            modelBuilder.Entity<Financeiro>()
+                .HasOne(f => f.Aluno)
+                .WithMany()
+                .HasForeignKey(f => f.AlunoRegistro)
+                .HasPrincipalKey("Registro")
+                .OnDelete(DeleteBehavior.Restrict);
 
             // CONFIGURAÇÃO GLOBAL PARA TODOS OS DECIMAIS
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
