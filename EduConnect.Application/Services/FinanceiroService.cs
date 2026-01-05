@@ -29,9 +29,9 @@ public class FinanceiroService(IFinanceiroRepository repo)
         return await _financeiroRepository.GetByFilters(filtro);
     }
 
-    public async Task<Financeiro?> GetById(int id)
+    public async Task<Financeiro?> GetById(string Registro)
     {
-        return await _financeiroRepository.GetById(id);
+        return await _financeiroRepository.GetById(Registro);
     }
 
     public async Task AddFinanceiroAsync(FinanceiroCadastroDTO FinanceiroDTO)
@@ -52,18 +52,22 @@ public class FinanceiroService(IFinanceiroRepository repo)
         await _financeiroRepository.Add(financeiro);
     }
 
-    public async Task UpdateFinanceiroAsync(FinanceiroDTO dto)
+    public async Task UpdateFinanceiroAsync(FinanceiroUpdateDTO FinanceiroDTO)
     {
         var financeiro = new Financeiro
         {
-            Registro = dto.Registro,
-            AlunoId = dto.AlunoId,
-            Categoria = dto.Categoria,
-            Valor = dto.Valor,
-            DataVencimento = dto.DataVencimento,
-            Pago = dto.Pago,
-            DataPagamento = dto.DataPagamento,
-            Cancelado = dto.Cancelado
+            Registro = FinanceiroDTO.Registro,
+            Categoria = FinanceiroDTO.Categoria,
+            Metodo = FinanceiroDTO.Metodo,
+            Descricao = FinanceiroDTO.Descricao,
+            Valor = FinanceiroDTO.Valor,
+            DataVencimento = FinanceiroDTO.DataVencimento,
+            Pago = FinanceiroDTO.Pago,
+            Cancelado = FinanceiroDTO.Cancelado,
+            Deletado = FinanceiroDTO.Deletado,
+            DataPagamento = FinanceiroDTO.DataPagamento,
+            Observacoes = FinanceiroDTO.Observacoes,
+            AlunoRegistro = FinanceiroDTO.AlunoRegistro
         };
         await _financeiroRepository.Update(financeiro);
     }

@@ -162,19 +162,19 @@ namespace EduConnect.Controllers
 
         [Authorize(Roles = "Administrador, Funcionario")]
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateFinanceiro(int id, FinanceiroDTO dto)
+        public async Task<IActionResult> UpdateFinanceiro(string Registro, FinanceiroUpdateDTO FinanceiroDTO)
         {
             // Atualiza um Financeiro existente
-            if (id != dto.Registro)
+            if (Registro != FinanceiroDTO.Registro)
             {
                 return BadRequest();
             }
-            var existingFinanceiro = await _financeiroService.GetById(id);
+            var existingFinanceiro = await _financeiroService.GetById(Registro);
             if (existingFinanceiro == null)
             {
                 return NotFound();
             }
-            await _financeiroService.UpdateFinanceiroAsync(dto);
+            await _financeiroService.UpdateFinanceiroAsync(FinanceiroDTO);
             return NoContent();
         }
 

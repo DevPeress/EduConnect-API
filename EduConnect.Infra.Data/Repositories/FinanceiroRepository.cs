@@ -83,9 +83,9 @@ public class FinanceiroRepository(EduContext context) : IFinanceiroRepository
         return (result, total);
     }
 
-    public async Task<Financeiro?> GetById(int id)
+    public async Task<Financeiro?> GetById(string Registro)
     {
-        return await _context.Financeiros.FirstOrDefaultAsync(dados => dados.Registro == id && dados.Deletado == false);
+        return await _context.Financeiros.FirstOrDefaultAsync(dados => dados.Registro == Registro && dados.Deletado == false);
     }
 
     public async Task Add(Financeiro financeiro)
@@ -100,9 +100,9 @@ public class FinanceiroRepository(EduContext context) : IFinanceiroRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task Delete(int id)
+    public async Task Delete(string Registro)
     {
-        var financeiro = await GetById(id);
+        var financeiro = await GetById(Registro);
         if (financeiro != null)
         {
             await Task.Run(() =>
