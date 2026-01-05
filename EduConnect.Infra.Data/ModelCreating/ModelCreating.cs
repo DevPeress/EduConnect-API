@@ -22,16 +22,10 @@ namespace EduConnect.Infra.Data.ModelCreating
                     .WithOne()
                     .HasForeignKey(tipo, "ContaId")
                     .OnDelete(DeleteBehavior.Restrict);
+
+                modelBuilder.Entity(tipo)
+                    .HasAlternateKey("Registro");
             }
-
-            modelBuilder.Entity<Pessoa>()
-                .HasAlternateKey(p => p.Registro);
-
-            modelBuilder.Entity<Aluno>()
-                .HasOne(a => a.Turma)
-                .WithMany(t => t.Alunos)
-                .HasForeignKey(a => a.TurmaRegistro)  
-                .HasPrincipalKey("Registro");
 
             modelBuilder.Entity<Aluno>()
                 .HasOne(a => a.Turma)
