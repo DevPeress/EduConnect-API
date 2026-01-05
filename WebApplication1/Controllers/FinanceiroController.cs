@@ -19,6 +19,11 @@ namespace EduConnect.Controllers
             var financeiroDTOs = new List<FinanceiroResponseViewModel>();
             foreach (var f in lista)
             {
+                // Corrigido: aguarda a Task para obter o Aluno
+                if (f == null || f.Aluno == null || f.Aluno.Registro == null)
+                {
+                    continue;
+                }
                 var aluno = _alunoService.GetAlunoByIdAsync(f.Aluno.Registro).Result;
                 if (aluno == null)
                 {
