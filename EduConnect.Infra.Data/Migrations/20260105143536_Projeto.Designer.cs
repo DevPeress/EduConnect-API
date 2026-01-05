@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EduConnect.Infra.Data.Migrations
 {
     [DbContext(typeof(EduContext))]
-    [Migration("20260105142233_Projeto")]
+    [Migration("20260105143536_Projeto")]
     partial class Projeto
     {
         /// <inheritdoc />
@@ -94,6 +94,78 @@ namespace EduConnect.Infra.Data.Migrations
                     b.ToView(null, (string)null);
                 });
 
+            modelBuilder.Entity("EduConnect.Domain.Entities.Aluno", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ContaId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ContatoEmergencia")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Cpf")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateOnly>("DataMatricula")
+                        .HasColumnType("date");
+
+                    b.Property<bool>("Deletado")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Endereco")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Foto")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Media")
+                        .HasColumnType("int");
+
+                    b.Property<DateOnly>("Nasc")
+                        .HasColumnType("date");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Registro")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Telefone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TurmaRegistro")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ContaId")
+                        .IsUnique();
+
+                    b.HasIndex("TurmaRegistro");
+
+                    b.ToTable("Alunos");
+                });
+
             modelBuilder.Entity("EduConnect.Domain.Entities.Conta", b =>
                 {
                     b.Property<int>("Id")
@@ -115,9 +187,6 @@ namespace EduConnect.Infra.Data.Migrations
                     b.Property<int>("LimiteLogin")
                         .HasColumnType("int");
 
-                    b.Property<int>("PessoaId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Registro")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -127,8 +196,6 @@ namespace EduConnect.Infra.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("PessoaId");
 
                     b.ToTable("Contas");
                 });
@@ -214,6 +281,92 @@ namespace EduConnect.Infra.Data.Migrations
                     b.ToTable("Financeiros");
                 });
 
+            modelBuilder.Entity("EduConnect.Domain.Entities.Funcionario", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Cargo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ContaId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ContatoEmergencia")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Cpf")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateOnly>("DataAdmissao")
+                        .HasColumnType("date");
+
+                    b.Property<bool>("Deletado")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Departamento")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Endereco")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Foto")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateOnly>("Nasc")
+                        .HasColumnType("date");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Registro")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<decimal>("Salario")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Supervisor")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Telefone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Turno")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasAlternateKey("Registro");
+
+                    b.HasIndex("ContaId")
+                        .IsUnique();
+
+                    b.ToTable("Funcionarios");
+                });
+
             modelBuilder.Entity("EduConnect.Domain.Entities.Presenca", b =>
                 {
                     b.Property<int>("Id")
@@ -256,6 +409,80 @@ namespace EduConnect.Infra.Data.Migrations
                     b.HasIndex("TurmaRegistro");
 
                     b.ToTable("Presencas");
+                });
+
+            modelBuilder.Entity("EduConnect.Domain.Entities.Professor", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ContaId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ContatoEmergencia")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateOnly>("Contratacao")
+                        .HasColumnType("date");
+
+                    b.Property<string>("Cpf")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Deletado")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Endereco")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Formacao")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Foto")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateOnly>("Nasc")
+                        .HasColumnType("date");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Registro")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<decimal>("Salario")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Telefone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasAlternateKey("Registro");
+
+                    b.HasIndex("ContaId")
+                        .IsUnique();
+
+                    b.ToTable("Professores");
                 });
 
             modelBuilder.Entity("EduConnect.Domain.Entities.ProfessorDisciplina", b =>
@@ -406,181 +633,21 @@ namespace EduConnect.Infra.Data.Migrations
                     b.ToTable("TurmaDisciplinas");
                 });
 
-            modelBuilder.Entity("EduConnect.Domain.Pessoa", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ContatoEmergencia")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Cpf")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Deletado")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasMaxLength(13)
-                        .HasColumnType("nvarchar(13)");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Endereco")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Foto")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateOnly>("Nasc")
-                        .HasColumnType("date");
-
-                    b.Property<string>("Nome")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Registro")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Telefone")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Pessoa");
-
-                    b.HasDiscriminator().HasValue("Pessoa");
-
-                    b.UseTphMappingStrategy();
-                });
-
             modelBuilder.Entity("EduConnect.Domain.Entities.Aluno", b =>
                 {
-                    b.HasBaseType("EduConnect.Domain.Pessoa");
-
-                    b.Property<int>("ContaId")
-                        .HasColumnType("int");
-
-                    b.Property<DateOnly>("DataMatricula")
-                        .HasColumnType("date");
-
-                    b.Property<int>("Media")
-                        .HasColumnType("int");
-
-                    b.Property<string>("TurmaRegistro")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasIndex("ContaId")
-                        .IsUnique()
-                        .HasFilter("[ContaId] IS NOT NULL");
-
-                    b.HasIndex("TurmaRegistro");
-
-                    b.ToTable("Pessoa", t =>
-                        {
-                            t.Property("ContaId")
-                                .HasColumnName("Aluno_ContaId");
-                        });
-
-                    b.HasDiscriminator().HasValue("Aluno");
-                });
-
-            modelBuilder.Entity("EduConnect.Domain.Entities.Funcionario", b =>
-                {
-                    b.HasBaseType("EduConnect.Domain.Pessoa");
-
-                    b.Property<string>("Cargo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ContaId")
-                        .HasColumnType("int");
-
-                    b.Property<DateOnly>("DataAdmissao")
-                        .HasColumnType("date");
-
-                    b.Property<string>("Departamento")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("Salario")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("Supervisor")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Turno")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasIndex("ContaId")
-                        .IsUnique()
-                        .HasFilter("[ContaId] IS NOT NULL");
-
-                    b.ToTable("Pessoa", t =>
-                        {
-                            t.Property("ContaId")
-                                .HasColumnName("Funcionario_ContaId");
-
-                            t.Property("Salario")
-                                .HasColumnName("Funcionario_Salario");
-                        });
-
-                    b.HasDiscriminator().HasValue("Funcionario");
-                });
-
-            modelBuilder.Entity("EduConnect.Domain.Entities.Professor", b =>
-                {
-                    b.HasBaseType("EduConnect.Domain.Pessoa");
-
-                    b.Property<int>("ContaId")
-                        .HasColumnType("int");
-
-                    b.Property<DateOnly>("Contratacao")
-                        .HasColumnType("date");
-
-                    b.Property<string>("Formacao")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("Salario")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasIndex("ContaId")
-                        .IsUnique()
-                        .HasFilter("[ContaId] IS NOT NULL");
-
-                    b.HasDiscriminator().HasValue("Professor");
-                });
-
-            modelBuilder.Entity("EduConnect.Domain.Entities.Conta", b =>
-                {
-                    b.HasOne("EduConnect.Domain.Pessoa", "Pessoa")
-                        .WithMany()
-                        .HasForeignKey("PessoaId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                    b.HasOne("EduConnect.Domain.Entities.Conta", "Conta")
+                        .WithOne()
+                        .HasForeignKey("EduConnect.Domain.Entities.Aluno", "ContaId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Pessoa");
+                    b.HasOne("EduConnect.Domain.Entities.Turma", "Turma")
+                        .WithMany("Alunos")
+                        .HasForeignKey("TurmaRegistro");
+
+                    b.Navigation("Conta");
+
+                    b.Navigation("Turma");
                 });
 
             modelBuilder.Entity("EduConnect.Domain.Entities.Financeiro", b =>
@@ -593,6 +660,17 @@ namespace EduConnect.Infra.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Aluno");
+                });
+
+            modelBuilder.Entity("EduConnect.Domain.Entities.Funcionario", b =>
+                {
+                    b.HasOne("EduConnect.Domain.Entities.Conta", "Conta")
+                        .WithOne()
+                        .HasForeignKey("EduConnect.Domain.Entities.Funcionario", "ContaId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Conta");
                 });
 
             modelBuilder.Entity("EduConnect.Domain.Entities.Presenca", b =>
@@ -610,6 +688,17 @@ namespace EduConnect.Infra.Data.Migrations
                     b.Navigation("Aluno");
 
                     b.Navigation("Turma");
+                });
+
+            modelBuilder.Entity("EduConnect.Domain.Entities.Professor", b =>
+                {
+                    b.HasOne("EduConnect.Domain.Entities.Conta", "Conta")
+                        .WithOne()
+                        .HasForeignKey("EduConnect.Domain.Entities.Professor", "ContaId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Conta");
                 });
 
             modelBuilder.Entity("EduConnect.Domain.Entities.ProfessorDisciplina", b =>
@@ -661,55 +750,9 @@ namespace EduConnect.Infra.Data.Migrations
                     b.Navigation("Turma");
                 });
 
-            modelBuilder.Entity("EduConnect.Domain.Entities.Aluno", b =>
-                {
-                    b.HasOne("EduConnect.Domain.Entities.Conta", "Conta")
-                        .WithOne()
-                        .HasForeignKey("EduConnect.Domain.Entities.Aluno", "ContaId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("EduConnect.Domain.Entities.Turma", "Turma")
-                        .WithMany("Alunos")
-                        .HasForeignKey("TurmaRegistro");
-
-                    b.Navigation("Conta");
-
-                    b.Navigation("Turma");
-                });
-
-            modelBuilder.Entity("EduConnect.Domain.Entities.Funcionario", b =>
-                {
-                    b.HasOne("EduConnect.Domain.Entities.Conta", "Conta")
-                        .WithOne()
-                        .HasForeignKey("EduConnect.Domain.Entities.Funcionario", "ContaId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Conta");
-                });
-
-            modelBuilder.Entity("EduConnect.Domain.Entities.Professor", b =>
-                {
-                    b.HasOne("EduConnect.Domain.Entities.Conta", "Conta")
-                        .WithOne()
-                        .HasForeignKey("EduConnect.Domain.Entities.Professor", "ContaId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Conta");
-                });
-
             modelBuilder.Entity("EduConnect.Domain.Entities.Disciplinas", b =>
                 {
                     b.Navigation("ProfessorDisciplinas");
-
-                    b.Navigation("TurmaDisciplinas");
-                });
-
-            modelBuilder.Entity("EduConnect.Domain.Entities.Turma", b =>
-                {
-                    b.Navigation("Alunos");
 
                     b.Navigation("TurmaDisciplinas");
                 });
@@ -719,6 +762,13 @@ namespace EduConnect.Infra.Data.Migrations
                     b.Navigation("ProfessorDisciplinas");
 
                     b.Navigation("Turmas");
+                });
+
+            modelBuilder.Entity("EduConnect.Domain.Entities.Turma", b =>
+                {
+                    b.Navigation("Alunos");
+
+                    b.Navigation("TurmaDisciplinas");
                 });
 #pragma warning restore 612, 618
         }

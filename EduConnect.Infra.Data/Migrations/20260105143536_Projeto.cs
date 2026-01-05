@@ -13,6 +13,24 @@ namespace EduConnect.Infra.Data.Migrations
         {
             RunSP(migrationBuilder);
             migrationBuilder.CreateTable(
+                name: "Contas",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Registro = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Senha = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Cargo = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Deletado = table.Column<bool>(type: "bit", nullable: false),
+                    LimiteLogin = table.Column<int>(type: "int", nullable: false),
+                    DataLogin = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Contas", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Disciplinas",
                 columns: table => new
                 {
@@ -50,54 +68,18 @@ namespace EduConnect.Infra.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Contas",
+                name: "Funcionarios",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Registro = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Senha = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ContaId = table.Column<int>(type: "int", nullable: false),
                     Cargo = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Deletado = table.Column<bool>(type: "bit", nullable: false),
-                    LimiteLogin = table.Column<int>(type: "int", nullable: false),
-                    DataLogin = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    PessoaId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Contas", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Financeiros",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Registro = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Categoria = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Metodo = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Descricao = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Valor = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
-                    DataVencimento = table.Column<DateOnly>(type: "date", nullable: false),
-                    Pago = table.Column<bool>(type: "bit", nullable: false),
-                    Cancelado = table.Column<bool>(type: "bit", nullable: false),
-                    Deletado = table.Column<bool>(type: "bit", nullable: false),
-                    DataPagamento = table.Column<DateOnly>(type: "date", nullable: true),
-                    Observacoes = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    AlunoRegistro = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Financeiros", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Pessoa",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DataAdmissao = table.Column<DateOnly>(type: "date", nullable: false),
+                    Salario = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    Departamento = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Supervisor = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Turno = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Registro = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Nome = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -108,43 +90,49 @@ namespace EduConnect.Infra.Data.Migrations
                     Endereco = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Cpf = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ContatoEmergencia = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Deletado = table.Column<bool>(type: "bit", nullable: false),
-                    Discriminator = table.Column<string>(type: "nvarchar(13)", maxLength: 13, nullable: false),
-                    Media = table.Column<int>(type: "int", nullable: true),
-                    DataMatricula = table.Column<DateOnly>(type: "date", nullable: true),
-                    Aluno_ContaId = table.Column<int>(type: "int", nullable: true),
-                    TurmaRegistro = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    Funcionario_ContaId = table.Column<int>(type: "int", nullable: true),
-                    Cargo = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DataAdmissao = table.Column<DateOnly>(type: "date", nullable: true),
-                    Funcionario_Salario = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: true),
-                    Departamento = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Supervisor = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Turno = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Contratacao = table.Column<DateOnly>(type: "date", nullable: true),
-                    Formacao = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Salario = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: true),
-                    ContaId = table.Column<int>(type: "int", nullable: true)
+                    Deletado = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Pessoa", x => x.Id);
-                    table.UniqueConstraint("AK_Pessoa_Registro", x => x.Registro);
+                    table.PrimaryKey("PK_Funcionarios", x => x.Id);
+                    table.UniqueConstraint("AK_Funcionarios_Registro", x => x.Registro);
                     table.ForeignKey(
-                        name: "FK_Pessoa_Contas_Aluno_ContaId",
-                        column: x => x.Aluno_ContaId,
-                        principalTable: "Contas",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Pessoa_Contas_ContaId",
+                        name: "FK_Funcionarios_Contas_ContaId",
                         column: x => x.ContaId,
                         principalTable: "Contas",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Professores",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Contratacao = table.Column<DateOnly>(type: "date", nullable: false),
+                    Formacao = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Salario = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    ContaId = table.Column<int>(type: "int", nullable: false),
+                    Registro = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Foto = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Telefone = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Nasc = table.Column<DateOnly>(type: "date", nullable: false),
+                    Endereco = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Cpf = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ContatoEmergencia = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Deletado = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Professores", x => x.Id);
+                    table.UniqueConstraint("AK_Professores_Registro", x => x.Registro);
                     table.ForeignKey(
-                        name: "FK_Pessoa_Contas_Funcionario_ContaId",
-                        column: x => x.Funcionario_ContaId,
+                        name: "FK_Professores_Contas_ContaId",
+                        column: x => x.ContaId,
                         principalTable: "Contas",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -169,9 +157,9 @@ namespace EduConnect.Infra.Data.Migrations
                         principalColumn: "Registro",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ProfessorDisciplinas_Pessoa_ProfessorId",
+                        name: "FK_ProfessorDisciplinas_Professores_ProfessorId",
                         column: x => x.ProfessorId,
-                        principalTable: "Pessoa",
+                        principalTable: "Professores",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -197,40 +185,47 @@ namespace EduConnect.Infra.Data.Migrations
                 {
                     table.PrimaryKey("PK_Turmas", x => x.Registro);
                     table.ForeignKey(
-                        name: "FK_Turmas_Pessoa_ProfessorId",
+                        name: "FK_Turmas_Professores_ProfessorId",
                         column: x => x.ProfessorId,
-                        principalTable: "Pessoa",
+                        principalTable: "Professores",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Presencas",
+                name: "Alunos",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Data = table.Column<DateOnly>(type: "date", nullable: false),
-                    Presente = table.Column<bool>(type: "bit", nullable: false),
-                    Justificada = table.Column<bool>(type: "bit", nullable: false),
-                    Observacao = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ProfessorId = table.Column<int>(type: "int", nullable: false),
-                    CriadoEm = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    AlunoId = table.Column<int>(type: "int", nullable: false),
-                    TurmaId = table.Column<int>(type: "int", nullable: true),
-                    TurmaRegistro = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    Media = table.Column<int>(type: "int", nullable: false),
+                    DataMatricula = table.Column<DateOnly>(type: "date", nullable: false),
+                    ContaId = table.Column<int>(type: "int", nullable: false),
+                    TurmaRegistro = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Registro = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Foto = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Telefone = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Nasc = table.Column<DateOnly>(type: "date", nullable: false),
+                    Endereco = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Cpf = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ContatoEmergencia = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Deletado = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Presencas", x => x.Id);
+                    table.PrimaryKey("PK_Alunos", x => x.Id);
+                    table.UniqueConstraint("AK_Alunos_Registro", x => x.Registro);
                     table.ForeignKey(
-                        name: "FK_Presencas_Pessoa_AlunoId",
-                        column: x => x.AlunoId,
-                        principalTable: "Pessoa",
+                        name: "FK_Alunos_Contas_ContaId",
+                        column: x => x.ContaId,
+                        principalTable: "Contas",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Presencas_Turmas_TurmaRegistro",
+                        name: "FK_Alunos_Turmas_TurmaRegistro",
                         column: x => x.TurmaRegistro,
                         principalTable: "Turmas",
                         principalColumn: "Registro");
@@ -262,10 +257,78 @@ namespace EduConnect.Infra.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Financeiros",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Registro = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Categoria = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Metodo = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Descricao = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Valor = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    DataVencimento = table.Column<DateOnly>(type: "date", nullable: false),
+                    Pago = table.Column<bool>(type: "bit", nullable: false),
+                    Cancelado = table.Column<bool>(type: "bit", nullable: false),
+                    Deletado = table.Column<bool>(type: "bit", nullable: false),
+                    DataPagamento = table.Column<DateOnly>(type: "date", nullable: true),
+                    Observacoes = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AlunoRegistro = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Financeiros", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Financeiros_Alunos_AlunoRegistro",
+                        column: x => x.AlunoRegistro,
+                        principalTable: "Alunos",
+                        principalColumn: "Registro",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Presencas",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Data = table.Column<DateOnly>(type: "date", nullable: false),
+                    Presente = table.Column<bool>(type: "bit", nullable: false),
+                    Justificada = table.Column<bool>(type: "bit", nullable: false),
+                    Observacao = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ProfessorId = table.Column<int>(type: "int", nullable: false),
+                    CriadoEm = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    AlunoId = table.Column<int>(type: "int", nullable: false),
+                    TurmaId = table.Column<int>(type: "int", nullable: true),
+                    TurmaRegistro = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Presencas", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Presencas_Alunos_AlunoId",
+                        column: x => x.AlunoId,
+                        principalTable: "Alunos",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Presencas_Turmas_TurmaRegistro",
+                        column: x => x.TurmaRegistro,
+                        principalTable: "Turmas",
+                        principalColumn: "Registro");
+                });
+
             migrationBuilder.CreateIndex(
-                name: "IX_Contas_PessoaId",
-                table: "Contas",
-                column: "PessoaId");
+                name: "IX_Alunos_ContaId",
+                table: "Alunos",
+                column: "ContaId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Alunos_TurmaRegistro",
+                table: "Alunos",
+                column: "TurmaRegistro");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Financeiros_AlunoRegistro",
@@ -273,30 +336,10 @@ namespace EduConnect.Infra.Data.Migrations
                 column: "AlunoRegistro");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Pessoa_Aluno_ContaId",
-                table: "Pessoa",
-                column: "Aluno_ContaId",
-                unique: true,
-                filter: "[ContaId] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Pessoa_ContaId",
-                table: "Pessoa",
+                name: "IX_Funcionarios_ContaId",
+                table: "Funcionarios",
                 column: "ContaId",
-                unique: true,
-                filter: "[ContaId] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Pessoa_Funcionario_ContaId",
-                table: "Pessoa",
-                column: "Funcionario_ContaId",
-                unique: true,
-                filter: "[ContaId] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Pessoa_TurmaRegistro",
-                table: "Pessoa",
-                column: "TurmaRegistro");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Presencas_AlunoId",
@@ -319,6 +362,12 @@ namespace EduConnect.Infra.Data.Migrations
                 column: "ProfessorId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Professores_ContaId",
+                table: "Professores",
+                column: "ContaId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_TurmaDisciplinas_DisciplinaRegistro",
                 table: "TurmaDisciplinas",
                 column: "DisciplinaRegistro");
@@ -332,44 +381,16 @@ namespace EduConnect.Infra.Data.Migrations
                 name: "IX_Turmas_ProfessorId",
                 table: "Turmas",
                 column: "ProfessorId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Contas_Pessoa_PessoaId",
-                table: "Contas",
-                column: "PessoaId",
-                principalTable: "Pessoa",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Financeiros_Pessoa_AlunoRegistro",
-                table: "Financeiros",
-                column: "AlunoRegistro",
-                principalTable: "Pessoa",
-                principalColumn: "Registro",
-                onDelete: ReferentialAction.Restrict);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Pessoa_Turmas_TurmaRegistro",
-                table: "Pessoa",
-                column: "TurmaRegistro",
-                principalTable: "Turmas",
-                principalColumn: "Registro");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Contas_Pessoa_PessoaId",
-                table: "Contas");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Turmas_Pessoa_ProfessorId",
-                table: "Turmas");
-
             migrationBuilder.DropTable(
                 name: "Financeiros");
+
+            migrationBuilder.DropTable(
+                name: "Funcionarios");
 
             migrationBuilder.DropTable(
                 name: "Presencas");
@@ -384,16 +405,19 @@ namespace EduConnect.Infra.Data.Migrations
                 name: "TurmaDisciplinas");
 
             migrationBuilder.DropTable(
+                name: "Alunos");
+
+            migrationBuilder.DropTable(
                 name: "Disciplinas");
 
             migrationBuilder.DropTable(
-                name: "Pessoa");
+                name: "Turmas");
+
+            migrationBuilder.DropTable(
+                name: "Professores");
 
             migrationBuilder.DropTable(
                 name: "Contas");
-
-            migrationBuilder.DropTable(
-                name: "Turmas");
         }
     }
 }
