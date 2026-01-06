@@ -36,51 +36,50 @@ public class FuncionarioService(IFuncionarioRepository repo)
         return await _funcionarioRepository.GetLastPessoaAsync();
     }
 
-    public async Task AddFuncionarioAsync(FuncionarioDTO dto)
+    public async Task AddFuncionarioAsync(FuncionarioCadastroDTO funcionarioDTO)
     {
         var funcionario = new Funcionario
         {
-            Nome = dto.Nome,
-            Email = dto.Email,
-            Telefone = dto.Telefone,
-            Status = dto.Status,
-            Nasc = dto.Nasc,
-            Endereco = dto.Endereco,
-            Cpf = dto.Cpf,
-            ContatoEmergencia = dto.ContatoEmergencia,
-            Registro = dto.Registro,
-            Cargo = dto.Cargo,
-            DataAdmissao = dto.DataAdmissao,
-            Salario = dto.Salario,
-            Departamento = dto.Departamento,
-            Supervisor = dto.Supervisor,
-            Turno = dto.Turno,
-            Foto = dto.Foto
+            Nome = funcionarioDTO.Nome,
+            Email = funcionarioDTO.Email,
+            Telefone = funcionarioDTO.Telefone,
+            Status = funcionarioDTO.Status,
+            Nasc = funcionarioDTO.Nasc,
+            Endereco = funcionarioDTO.Endereco,
+            Cpf = funcionarioDTO.CPF,
+            ContatoEmergencia = funcionarioDTO.ContatoEmergencia,
+            Registro = funcionarioDTO.Registro,
+            Cargo = funcionarioDTO.Cargo,
+            DataAdmissao = DateOnly.FromDateTime(DateTime.Now),
+            Salario = 0m,
+            Departamento = funcionarioDTO.Departamento,
+            Supervisor = funcionarioDTO.Supervisor,
+            Turno = funcionarioDTO.Turno,
+            Foto = funcionarioDTO.Foto
         };
         await _funcionarioRepository.AddAsync(funcionario);
     }
 
-    public async Task UpdateFuncionarioAsync(FuncionarioDTO dto)
+    public async Task UpdateFuncionarioAsync(FuncionarioUpdateDTO funcionarioDTO, DateOnly admissao)
     {
         var funcionario = new Funcionario
         {
-            Id = dto.Id,
-            Nome = dto.Nome,
-            Email = dto.Email,
-            Telefone = dto.Telefone,
-            Status = dto.Status,
-            Nasc = dto.Nasc,
-            Endereco = dto.Endereco,
-            Cpf = dto.Cpf,
-            ContatoEmergencia = dto.ContatoEmergencia,
-            Registro = dto.Registro,
-            Cargo = dto.Cargo,
-            DataAdmissao = dto.DataAdmissao,
-            Salario = dto.Salario,
-            Departamento = dto.Departamento,
-            Supervisor = dto.Supervisor,
-            Turno = dto.Turno,
-            Foto = dto.Foto
+            Nome = funcionarioDTO.Nome,
+            Email = funcionarioDTO.Email,
+            Telefone = funcionarioDTO.Telefone,
+            Status = funcionarioDTO.Status,
+            Nasc = funcionarioDTO.Nasc,
+            Endereco = funcionarioDTO.Endereco,
+            Cpf = funcionarioDTO.CPF,
+            ContatoEmergencia = funcionarioDTO.ContatoEmergencia,
+            Registro = funcionarioDTO.Registro,
+            Cargo = funcionarioDTO.Cargo,
+            DataAdmissao = admissao,
+            Salario = funcionarioDTO.Salario,
+            Departamento = funcionarioDTO.Departamento,
+            Supervisor = funcionarioDTO.Supervisor,
+            Turno = funcionarioDTO.Turno,
+            Foto = funcionarioDTO.Foto
         };
         await _funcionarioRepository.UpdateAsync(funcionario);
     }

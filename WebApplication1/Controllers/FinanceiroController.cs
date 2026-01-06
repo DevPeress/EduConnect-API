@@ -13,12 +13,17 @@ namespace EduConnect.Controllers
     {
         private readonly FinanceiroService _financeiroService = service;
         private readonly AlunoService _alunoService = alunoService;
-        private List<FinanceiroResponseViewModel> Filtro(List<Financeiro> lista)
+        private List<FinanceiroDTO> Filtro(List<Financeiro> lista)
         {
             // Recebe a Lista do Financeiro e adiciona o Nome do Aluno e o Status no DTO
-            var financeiroDTOs = new List<FinanceiroResponseViewModel>();
+            var financeiroDTOs = new List<FinanceiroDTO>();
             foreach (var f in lista)
             {
+                // Corrigido: aguarda a Task para obter o Aluno
+                if (f == null || f.Aluno == null || f.Aluno.Registro == null)
+                {
+                    continue;
+                }
                 var aluno = _alunoService.GetAlunoByIdAsync(f.Aluno.Registro).Result;
                 if (aluno == null)
                 {
@@ -26,7 +31,7 @@ namespace EduConnect.Controllers
                 }
                 // Verifica o Status do Pagamento
                 var verificarStatus = f.Pago ? "Pago" : f.Cancelado ? "Cancelado" : f.DataVencimento < DateOnly.FromDateTime(DateTime.Now) ? "Atrasado" : "Pendente";
-                var dto = new FinanceiroResponseViewModel
+                var dto = new FinanceiroDTO
                 {
                     Registro = f.Registro,
                     Categoria = f.Categoria,
@@ -51,22 +56,22 @@ namespace EduConnect.Controllers
             var (totalRecebido, totalPendente, totalAtrasado) = await _financeiroService.GetDashBoard();
             return Ok(new List<CardsFinanceiroResponseViewModel>
             {
-                new CardsFinanceiroResponseViewModel()
+                new()
                 {
                     Dado = "Recebido",
                     Total = totalRecebido
                 },
-                new CardsFinanceiroResponseViewModel()
+                new()
                 {
                     Dado = "Pendente",
                     Total = totalPendente
                 },
-                new CardsFinanceiroResponseViewModel()
+                new()
                 {
                     Dado = "Atrasado",
                     Total = totalAtrasado
                 },
-                new CardsFinanceiroResponseViewModel()
+                new()
                 {
                     Dado = "Total",
                     Total = totalAtrasado + totalPendente + totalRecebido
@@ -89,7 +94,7 @@ namespace EduConnect.Controllers
             var (financeiros, total) = await _financeiroService.GetByFilters(filtro);
             var financeiroDTOs = Filtro(financeiros.ToList());
 
-            return Ok(new FiltroResponseViewModel<FinanceiroResponseViewModel>
+            return Ok(new FiltroResponseViewModel<FinanceiroDTO>
                 {
                     Total = total,
                     Dados = financeiroDTOs
@@ -98,22 +103,22 @@ namespace EduConnect.Controllers
         }
 
         [Authorize(Roles = "Administrador, Funcionario")]
-        [HttpGet("aluno/{alunoId}")]
-        public async Task<IActionResult> GetByAlunoId(int alunoId)
+        [HttpGet("aluno/{Registro}")]
+        public async Task<IActionResult> GetByAlunoId(string Registro)
         {
             // Pega os Financeiros pelo Id do Aluno e adiciona o Nome do Aluno e o Status no DTO
-            var financeiros = await _financeiroService.GetByAlunoId(alunoId);
+            var financeiros = await _financeiroService.GetByAlunoId(Registro);
             var financeiroDTOs = Filtro(financeiros.ToList());
 
             return Ok(financeiroDTOs);
         }
 
         [Authorize(Roles = "Administrador, Funcionario")]
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+        [HttpGet("{Registro}")]
+        public async Task<IActionResult> GetById(string Registro)
         {
             // Pega o Financeiro pelo Id e adiciona o Nome do Aluno e o Status no DTO
-            var financeiro = await _financeiroService.GetById(id);
+            var financeiro = await _financeiroService.GetById(Registro);
             if (financeiro == null)
             {
                 return NotFound();
@@ -125,7 +130,7 @@ namespace EduConnect.Controllers
             }
             // Verifica o Status do Pagamento
             var verificarStatus = financeiro.Pago ? "Pago" : financeiro.Cancelado ? "Cancelado" : financeiro.DataVencimento < DateOnly.FromDateTime(DateTime.Now) ? "Atrasado" : "Pendente";
-            var dto = new FinanceiroResponseViewModel
+            var dto = new FinanceiroDTO
             {
                 Registro = financeiro.Registro,
                 Categoria = financeiro.Categoria,
@@ -143,47 +148,47 @@ namespace EduConnect.Controllers
 
         [Authorize(Roles = "Administrador, Funcionario")]
         [HttpPost]
-        public async Task<IActionResult> AddFinanceiro(FinanceiroDTO dto)
+        public async Task<IActionResult> AddFinanceiro(FinanceiroCadastroDTO FinanceiroDTO)
         {
-            var aluno = _alunoService.GetAlunoByIdAsync(dto.AlunoId.ToString()).Result;
+            var aluno = _alunoService.GetAlunoByIdAsync(FinanceiroDTO.Registro).Result;
             if (aluno == null)
             {
                 return NotFound();
             }
             // Adiciona um novo Financeiro
-            await _financeiroService.AddFinanceiroAsync(dto);
+            await _financeiroService.AddFinanceiroAsync(FinanceiroDTO);
             return Ok();
         }
 
         [Authorize(Roles = "Administrador, Funcionario")]
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateFinanceiro(int id, FinanceiroDTO dto)
+        [HttpPut("{Registro}")]
+        public async Task<IActionResult> UpdateFinanceiro(string Registro, FinanceiroUpdateDTO FinanceiroDTO)
         {
             // Atualiza um Financeiro existente
-            if (id != dto.Registro)
+            if (Registro != FinanceiroDTO.Registro)
             {
                 return BadRequest();
             }
-            var existingFinanceiro = await _financeiroService.GetById(id);
+            var existingFinanceiro = await _financeiroService.GetById(Registro);
             if (existingFinanceiro == null)
             {
                 return NotFound();
             }
-            await _financeiroService.UpdateFinanceiroAsync(dto);
+            await _financeiroService.UpdateFinanceiroAsync(FinanceiroDTO);
             return NoContent();
         }
 
         [Authorize(Roles = "Administrador, Funcionario")]
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteFinanceiro(int id)
+        [HttpDelete("{Registro}")]
+        public async Task<IActionResult> DeleteFinanceiro(string Registro)
         {
             // Deleta um Financeiro existente
-            var existingFinanceiro = await _financeiroService.GetById(id);
+            var existingFinanceiro = await _financeiroService.GetById(Registro);
             if (existingFinanceiro == null)
             {
                 return NotFound();
             }
-            await _financeiroService.DeleteFinanceiroAsync(id);
+            await _financeiroService.DeleteFinanceiroAsync(Registro);
             return NoContent();
         }
     }

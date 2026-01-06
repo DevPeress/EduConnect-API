@@ -1,7 +1,6 @@
 ﻿using EduConnect.Application.Common.Auditing;
 using EduConnect.Application.DTO.Entities;
 using EduConnect.Application.Services;
-using EduConnect.Domain.Entities;
 using EduConnect.Domain.Enums;
 using EduConnect.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -38,7 +37,7 @@ namespace EduConnect.Controllers
         }
 
         [Authorize(Roles = "Administrador, Funcionario, Professor")]
-        [HttpGet("{id:int}")]
+        [HttpGet("{Registro}")]
         public async Task<IActionResult> GetAlunoById(string Registro)
         {
             var aluno = await _alunoService.GetAlunoByIdAsync(Registro);
@@ -104,22 +103,22 @@ namespace EduConnect.Controllers
         }
 
         [Authorize(Roles = "Administrador, Funcionario")]
-        [HttpPut("{id:int}")]
-        public async Task<IActionResult> UpdateAluno(string registro, AlunoUpdateDTO AlunoDTO)
+        [HttpPut("{Registro}")]
+        public async Task<IActionResult> UpdateAluno(string Registro, [FromBody] AlunoUpdateDTO AlunoDTO)
         {
-            if (registro != AlunoDTO.Registro)
+            if (Registro != AlunoDTO.Registro)
                 return BadRequest();
 
-            var existingAluno = await _alunoService.GetAlunoByIdAsync(registro);
+            var existingAluno = await _alunoService.GetAlunoByIdAsync(Registro);
             if (existingAluno == null)
                 return NotFound();
 
-            await _alunoService.UpdateAlunoAsync(AlunoDTO);
+            await _alunoService.UpdateAlunoAsync(AlunoDTO, existingAluno.DataMatricula);
             return NoContent();
         }
 
         [Authorize(Roles = "Administrador, Funcionario")]
-        [HttpDelete("{id:int}")]
+        [HttpDelete("{Registro}")]
         public async Task<IActionResult> DeleteAluno(string Registro)
         {
             var existingAluno = await _alunoService.GetAlunoByIdAsync(Registro);

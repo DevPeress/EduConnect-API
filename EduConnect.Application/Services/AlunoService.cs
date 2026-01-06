@@ -1,7 +1,5 @@
-﻿using EduConnect.Application.Common.Auditing;
-using EduConnect.Application.DTO.Entities;
+﻿using EduConnect.Application.DTO.Entities;
 using EduConnect.Domain.Entities;
-using EduConnect.Domain.Enums;
 using EduConnect.Domain.Interfaces;
 
 namespace EduConnect.Application.Services;
@@ -81,7 +79,7 @@ public class AlunoService(IAlunoRepository repo)
         await _alunoRepository.AddAsync(aluno);
     }
 
-    public async Task UpdateAlunoAsync(AlunoUpdateDTO AlunoDTO)
+    public async Task UpdateAlunoAsync(AlunoUpdateDTO AlunoDTO, DateOnly matricula)
     {
         var aluno = new Aluno
         {
@@ -95,6 +93,7 @@ public class AlunoService(IAlunoRepository repo)
             Endereco = AlunoDTO.Endereco,
             Cpf = AlunoDTO.Cpf,
             ContatoEmergencia = AlunoDTO.ContatoEmergencia,
+            DataMatricula = matricula,
             Deletado = AlunoDTO.Deletado,
             Media = AlunoDTO.Media,
             TurmaRegistro = AlunoDTO.TurmaRegistro

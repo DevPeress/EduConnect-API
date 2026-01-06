@@ -37,7 +37,7 @@ public class ContaRepository(EduContext context) : IContaRepository
             }
 
             var verify = SegurancaManager.VerificarHash(senha, conta.Senha);
-            if (verify || senha == conta.Senha)
+            if (verify)
             {
                 return (true, 0);
             } 

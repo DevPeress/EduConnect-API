@@ -1,8 +1,6 @@
-﻿using EduConnect.Domain.Entities;
+﻿namespace EduConnect.Application.DTO.Entities;
 
-namespace EduConnect.Application.DTO.Entities;
-
-public class FiltroFinanceiroDTO : FiltroBase
+public class FiltroFinanceiroDTO : FiltroBaseDTO
 {
     public required string Status { get; set; }
     public required string Categoria { get; set; }

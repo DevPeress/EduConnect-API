@@ -73,7 +73,7 @@ public class ProfessorService(IProfessorRepository repo)
         await _professorRepository.AddAsync(professor);
     }
 
-    public async Task UpdateProfessorAsync(ProfessorUpdateDTO ProfessorDTO)
+    public async Task UpdateProfessorAsync(ProfessorUpdateDTO ProfessorDTO, DateOnly DataContrato)
     {
         var disciplinas = await _professorRepository.GetDisciplinasByProfessorAsync(ProfessorDTO.Registro);
         ICollection<ProfessorDisciplina> disciplinasDoProfessor = disciplinas != null! ? disciplinas : [];
@@ -96,6 +96,7 @@ public class ProfessorService(IProfessorRepository repo)
             ProfessorDisciplinas = disciplinasDoProfessor,
             Foto = ProfessorDTO.Foto,
             Formacao = ProfessorDTO.Formacao,
+            Contratacao = DataContrato,
             Salario = ProfessorDTO.Salario
         };
         await _professorRepository.UpdateAsync(professor);

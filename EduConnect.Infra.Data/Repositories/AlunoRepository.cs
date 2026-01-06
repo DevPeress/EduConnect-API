@@ -17,7 +17,7 @@ public class AlunoRepository(EduContext context) : IAlunoRepository
         if (filtro.Ano != null && filtro.Ano != "Todos os Anos")
         {
             int anoLetivo = int.Parse(filtro.Ano);
-            query = query.Where(dados => dados.DataMatricula!.Value.Year == anoLetivo);
+            query = query.Where(dados => dados.DataMatricula.Year == anoLetivo);
         }
         
         if (filtro.Status != null && filtro.Status != "Todos os Status")
@@ -44,11 +44,11 @@ public class AlunoRepository(EduContext context) : IAlunoRepository
         return (result, total);
     }
 
-    public async Task<(List<string>, List<string>?)> GetInformativos()
+    public async Task<(List<string>, List<string>)> GetInformativos()
     {
         var anos = await _context.Alunos
             .Where(a => a.Deletado == false)
-            .Select(a => a.DataMatricula!.Value.Year.ToString())
+            .Select(a => a.DataMatricula.Year.ToString())
             .Distinct()
             .ToListAsync();
         var salas = await _context.Alunos

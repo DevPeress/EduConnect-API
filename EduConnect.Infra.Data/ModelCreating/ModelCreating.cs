@@ -22,7 +22,23 @@ namespace EduConnect.Infra.Data.ModelCreating
                     .WithOne()
                     .HasForeignKey(tipo, "ContaId")
                     .OnDelete(DeleteBehavior.Restrict);
+
+                modelBuilder.Entity(tipo)
+                    .HasAlternateKey("Registro");
             }
+
+            modelBuilder.Entity<Aluno>()
+                .HasOne(a => a.Turma)
+                .WithMany(t => t.Alunos)
+                .HasForeignKey(a => a.TurmaRegistro)
+                .HasPrincipalKey("Registro");
+
+            modelBuilder.Entity<Financeiro>()
+                .HasOne(f => f.Aluno)
+                .WithMany()
+                .HasForeignKey(f => f.AlunoRegistro)
+                .HasPrincipalKey("Registro")
+                .OnDelete(DeleteBehavior.Restrict);
 
             // CONFIGURAÇÃO GLOBAL PARA TODOS OS DECIMAIS
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())

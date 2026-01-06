@@ -45,7 +45,7 @@ namespace EduConnect.Controllers
             });
         }
 
-        [HttpGet("{matricula}")]
+        [HttpGet("{Registro}")]
         public async Task<IActionResult> GetProfessorById(string Registro)
         {
             var professores = await _professorService.GetProfessorByIdAsync(Registro);
@@ -83,14 +83,14 @@ namespace EduConnect.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddProfessor(ProfessorCadastroDTO ProfessorDTO)
+        public async Task<IActionResult> AddProfessor([FromBody] ProfessorCadastroDTO ProfessorDTO)
         {
             await _professorService.AddProfessorAsync(ProfessorDTO);
             return Ok();
         }
 
         [HttpPut("{Registro}")]
-        public async Task<IActionResult> UpdateProfessor(string Registro, ProfessorUpdateDTO ProfessorDTO)
+        public async Task<IActionResult> UpdateProfessor(string Registro, [FromBody] ProfessorUpdateDTO ProfessorDTO)
         {
             if (Registro != ProfessorDTO.Registro)
             {
@@ -101,7 +101,7 @@ namespace EduConnect.Controllers
             {
                 return NotFound();
             }
-            await _professorService.UpdateProfessorAsync(ProfessorDTO);
+            await _professorService.UpdateProfessorAsync(ProfessorDTO, existingProfessor.Contratacao);
             return NoContent();
         }
 

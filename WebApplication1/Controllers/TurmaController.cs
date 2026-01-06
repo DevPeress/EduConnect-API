@@ -42,10 +42,10 @@ namespace EduConnect.Controllers
         }
 
         [Authorize(Roles = "Administrador, Funcionario, Professor")]
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetTurmaById(string id)
+        [HttpGet("{Registro}")]
+        public async Task<IActionResult> GetTurmaById(string Registro)
         {
-            var turma = await _turmaService.GetTurmaByIdAsync(id);
+            var turma = await _turmaService.GetTurmaByIdAsync(Registro);
             if (turma == null)
             {
                 return NotFound();
@@ -90,7 +90,7 @@ namespace EduConnect.Controllers
 
         [Authorize(Roles = "Administrador, Funcionario")]
         [HttpPost]
-        public async Task<IActionResult> CreateTurma(TurmaCadastroDTO turmaDTO)
+        public async Task<IActionResult> CreateTurma([FromBody] TurmaCadastroDTO turmaDTO)
         {
             await _turmaService.AddTurmaAsync(turmaDTO);
             return Ok();
@@ -98,7 +98,7 @@ namespace EduConnect.Controllers
 
         [Authorize(Roles = "Administrador, Funcionario")]
         [HttpPut("{Registro}")]
-        public async Task<IActionResult> UpdateTurma(string Registro, TurmaUpdateDTO turmaDTO)
+        public async Task<IActionResult> UpdateTurma(string Registro, [FromBody] TurmaUpdateDTO turmaDTO)
         {
             if (Registro != turmaDTO.Registro)
             {

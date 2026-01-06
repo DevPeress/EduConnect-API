@@ -5,12 +5,13 @@ namespace EduConnect.Domain.Entities;
 public class Financeiro
 {
     [Key]
-    public int Registro { get; set; }
+    public int Id { get; set; }
+    public required string Registro { get; set; }
     public required string Categoria { get; set; }
     public string Metodo { get; init; } = "Cartão de Crédito";
     public string Descricao { get; init; } = default!;
-    public decimal Valor { get; set; }
-    public DateOnly DataVencimento { get; set; }
+    public required decimal Valor { get; set; }
+    public required DateOnly DataVencimento { get; set; }
     public bool Pago { get; set; }
     public bool Cancelado { get; set; }
     public bool Deletado { get; set; } = false;
@@ -18,6 +19,6 @@ public class Financeiro
     public string? Observacoes { get; set; }
 
     // Relacionamento
-    public int AlunoId { get; set; }
-    public Aluno Aluno { get; set; } = default!;
+    public required string AlunoRegistro { get; set; }
+    public Aluno Aluno { get; set; } = null!;
 }

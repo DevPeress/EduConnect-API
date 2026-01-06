@@ -1,8 +1,6 @@
-﻿using EduConnect.Domain.Entities;
+﻿namespace EduConnect.Application.DTO.Entities;
 
-namespace EduConnect.Application.DTO.Entities;
-
-public class FiltroTurmaDTO : FiltroBase
+public class FiltroTurmaDTO : FiltroBaseDTO
 {
     public required string Ano { get; set; }
     public required string Turno { get; set; }

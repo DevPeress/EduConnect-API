@@ -1,5 +1,4 @@
-﻿using EduConnect.Domain.Entities;
-using EduConnect.Domain.Interfaces;
+﻿using EduConnect.Domain.Interfaces;
 using EduConnect.Infra.Data.Context;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
