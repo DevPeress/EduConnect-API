@@ -8,9 +8,13 @@ namespace EduConnect.Application.Services
     {
         private readonly IDisciplinasRepository _disciplinasRepository = disciplinasRepository;
 
-        public async Task<List<Disciplinas>> GetAllDisciplinas()
+        public async Task<(IEnumerable<Disciplinas>, int TotalRegistro)> GetDisciplinas(FiltroBaseDTO FiltroDTO)
         {
-            return await _disciplinasRepository.GetAllDisciplinas();
+            var filtro = new FiltroBase
+            {
+                Page = FiltroDTO.Page
+            };
+            return await _disciplinasRepository.GetDisciplinas(filtro);
         }
 
         public async Task<Disciplinas?> GetLastDisciplina()

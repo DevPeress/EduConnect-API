@@ -8,12 +8,22 @@ namespace EduConnect.Infra.Data.Repositories;
 public class DisciplinasRepository(EduContext context) : IDisciplinasRepository
 {
     private readonly EduContext _context = context;
-
-    public async Task<List<Disciplinas>> GetAllDisciplinas()
+    private IQueryable<Disciplinas> QueryFiltroAluno(FiltroBase filtro)
     {
-        return await _context.Disciplinas
-            .Where(d => d.Deletado == false)
-            .ToListAsync();
+        var query = _context.Disciplinas.AsNoTracking().Where(p => p.Deletado == false);
+
+        return query;
+    }
+
+    public async Task<(IEnumerable<Disciplinas>, int TotalRegistro)> GetDisciplinas(FiltroBase filtro)
+    {
+        var query = QueryFiltroAluno(filtro);
+        var total = await query.CountAsync();
+
+        query = query.Skip(filtro.Offset).Take(6);
+        var result = await query.ToListAsync();
+
+        return (result, total);
     }
 
     public async Task<Disciplinas?> GetLastDisciplina()
