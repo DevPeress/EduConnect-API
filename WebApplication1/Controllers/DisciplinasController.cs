@@ -13,10 +13,14 @@ namespace EduConnect.Controllers
     {
         private readonly DisciplinasService _disciplinasService = service;
 
-        [HttpGet("pegarDisciplinas")]
-        public async Task<IActionResult> GetAllDisciplinas()
+        [HttpGet("filtro/page/{page}")]
+        public async Task<IActionResult> GetDisciplinas(int page)
         {
-            var disciplinas = await _disciplinasService.GetAllDisciplinas();
+            var filtro = new FiltroBaseDTO
+            {
+                Page = page
+            };
+            var (disciplinas, total) = await _disciplinasService.GetDisciplinas(filtro);
             List<DisciplinasResponseViewModel> lista = [];
             foreach (var disciplina in disciplinas)
             {
@@ -28,7 +32,11 @@ namespace EduConnect.Controllers
                     DataCriacao = disciplina.DataCriacao
                 });
             }
-            return Ok(lista);
+            return Ok(new FiltroResponseViewModel<DisciplinasResponseViewModel>
+            {
+                Total = total,
+                Dados = lista
+            });
         }
 
         [HttpGet("Cadastro")]
