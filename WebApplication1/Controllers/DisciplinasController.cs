@@ -22,7 +22,9 @@ namespace EduConnect.Controllers
                 lista.Add(new DisciplinasResponseViewModel
                 {
                     Registro = disciplina.Registro,
-                    Nome = disciplina.Nome
+                    Nome = disciplina.Nome,
+                    Descricao = disciplina.Descricao,
+                    DataCriacao = disciplina.DataCriacao
                 });
             }
             return Ok(lista);
