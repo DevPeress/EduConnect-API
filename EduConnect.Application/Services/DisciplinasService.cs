@@ -27,11 +27,16 @@ namespace EduConnect.Application.Services
             var disciplina = new Disciplinas
             {
                 Registro = DisciplinaDTO.Registro,
-                Nome =  DisciplinaDTO.Nome,
-                Descricao =  DisciplinaDTO.Descricao,
+                Nome = DisciplinaDTO.Nome,
+                Descricao = DisciplinaDTO.Descricao,
                 DataCriacao = DateOnly.FromDateTime(DateTime.Now)
             };
             return await _disciplinasRepository.CreateDisciplina(disciplina);
+        }
+
+        public async Task DeleteDisciplina(string Registro)
+        {
+            await _disciplinasRepository.DeleteDisciplina(Registro);
         }
     }
 }

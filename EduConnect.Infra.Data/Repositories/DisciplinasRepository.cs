@@ -39,4 +39,14 @@ public class DisciplinasRepository(EduContext context) : IDisciplinasRepository
         await _context.SaveChangesAsync();
         return disciplina;
     }
+
+    public async Task DeleteDisciplina(string Registro)
+    {
+        var disciplina = await _context.Disciplinas.FirstOrDefaultAsync(d => d.Registro == Registro);
+        if (disciplina != null)
+        {
+            disciplina.Deletado = true;
+            await _context.SaveChangesAsync();
+        }
+    }
 }

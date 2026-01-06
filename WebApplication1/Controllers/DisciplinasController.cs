@@ -71,5 +71,12 @@ namespace EduConnect.Controllers
             await _disciplinasService.CreateDisciplina(DisciplinaDTO);
             return Ok("Disciplina criada com sucesso.");
         }
+
+        [HttpDelete("{Registro}")]
+        public async Task<IActionResult> DeleteDisciplina(string Registro)
+        {
+            await _disciplinasService.DeleteDisciplina(Registro);
+            return Ok();
+        }
     }
 }
