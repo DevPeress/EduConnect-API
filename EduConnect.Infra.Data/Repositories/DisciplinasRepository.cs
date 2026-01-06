@@ -20,10 +20,18 @@ public class DisciplinasRepository(EduContext context) : IDisciplinasRepository
         var query = QueryFiltroAluno(filtro);
         var total = await query.CountAsync();
 
-        query = query.Skip(filtro.Offset).Take(6);
+        query = query.Skip(filtro.Offset).Take(9);
         var result = await query.ToListAsync();
 
         return (result, total);
+    }
+
+    public async Task<List<Disciplinas>> GetAllDisciplinas()
+    {
+        return await _context.Disciplinas
+            .AsNoTracking()
+            .Where(d => d.Deletado == false)
+            .ToListAsync();
     }
 
     public async Task<Disciplinas?> GetLastDisciplina()

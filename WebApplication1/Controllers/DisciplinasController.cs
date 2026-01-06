@@ -39,6 +39,24 @@ namespace EduConnect.Controllers
             });
         }
 
+        [HttpGet("pegarDisciplinas")]
+        public async Task<IActionResult> GetAllDisciplinas()
+        {
+            var disciplinas = await _disciplinasService.GetAllDisciplinas();
+            List<DisciplinasResponseViewModel> lista = [];
+            foreach (var disciplina in disciplinas)
+            {
+                lista.Add(new DisciplinasResponseViewModel
+                {
+                    Registro = disciplina.Registro,
+                    Nome = disciplina.Nome,
+                    Descricao = disciplina.Descricao,
+                    DataCriacao = disciplina.DataCriacao
+                });
+            }
+            return Ok(lista);
+        }
+
         [HttpGet("Cadastro")]
         public async Task<IActionResult> GetDisciplinaByCadastro()
         {
