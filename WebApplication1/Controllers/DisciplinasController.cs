@@ -1,17 +1,18 @@
-﻿using EduConnect.Application.Services;
+﻿using EduConnect.Application.DTO.Entities;
+using EduConnect.Application.Services;
 using EduConnect.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EduConnect.Controllers
 {
+    [Authorize(Roles = "Administrador")]
     [ApiController]
     [Route("api/disciplinas")]
     public class DisciplinasController(DisciplinasService service) : ControllerBase
     {
         private readonly DisciplinasService _disciplinasService = service;
 
-        [Authorize(Roles = "Administrador")]
         [HttpGet("pegarDisciplinas")]
         public async Task<IActionResult> GetAllDisciplinas()
         {
@@ -30,7 +31,6 @@ namespace EduConnect.Controllers
             return Ok(lista);
         }
 
-        [Authorize(Roles = "Administrador")]
         [HttpGet("Cadastro")]
         public async Task<IActionResult> GetDisciplinaByCadastro()
         {
@@ -55,6 +55,13 @@ namespace EduConnect.Controllers
             var proximoFormatado = proximo.ToString("D6");
 
             return Ok("D" + proximoFormatado);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateDisciplina([FromBody] DisciplinaCadastroDTO DisciplinaDTO)
+        {
+            await _disciplinasService.CreateDisciplina(DisciplinaDTO);
+            return Ok("Disciplina criada com sucesso.");
         }
     }
 }

@@ -22,4 +22,11 @@ public class DisciplinasRepository(EduContext context) : IDisciplinasRepository
             .OrderBy(d => d.Registro)
             .LastOrDefaultAsync();
     }
+
+    public async Task<Disciplinas> CreateDisciplina(Disciplinas disciplina)
+    {
+        _context.Disciplinas.Add(disciplina);
+        await _context.SaveChangesAsync();
+        return disciplina;
+    }
 }

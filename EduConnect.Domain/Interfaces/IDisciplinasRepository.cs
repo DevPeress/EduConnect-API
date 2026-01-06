@@ -6,4 +6,5 @@ public interface IDisciplinasRepository
 {
     Task<List<Disciplinas>> GetAllDisciplinas();
     Task<Disciplinas?> GetLastDisciplina();
+    Task<Disciplinas> CreateDisciplina(Disciplinas disciplina);
 }
