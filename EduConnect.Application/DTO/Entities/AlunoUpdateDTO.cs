@@ -13,6 +13,7 @@ public record AlunoUpdateDTO
     public required DateOnly Nasc { get; init; }
     public required string Endereco { get; init; }
     public required string Cpf { get; init; }
+    public required string NomeEmergencia { get; init; }
     public required string ContatoEmergencia { get; init; }
     public bool Deletado { get; init; }
     public required int Media { get; init; }

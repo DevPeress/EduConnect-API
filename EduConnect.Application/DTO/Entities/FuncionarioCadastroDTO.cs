@@ -10,6 +10,7 @@ public record FuncionarioCadastroDTO
     public required DateOnly Nasc { get; init; }
     public required string Endereco { get; init; }
     public required string CPF { get; init; }
+    public required string NomeEmergencia { get; init; }
     public required string ContatoEmergencia { get; init; }
     public required string Foto { get; init; }
     public required string Cargo { get; init; }
