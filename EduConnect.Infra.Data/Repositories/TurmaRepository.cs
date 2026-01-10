@@ -25,7 +25,7 @@ public class TurmaRepository(EduContext context) : ITurmaRepository
                 dados.Professor.Registro.Contains(pesquisa, StringComparison.OrdinalIgnoreCase) ||
                 dados.TurmaDisciplinas.Any(td => td.Disciplina.Nome.Contains(pesquisa, StringComparison.OrdinalIgnoreCase) ||
                 dados.Alunos.Any(a => a.Nome.Contains(pesquisa, StringComparison.OrdinalIgnoreCase)) ||
-                dados.Alunos.Any(a => a.Registro.Contains(pesquisa, StringComparison.OrdinalIgnoreCase))
+                dados.Alunos.Any(a => a.Registro.Contains(pesquisa, StringComparison.OrdinalIgnoreCase)))
             );
         }
 
