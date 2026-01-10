@@ -25,7 +25,7 @@ public class ProfessorRepository(EduContext context) : IProfessorRepository
                 dados.Formacao.Contains(pesquisa, StringComparison.OrdinalIgnoreCase) ||
                 dados.Turmas.Any(turma => turma.Nome.Contains(pesquisa, StringComparison.OrdinalIgnoreCase) ||
                 dados.ProfessorDisciplinas.Any(pd => pd.Disciplina.Nome.Contains(pesquisa, StringComparison.OrdinalIgnoreCase)) ||
-                dados.ProfessorDisciplinas.Any(pd => pd.Disciplina.Registro.Contains(pesquisa, StringComparison.OrdinalIgnoreCase))
+                dados.ProfessorDisciplinas.Any(pd => pd.Disciplina.Registro.Contains(pesquisa, StringComparison.OrdinalIgnoreCase)))
             );
         }
 
