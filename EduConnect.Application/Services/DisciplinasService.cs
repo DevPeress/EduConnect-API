@@ -10,9 +10,10 @@ namespace EduConnect.Application.Services
 
         public async Task<(IEnumerable<Disciplinas>, int TotalRegistro)> GetDisciplinas(FiltroBaseDTO FiltroDTO)
         {
-            var filtro = new FiltroBase
+            var filtro = new FiltroDisciplinas
             {
-                Page = FiltroDTO.Page
+                Page = FiltroDTO.Page,
+                Pesquisa = FiltroDTO.Pesquisa
             };
             return await _disciplinasRepository.GetDisciplinas(filtro);
         }
