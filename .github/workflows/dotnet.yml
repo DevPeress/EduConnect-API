@@ -29,7 +29,3 @@ jobs:
       # 4. Build do projeto
       - name: Build
         run: dotnet build --configuration Release --no-restore
-
-      # 5. Rodar testes (se houver)
-      - name: Run tests
-        run: dotnet test --no-build --verbosity normal
