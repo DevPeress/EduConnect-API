@@ -5,4 +5,5 @@ public class FiltroFinanceiro : FiltroBase
     public required string Status { get; set; }
     public required string Categoria { get; set; }
     public required string Meses { get; set; }
+    public required string Pesquisa { get; set; }
 }
