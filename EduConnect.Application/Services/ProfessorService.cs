@@ -15,7 +15,8 @@ public class ProfessorService(IProfessorRepository repo)
             Page = filtrodto.Page,
             Categoria = filtrodto.Categoria,
             Status = filtrodto.Status,
-            Ano = filtrodto.Ano
+            Ano = filtrodto.Ano,
+            Pesquisa = filtrodto.Pesquisa
         };
 
         var (professores, total) = await _professorRepository.GetByFilters(filtro);
