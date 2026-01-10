@@ -15,7 +15,8 @@ public class AlunoService(IAlunoRepository repo)
             Page = filtrodto.Page,
             Categoria = filtrodto.Categoria,
             Status = filtrodto.Status,
-            Ano = filtrodto.Ano
+            Ano = filtrodto.Ano,
+            Pesquisa = filtrodto.Pesquisa
         };
 
         var (alunos, total) = await _alunoRepository.GetByFilters(filtro);
@@ -71,6 +72,7 @@ public class AlunoService(IAlunoRepository repo)
             Endereco = AlunoDTO.Endereco,
             Cpf = AlunoDTO.CPF,
             ContatoEmergencia = AlunoDTO.ContatoEmergencia,
+            NomeEmergencia = AlunoDTO.NomeEmergencia,
             DataMatricula = DateOnly.FromDateTime(DateTime.Now),
             Media = 0,
             Deletado = false,
@@ -93,6 +95,7 @@ public class AlunoService(IAlunoRepository repo)
             Endereco = AlunoDTO.Endereco,
             Cpf = AlunoDTO.Cpf,
             ContatoEmergencia = AlunoDTO.ContatoEmergencia,
+            NomeEmergencia = AlunoDTO.NomeEmergencia,
             DataMatricula = matricula,
             Deletado = AlunoDTO.Deletado,
             Media = AlunoDTO.Media,

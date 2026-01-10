@@ -8,14 +8,24 @@ namespace EduConnect.Infra.Data.Repositories;
 public class DisciplinasRepository(EduContext context) : IDisciplinasRepository
 {
     private readonly EduContext _context = context;
-    private IQueryable<Disciplinas> QueryFiltroAluno(FiltroBase filtro)
+    private IQueryable<Disciplinas> QueryFiltroAluno(FiltroDisciplinas filtro)
     {
         var query = _context.Disciplinas.AsNoTracking().Where(p => p.Deletado == false);
+
+        if (filtro.Pesquisa != "" && filtro.Pesquisa.Length > 2)
+        {
+            string pesquisa = filtro.Pesquisa;
+            query = query.Where(dados =>
+                dados.Nome.Contains(pesquisa, StringComparison.OrdinalIgnoreCase) ||
+                dados.Registro.Contains(pesquisa, StringComparison.OrdinalIgnoreCase) ||
+                dados.Descricao.Contains(pesquisa, StringComparison.OrdinalIgnoreCase) 
+            );
+        }
 
         return query;
     }
 
-    public async Task<(IEnumerable<Disciplinas>, int TotalRegistro)> GetDisciplinas(FiltroBase filtro)
+    public async Task<(IEnumerable<Disciplinas>, int TotalRegistro)> GetDisciplinas(FiltroDisciplinas filtro)
     {
         var query = QueryFiltroAluno(filtro);
         var total = await query.CountAsync();

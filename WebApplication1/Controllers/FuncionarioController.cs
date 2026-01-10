@@ -13,15 +13,16 @@ namespace EduConnect.Controllers
         private readonly FuncionarioService _funcionarioService = service;
 
         [Authorize(Roles = "Administrador, Funcionario")]
-        [HttpGet("filtro/selecionada/{selecionada}/status/{status}/page/{page}/ano/{ano}")]
-        public async Task<IActionResult> GetAllFuncionarios(string selecionada, string status, int page, string ano)
+        [HttpGet("filtro/selecionada/{selecionada}/status/{status}/page/{page}/ano/{ano}/pesquisa/{pesquisa}")]
+        public async Task<IActionResult> GetAllFuncionarios(string selecionada, string status, int page, string ano, string pesquisa)
         {
             var filtro = new FiltroPessoaDTO
             {
                 Categoria = selecionada,
                 Status = status,
                 Page = page,
-                Ano = ano
+                Ano = ano,
+                Pesquisa = pesquisa
             };
 
             var (funcionarios, total) = await _funcionarioService.GetByFilters(filtro);

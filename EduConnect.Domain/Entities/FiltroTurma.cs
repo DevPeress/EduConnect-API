@@ -5,4 +5,5 @@ public class FiltroTurma : FiltroBase
     public required string Ano { get; set; }
     public required string Turno { get; set; }
     public required string Status { get; set; }
+    public required string Pesquisa { get; set; }
 }

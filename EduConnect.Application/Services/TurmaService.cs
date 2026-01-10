@@ -14,7 +14,8 @@ public class TurmaService(ITurmaRepository repo)
             Turno = filtrodto.Turno,
             Status = filtrodto.Status,
             Ano = filtrodto.Ano,
-            Page = filtrodto.Page
+            Page = filtrodto.Page,
+            Pesquisa = filtrodto.Pesquisa
         };
 
         var (turmas, total) = await _turmaRepository.GetByFilters(filtro);

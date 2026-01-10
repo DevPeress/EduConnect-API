@@ -14,6 +14,17 @@ public class AlunoRepository(EduContext context) : IAlunoRepository
     {
         var query = _context.Alunos.AsNoTracking().Where(p => p.Deletado == false);
 
+        if (filtro.Pesquisa != "" && filtro.Pesquisa.Length > 2)
+        {
+            string pesquisa = filtro.Pesquisa;
+            query = query.Where(dados =>
+                dados.Nome.Contains(pesquisa, StringComparison.OrdinalIgnoreCase) ||
+                dados.Registro.Contains(pesquisa, StringComparison.OrdinalIgnoreCase) ||
+                dados.Email.Contains(pesquisa, StringComparison.OrdinalIgnoreCase) ||
+                dados.Cpf.Contains(pesquisa, StringComparison.OrdinalIgnoreCase) 
+            );
+        }
+
         if (filtro.Ano != null && filtro.Ano != "Todos os Anos")
         {
             int anoLetivo = int.Parse(filtro.Ano);

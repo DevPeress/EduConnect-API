@@ -25,6 +25,7 @@ public class FinanceiroService(IFinanceiroRepository repo)
             Status = filtrodto.Status,
             Categoria = filtrodto.Categoria,
             Meses = filtrodto.Meses,
+            Pesquisa = filtrodto.Pesquisa
         };
         return await _financeiroRepository.GetByFilters(filtro);
     }

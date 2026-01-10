@@ -13,15 +13,16 @@ namespace EduConnect.Controllers
         private readonly RegistroService _registroService = service;
 
         [Authorize(Roles = "Administrador, Funcionario")]
-        [HttpGet("filtro/page/{page}")]
-        public async Task<IActionResult> GetRegistros(int page)
+        [HttpGet("filtro/page/{page}/pesquisa/{pesquisa}")]
+        public async Task<IActionResult> GetRegistros(int page, string pesquisa)
         {
             var filtro = new FiltroRegistroDTO
             {
                 Ano = "",
                 Categoria = "",
                 Status = "",
-                Page = page
+                Page = page,
+                Pesquisa = pesquisa
             };
 
             var (registros, total) = await _registroService.GetRegistros(filtro);

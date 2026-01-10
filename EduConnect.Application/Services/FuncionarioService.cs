@@ -15,7 +15,8 @@ public class FuncionarioService(IFuncionarioRepository repo)
             Page = filtrodto.Page,
             Categoria = filtrodto.Categoria,
             Status = filtrodto.Status,
-            Ano = filtrodto.Ano
+            Ano = filtrodto.Ano,
+            Pesquisa = filtrodto.Pesquisa
         };
 
         return await _funcionarioRepository.GetByFilters(filtro);
@@ -47,6 +48,7 @@ public class FuncionarioService(IFuncionarioRepository repo)
             Nasc = funcionarioDTO.Nasc,
             Endereco = funcionarioDTO.Endereco,
             Cpf = funcionarioDTO.CPF,
+            NomeEmergencia = funcionarioDTO.NomeEmergencia,
             ContatoEmergencia = funcionarioDTO.ContatoEmergencia,
             Registro = funcionarioDTO.Registro,
             Cargo = funcionarioDTO.Cargo,
@@ -71,6 +73,7 @@ public class FuncionarioService(IFuncionarioRepository repo)
             Nasc = funcionarioDTO.Nasc,
             Endereco = funcionarioDTO.Endereco,
             Cpf = funcionarioDTO.CPF,
+            NomeEmergencia = funcionarioDTO.NomeEmergencia,
             ContatoEmergencia = funcionarioDTO.ContatoEmergencia,
             Registro = funcionarioDTO.Registro,
             Cargo = funcionarioDTO.Cargo,
