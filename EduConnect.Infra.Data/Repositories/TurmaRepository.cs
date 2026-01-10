@@ -13,6 +13,22 @@ public class TurmaRepository(EduContext context) : ITurmaRepository
     {
         var query = _context.Turmas.AsNoTracking().Where(p => p.Deletado == false);
 
+        if (filtro.Pesquisa != "" && filtro.Pesquisa.Length > 2)
+        {
+            string pesquisa = filtro.Pesquisa;
+            query = query.Where(dados =>
+                dados.Nome.Contains(pesquisa, StringComparison.OrdinalIgnoreCase) ||
+                dados.Registro.Contains(pesquisa, StringComparison.OrdinalIgnoreCase) ||
+                dados.Sala.Contains(pesquisa, StringComparison.OrdinalIgnoreCase) ||
+                dados.Capacidade.ToString().Contains(pesquisa, StringComparison.OrdinalIgnoreCase) ||
+                dados.Professor.Nome.Contains(pesquisa, StringComparison.OrdinalIgnoreCase) ||
+                dados.Professor.Registro.Contains(pesquisa, StringComparison.OrdinalIgnoreCase) ||
+                dados.TurmaDisciplinas.Any(td => td.Disciplina.Nome.Contains(pesquisa, StringComparison.OrdinalIgnoreCase) ||
+                dados.Alunos.Any(a => a.Nome.Contains(pesquisa, StringComparison.OrdinalIgnoreCase)) ||
+                dados.Alunos.Any(a => a.Registro.Contains(pesquisa, StringComparison.OrdinalIgnoreCase))
+            );
+        }
+
         if (filtro.Ano != null && filtro.Ano != "Todos os Anos")
         {
             int anoLetivo = int.Parse(filtro.Ano);
