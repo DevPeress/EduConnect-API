@@ -14,6 +14,21 @@ public class ProfessorRepository(EduContext context) : IProfessorRepository
     {
         var query = _context.Professores.AsNoTracking().Where(p => p.Deletado == false);
 
+        if (filtro.Pesquisa != "" && filtro.Pesquisa.Length > 2)
+        {
+            string pesquisa = filtro.Pesquisa;
+            query = query.Where(dados =>
+                dados.Nome.Contains(pesquisa, StringComparison.OrdinalIgnoreCase) ||
+                dados.Registro.Contains(pesquisa, StringComparison.OrdinalIgnoreCase) ||
+                dados.Email.Contains(pesquisa, StringComparison.OrdinalIgnoreCase) ||
+                dados.Telefone.Contains(pesquisa, StringComparison.OrdinalIgnoreCase) ||
+                dados.Formacao.Contains(pesquisa, StringComparison.OrdinalIgnoreCase) ||
+                dados.Turmas.Any(turma => turma.Nome.Contains(pesquisa, StringComparison.OrdinalIgnoreCase) ||
+                dados.ProfessorDisciplinas.Any(pd => pd.Disciplina.Nome.Contains(pesquisa, StringComparison.OrdinalIgnoreCase)) ||
+                dados.ProfessorDisciplinas.Any(pd => pd.Disciplina.Registro.Contains(pesquisa, StringComparison.OrdinalIgnoreCase)))
+            );
+        }
+
         if (filtro.Ano != null && filtro.Ano != "Todos os Anos")
         {
             int anoLetivo = int.Parse(filtro.Ano);

@@ -17,6 +17,7 @@ public abstract class Pessoa
     public required DateOnly Nasc { get; set; }
     public required string Endereco { get; set; }
     public required string Cpf { get; set; }
+    public required string NomeEmergencia { get; set; }
     public required string ContatoEmergencia { get; set; }
     public bool Deletado { get; set; } = false;
 }

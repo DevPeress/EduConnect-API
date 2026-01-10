@@ -15,7 +15,8 @@ public class ProfessorService(IProfessorRepository repo)
             Page = filtrodto.Page,
             Categoria = filtrodto.Categoria,
             Status = filtrodto.Status,
-            Ano = filtrodto.Ano
+            Ano = filtrodto.Ano,
+            Pesquisa = filtrodto.Pesquisa
         };
 
         var (professores, total) = await _professorRepository.GetByFilters(filtro);
@@ -63,6 +64,7 @@ public class ProfessorService(IProfessorRepository repo)
             Nasc = ProfessorDTO.Nasc,
             Endereco = ProfessorDTO.Endereco,
             Cpf = ProfessorDTO.CPF,
+            NomeEmergencia = ProfessorDTO.NomeEmergencia,
             ContatoEmergencia = ProfessorDTO.ContatoEmergencia,
             Turmas = [],
             Foto = ProfessorDTO.Foto,
@@ -91,6 +93,7 @@ public class ProfessorService(IProfessorRepository repo)
             Nasc = ProfessorDTO.Nasc,
             Endereco = ProfessorDTO.Endereco,
             Cpf = ProfessorDTO.CPF,
+            NomeEmergencia  = ProfessorDTO.NomeEmergencia,
             ContatoEmergencia = ProfessorDTO.ContatoEmergencia,
             Turmas = turmasDoProfessor,
             ProfessorDisciplinas = disciplinasDoProfessor,
