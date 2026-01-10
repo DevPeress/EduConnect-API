@@ -3,9 +3,9 @@ name: Build .NET 10
 # Dispara em push ou pull request na main
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "dev" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main", "dev" ]
 
 jobs:
   build:
