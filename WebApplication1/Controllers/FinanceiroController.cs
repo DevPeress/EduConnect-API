@@ -80,15 +80,16 @@ namespace EduConnect.Controllers
         }
 
         [Authorize(Roles = "Administrador, Funcionario")]
-        [HttpGet("filtro/categoria/{categoria}/status/{status}/data/{data}/page/{page}")]
-        public async Task<IActionResult> GetByFilters(string categoria, string status, string data, int page)
+        [HttpGet("filtro/categoria/{categoria}/status/{status}/data/{data}/page/{page}/pesquisa/{pesquisa}")]
+        public async Task<IActionResult> GetByFilters(string categoria, string status, string data, int page, string pesquisa)
         {
             var filtro = new FiltroFinanceiroDTO
             {
                 Categoria = categoria,
                 Status = status,
                 Meses = data,
-                Page = page
+                Page = page,
+                Pesquisa = pesquisa
             };
 
             var (financeiros, total) = await _financeiroService.GetByFilters(filtro);

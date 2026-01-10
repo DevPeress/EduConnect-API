@@ -14,15 +14,16 @@ namespace EduConnect.Controllers
     {
         private readonly ProfessorService _professorService = service;
 
-        [HttpGet("filtro/selecionada/{selecionada}/status/{status}/page/{page}/ano/{ano}")]
-        public async Task<IActionResult> GetAllProfessor(string selecionada, string status, int page, string ano)
+        [HttpGet("filtro/selecionada/{selecionada}/status/{status}/page/{page}/ano/{ano}/pesquisa/{pesquisa}")]
+        public async Task<IActionResult> GetAllProfessor(string selecionada, string status, int page, string ano, string pesquisa)
         {
             var filtro = new FiltroPessoaDTO
             {
                 Categoria = selecionada,
                 Status = status,
                 Page = page,
-                Ano = ano
+                Ano = ano,
+                Pesquisa = pesquisa
             };
 
             var (professores, total) = await _professorService.GetByFilters(filtro);

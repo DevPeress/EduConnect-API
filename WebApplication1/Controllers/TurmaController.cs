@@ -13,15 +13,16 @@ namespace EduConnect.Controllers
         private readonly TurmaService _turmaService = TurmaService;
 
         [Authorize(Roles = "Administrador, Funcionario, Professor")]
-        [HttpGet("filtro/turno/{turno}/status/{status}/page/{page}/ano/{ano}")]
-        public async Task<IActionResult> GetAllTurmas(string turno, string status, int page, string ano)
+        [HttpGet("filtro/turno/{turno}/status/{status}/page/{page}/ano/{ano}/pesquisa/{pesquisa}")]
+        public async Task<IActionResult> GetAllTurmas(string turno, string status, int page, string ano, string pesquisa)
         {
             var filtro = new FiltroTurmaDTO
             {
                 Turno = turno,
                 Status = status,
                 Page = page,
-                Ano = ano
+                Ano = ano,
+                Pesquisa = pesquisa
             };
 
             var (turmas, total) = await _turmaService.GetByFilters(filtro);

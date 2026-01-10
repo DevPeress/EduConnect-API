@@ -13,13 +13,15 @@ namespace EduConnect.Controllers
     {
         private readonly DisciplinasService _disciplinasService = service;
 
-        [HttpGet("filtro/page/{page}")]
-        public async Task<IActionResult> GetDisciplinas(int page)
+        [HttpGet("filtro/page/{page}/pesquisa/{pesquisa}")]
+        public async Task<IActionResult> GetDisciplinas(int page, string pesquisa)
         {
             var filtro = new FiltroBaseDTO
             {
-                Page = page
+                Page = page,
+                Pesquisa = pesquisa
             };
+
             var (disciplinas, total) = await _disciplinasService.GetDisciplinas(filtro);
             List<DisciplinasResponseViewModel> lista = [];
             foreach (var disciplina in disciplinas)
