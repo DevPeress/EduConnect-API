@@ -20,7 +20,8 @@ public class AlunoRepository(EduContext context) : IAlunoRepository
             query = query.Where(dados =>
                 dados.Nome.Contains(pesquisa, StringComparison.OrdinalIgnoreCase) ||
                 dados.Registro.Contains(pesquisa, StringComparison.OrdinalIgnoreCase) ||
-                dados.Email.Contains(pesquisa, StringComparison.OrdinalIgnoreCase)
+                dados.Email.Contains(pesquisa, StringComparison.OrdinalIgnoreCase) ||
+                dados.Cpf.Contains(pesquisa, StringComparison.OrdinalIgnoreCase) 
             );
         }
 
