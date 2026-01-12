@@ -37,10 +37,17 @@ namespace EduConnect.Controllers
                 return Unauthorized("Credenciais inválidas.");
             }
             
-            var (login, tentativas) = await _contaService.VerifyLogin(conta.Registro, conta.Senha, maxTentativas);
+            var (login, tentativas) = await _contaService.VerifyLogin(conta.Registro, contaDto.Senha, maxTentativas);
             if (login == false)
             {
-                return Ok(maxTentativas - tentativas);
+               if (tentativas == -1)
+               {
+                    return Unauthorized(-1);
+               } 
+               else
+               {
+                    return Unauthorized(maxTentativas - tentativas);
+               }
             }
            
             (string nome, string foto) = await _contaService.GetInfos(conta.Cargo, conta.Registro);
@@ -51,6 +58,7 @@ namespace EduConnect.Controllers
          
             var token = _jwtService.GenerateToken(contaDto.Registro, conta.Cargo, nome, foto, contaDto.Lembrar);
             var tempo = contaDto.Lembrar != null && contaDto.Lembrar == true ? 9 : 1;
+            Console.WriteLine("Tempo: " + tempo);
             Response.Cookies.Append("auth", token, new CookieOptions
             {
                 HttpOnly = true,
