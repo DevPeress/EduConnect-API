@@ -32,7 +32,7 @@ public class ContaRepository(EduContext context) : IContaRepository
                     conta.LimiteLogin = 0;
                     conta.DataLogin = null;
                     _context.Contas.Update(conta);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                 }
             }
 
@@ -44,12 +44,13 @@ public class ContaRepository(EduContext context) : IContaRepository
             else
             {
                 conta.LimiteLogin += 1;
+                Console.WriteLine(conta.LimiteLogin);
                 if (conta.LimiteLogin >= maxTentativas)
                 {
                     conta.DataLogin = DateTime.Now.AddMinutes(60);
-                    _context.Contas.Update(conta);
-                    _context.SaveChanges();
                 }
+                _context.Contas.Update(conta);
+                await _context.SaveChangesAsync();
                 return (false, conta.LimiteLogin);
             }
         }
