@@ -16,16 +16,14 @@ public class ProfessorRepository(EduContext context) : IProfessorRepository
 
         if (filtro.Pesquisa != "" && filtro.Pesquisa.Length > 2)
         {
-            string pesquisa = filtro.Pesquisa;
+            var pesquisa = $"%{filtro.Pesquisa}%";
+
             query = query.Where(dados =>
-                dados.Nome.Contains(pesquisa, StringComparison.OrdinalIgnoreCase) ||
-                dados.Registro.Contains(pesquisa, StringComparison.OrdinalIgnoreCase) ||
-                dados.Email.Contains(pesquisa, StringComparison.OrdinalIgnoreCase) ||
-                dados.Telefone.Contains(pesquisa, StringComparison.OrdinalIgnoreCase) ||
-                dados.Formacao.Contains(pesquisa, StringComparison.OrdinalIgnoreCase) ||
-                dados.Turmas.Any(turma => turma.Nome.Contains(pesquisa, StringComparison.OrdinalIgnoreCase) ||
-                dados.ProfessorDisciplinas.Any(pd => pd.Disciplina.Nome.Contains(pesquisa, StringComparison.OrdinalIgnoreCase)) ||
-                dados.ProfessorDisciplinas.Any(pd => pd.Disciplina.Registro.Contains(pesquisa, StringComparison.OrdinalIgnoreCase)))
+                EF.Functions.Like(dados.Nome, pesquisa) ||
+                EF.Functions.Like(dados.Registro, pesquisa) ||
+                EF.Functions.Like(dados.Email, pesquisa) ||
+                EF.Functions.Like(dados.Telefone, pesquisa) ||
+                EF.Functions.Like(dados.Formacao, pesquisa) 
             );
         }
 

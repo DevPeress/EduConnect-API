@@ -14,11 +14,12 @@ public class DisciplinasRepository(EduContext context) : IDisciplinasRepository
 
         if (filtro.Pesquisa != "" && filtro.Pesquisa.Length > 2)
         {
-            string pesquisa = filtro.Pesquisa;
+            var pesquisa = $"%{filtro.Pesquisa}%";
+
             query = query.Where(dados =>
-                dados.Nome.Contains(pesquisa, StringComparison.OrdinalIgnoreCase) ||
-                dados.Registro.Contains(pesquisa, StringComparison.OrdinalIgnoreCase) ||
-                dados.Descricao.Contains(pesquisa, StringComparison.OrdinalIgnoreCase) 
+                EF.Functions.Like(dados.Nome, pesquisa) ||
+                EF.Functions.Like(dados.Registro, pesquisa) ||
+                EF.Functions.Like(dados.Descricao, pesquisa)
             );
         }
 

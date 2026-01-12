@@ -15,17 +15,15 @@ public class TurmaRepository(EduContext context) : ITurmaRepository
 
         if (filtro.Pesquisa != "" && filtro.Pesquisa.Length > 2)
         {
-            string pesquisa = filtro.Pesquisa;
+            var pesquisa = $"%{filtro.Pesquisa}%";
+
             query = query.Where(dados =>
-                dados.Nome.Contains(pesquisa, StringComparison.OrdinalIgnoreCase) ||
-                dados.Registro.Contains(pesquisa, StringComparison.OrdinalIgnoreCase) ||
-                dados.Sala.Contains(pesquisa, StringComparison.OrdinalIgnoreCase) ||
-                dados.Capacidade.ToString().Contains(pesquisa, StringComparison.OrdinalIgnoreCase) ||
-                dados.Professor.Nome.Contains(pesquisa, StringComparison.OrdinalIgnoreCase) ||
-                dados.Professor.Registro.Contains(pesquisa, StringComparison.OrdinalIgnoreCase) ||
-                dados.TurmaDisciplinas.Any(td => td.Disciplina.Nome.Contains(pesquisa, StringComparison.OrdinalIgnoreCase) ||
-                dados.Alunos.Any(a => a.Nome.Contains(pesquisa, StringComparison.OrdinalIgnoreCase)) ||
-                dados.Alunos.Any(a => a.Registro.Contains(pesquisa, StringComparison.OrdinalIgnoreCase)))
+                EF.Functions.Like(dados.Nome, pesquisa) ||
+                EF.Functions.Like(dados.Registro, pesquisa) ||
+                EF.Functions.Like(dados.Sala, pesquisa) ||
+                EF.Functions.Like(dados.Capacidade.ToString(), pesquisa) ||
+                EF.Functions.Like(dados.Professor.Nome, pesquisa) ||
+                EF.Functions.Like(dados.Professor.Registro, pesquisa) 
             );
         }
 

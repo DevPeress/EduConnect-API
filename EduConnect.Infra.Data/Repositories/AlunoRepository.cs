@@ -14,14 +14,15 @@ public class AlunoRepository(EduContext context) : IAlunoRepository
     {
         var query = _context.Alunos.AsNoTracking().Where(p => p.Deletado == false);
 
-        if (filtro.Pesquisa != "" && filtro.Pesquisa.Length > 2)
+        if (filtro.Pesquisa != "Todos")
         {
-            string pesquisa = filtro.Pesquisa;
+            var pesquisa = $"%{filtro.Pesquisa}%";
+
             query = query.Where(dados =>
-                dados.Nome.Contains(pesquisa, StringComparison.OrdinalIgnoreCase) ||
-                dados.Registro.Contains(pesquisa, StringComparison.OrdinalIgnoreCase) ||
-                dados.Email.Contains(pesquisa, StringComparison.OrdinalIgnoreCase) ||
-                dados.Cpf.Contains(pesquisa, StringComparison.OrdinalIgnoreCase) 
+                EF.Functions.Like(dados.Nome, pesquisa) ||
+                EF.Functions.Like(dados.Registro, pesquisa) ||
+                EF.Functions.Like(dados.Email, pesquisa) ||
+                EF.Functions.Like(dados.Cpf, pesquisa)
             );
         }
 
@@ -40,7 +41,6 @@ public class AlunoRepository(EduContext context) : IAlunoRepository
         {
             query = query.Where(dados => dados.Turma!.Nome == filtro.Categoria);
         }
-
         return query;
     }
 

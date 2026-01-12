@@ -17,16 +17,17 @@ public class FinanceiroRepository(EduContext context) : IFinanceiroRepository
 
         if (filtro.Pesquisa != "" && filtro.Pesquisa.Length > 2)
         {
-            string pesquisa = filtro.Pesquisa;
+            var pesquisa = $"%{filtro.Pesquisa}%";
+
             query = query.Where(dados =>
-                dados.AlunoRegistro.Contains(pesquisa, StringComparison.OrdinalIgnoreCase) ||
-                dados.Registro.Contains(pesquisa, StringComparison.OrdinalIgnoreCase) ||
-                dados.Descricao.Contains(pesquisa, StringComparison.OrdinalIgnoreCase) ||
-                dados.Metodo.Contains(pesquisa, StringComparison.OrdinalIgnoreCase) ||
-                dados.Observacoes!.Contains(pesquisa, StringComparison.OrdinalIgnoreCase) ||
-                dados.Valor.ToString().Contains(pesquisa, StringComparison.OrdinalIgnoreCase) ||
-                dados.Aluno.Nome.Contains(pesquisa, StringComparison.OrdinalIgnoreCase) ||
-                dados.Aluno.Email.Contains(pesquisa, StringComparison.OrdinalIgnoreCase)
+                EF.Functions.Like(dados.AlunoRegistro, pesquisa) ||
+                EF.Functions.Like(dados.Registro, pesquisa) ||
+                EF.Functions.Like(dados.Descricao, pesquisa) ||
+                EF.Functions.Like(dados.Metodo, pesquisa) ||
+                EF.Functions.Like(dados.Observacoes!, pesquisa) ||
+                EF.Functions.Like(dados.Valor.ToString(), pesquisa) ||
+                EF.Functions.Like(dados.Aluno.Nome, pesquisa) ||
+                EF.Functions.Like(dados.Aluno.Email, pesquisa)
             );
         }
 

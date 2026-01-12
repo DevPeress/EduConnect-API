@@ -16,13 +16,14 @@ public class FuncionarioRepository(EduContext context) : IFuncionarioRepository
 
         if (filtro.Pesquisa != "" && filtro.Pesquisa.Length > 2)
         {
-            string pesquisa = filtro.Pesquisa;
+            var pesquisa = $"%{filtro.Pesquisa}%";
+
             query = query.Where(dados =>
-                dados.Nome.Contains(pesquisa, StringComparison.OrdinalIgnoreCase) ||
-                dados.Registro.Contains(pesquisa, StringComparison.OrdinalIgnoreCase) ||
-                dados.Email.Contains(pesquisa, StringComparison.OrdinalIgnoreCase) ||
-                dados.Cargo.Contains(pesquisa, StringComparison.OrdinalIgnoreCase) ||
-                dados.Supervisor.Contains(pesquisa, StringComparison.OrdinalIgnoreCase) 
+                EF.Functions.Like(dados.Nome, pesquisa) ||
+                EF.Functions.Like(dados.Registro, pesquisa) ||
+                EF.Functions.Like(dados.Email, pesquisa) ||
+                EF.Functions.Like(dados.Cargo, pesquisa) ||
+                EF.Functions.Like(dados.Supervisor, pesquisa) 
             );
         }
 
