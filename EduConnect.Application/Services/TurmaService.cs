@@ -24,10 +24,10 @@ public class TurmaService(ITurmaRepository repo)
             Registro = turmas.Registro,
             Nome = turmas.Nome,
             Turno = turmas.Turno,
-            Inicio = turmas.Inicio,
-            Fim = turmas.Fim,
+            Professor = turmas.ProfessorResponsavel,
+            Horario = $"{turmas.Inicio} - {turmas.Fim}",
             Sala = turmas.Sala,
-            Status = turmas.Status,
+            Capacidade = turmas.Capacidade,
         }).ToList();
 
         return (turmaDTO, total);
