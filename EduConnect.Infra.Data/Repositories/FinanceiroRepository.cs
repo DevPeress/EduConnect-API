@@ -15,7 +15,7 @@ public class FinanceiroRepository(EduContext context) : IFinanceiroRepository
     {
         var query = _context.Financeiros.AsNoTracking().Where(p => p.Deletado == false);
 
-        if (filtro.Pesquisa != "" && filtro.Pesquisa.Length > 2)
+        if (filtro.Pesquisa != "Todos" && filtro.Pesquisa.Length > 0)
         {
             var pesquisa = $"%{filtro.Pesquisa}%";
 

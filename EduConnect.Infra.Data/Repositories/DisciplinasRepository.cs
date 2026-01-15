@@ -12,7 +12,7 @@ public class DisciplinasRepository(EduContext context) : IDisciplinasRepository
     {
         var query = _context.Disciplinas.AsNoTracking().Where(p => p.Deletado == false);
 
-        if (filtro.Pesquisa != "" && filtro.Pesquisa.Length > 2)
+        if (filtro.Pesquisa != "Todos" && filtro.Pesquisa.Length > 0)
         {
             var pesquisa = $"%{filtro.Pesquisa}%";
 

@@ -13,7 +13,7 @@ public class TurmaRepository(EduContext context) : ITurmaRepository
     {
         var query = _context.Turmas.AsNoTracking().Where(p => p.Deletado == false);
 
-        if (filtro.Pesquisa != "" && filtro.Pesquisa.Length > 2)
+        if (filtro.Pesquisa != "Todos" && filtro.Pesquisa.Length > 0)
         {
             var pesquisa = $"%{filtro.Pesquisa}%";
 

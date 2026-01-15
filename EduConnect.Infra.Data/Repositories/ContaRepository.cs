@@ -9,7 +9,7 @@ namespace EduConnect.Infra.Data.Repositories;
 public class ContaRepository(EduContext context) : IContaRepository
 {
     private readonly EduContext _context = context;
-    private bool VerifyDate(DateTime dataLogin)
+    private static bool VerifyDate(DateTime dataLogin)
     {
         var currentDate = DateTime.Now;
         return dataLogin > currentDate;

@@ -14,7 +14,7 @@ public class ProfessorRepository(EduContext context) : IProfessorRepository
     {
         var query = _context.Professores.AsNoTracking().Where(p => p.Deletado == false);
 
-        if (filtro.Pesquisa != "" && filtro.Pesquisa.Length > 2)
+        if (filtro.Pesquisa != "Todos" && filtro.Pesquisa.Length > 0)
         {
             var pesquisa = $"%{filtro.Pesquisa}%";
 
