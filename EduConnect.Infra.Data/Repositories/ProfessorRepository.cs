@@ -81,7 +81,7 @@ public class ProfessorRepository(EduContext context) : IProfessorRepository
 
     public async Task<List<Turma>?> GetTurmasByProfessorAsync(string Registro)
     {
-        return await _context.Turmas.Where(t => t.Professor.Registro == Registro).ToListAsync();
+        return await _context.Turmas.Where(t => t.ProfessorResponsavel == Registro).ToListAsync();
     }
 
     public async Task<Professor?> GetByIdAsync(string Registro)

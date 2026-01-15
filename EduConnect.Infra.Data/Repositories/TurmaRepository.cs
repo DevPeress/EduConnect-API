@@ -7,7 +7,7 @@ namespace EduConnect.Infra.Data.Repositories;
 public class TurmaRepository(EduContext context) : ITurmaRepository
 {
     private readonly EduContext _context = context;
-    private readonly DateOnly Year = DateOnly.FromDateTime(DateTime.Now);
+    private readonly string Year = DateTime.Now.Year.ToString();
 
     private IQueryable<Turma> QueryFiltroTurma(FiltroTurma filtro)
     {
@@ -22,15 +22,13 @@ public class TurmaRepository(EduContext context) : ITurmaRepository
                 EF.Functions.Like(dados.Registro, pesquisa) ||
                 EF.Functions.Like(dados.Sala, pesquisa) ||
                 EF.Functions.Like(dados.Capacidade.ToString(), pesquisa) ||
-                EF.Functions.Like(dados.Professor.Nome, pesquisa) ||
-                EF.Functions.Like(dados.Professor.Registro, pesquisa) 
+                EF.Functions.Like(dados.ProfessorResponsavel, pesquisa)
             );
         }
 
         if (filtro.Ano != null && filtro.Ano != "Todos os Anos")
         {
-            int anoLetivo = int.Parse(filtro.Ano);
-            query = query.Where(dados => dados.AnoLetivo.Year == anoLetivo);
+            query = query.Where(dados => dados.AnoLetivo == filtro.Ano);
         }
 
         if (filtro.Status != null && filtro.Status != "Todos os Status")
