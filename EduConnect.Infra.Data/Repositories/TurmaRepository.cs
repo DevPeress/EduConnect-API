@@ -82,14 +82,55 @@ public class TurmaRepository(EduContext context) : ITurmaRepository
         return await _context.Turmas.FirstOrDefaultAsync(dados => dados.Registro == id && dados.Deletado == false);
     }
 
-    public async Task AddTurmaAsync(Turma turma)
+    public async Task AddTurmaAsync(Turma turma, List<string> disciplinas)
     {
+        foreach (var disciplina in disciplinas)
+        {
+            await _context.TurmaDisciplinas.AddAsync(new TurmaDisciplina
+            {
+                AnoLetivo = turma.AnoLetivo,
+                TurmaRegistro = turma.Registro,
+                DisciplinaRegistro = disciplina
+            });
+        }
+
+        await _context.SaveChangesAsync();
+
+        var disciplinasRegistradas = await _context.TurmaDisciplinas
+            .Where(td => td.TurmaRegistro == turma.Registro && turma.AnoLetivo == td.AnoLetivo)
+            .ToListAsync();
+
+        turma.TurmaDisciplinas = disciplinasRegistradas;
+
         await _context.Turmas.AddAsync(turma);
         await _context.SaveChangesAsync();
     }
 
-    public async Task UpdateTurmaAsync(Turma turma)
+    public async Task UpdateTurmaAsync(Turma turma, List<string> disciplinas)
     {
+        foreach (var disciplina in disciplinas)
+        {
+            var existingEntry = await _context.TurmaDisciplinas
+                .FirstOrDefaultAsync(td => td.TurmaRegistro == turma.Registro &&
+                                           td.DisciplinaRegistro == disciplina &&
+                                           td.AnoLetivo == turma.AnoLetivo);
+            if (existingEntry == null)
+            {
+                await _context.TurmaDisciplinas.AddAsync(new TurmaDisciplina
+                {
+                    AnoLetivo = turma.AnoLetivo,
+                    TurmaRegistro = turma.Registro,
+                    DisciplinaRegistro = disciplina
+                });
+            }
+        }
+
+        var disciplinasRegistradas = await _context.TurmaDisciplinas
+           .Where(td => td.TurmaRegistro == turma.Registro && turma.AnoLetivo == td.AnoLetivo)
+           .ToListAsync();
+
+        turma.TurmaDisciplinas = disciplinasRegistradas;
+
         _context.Turmas.Update(turma);
         await _context.SaveChangesAsync();
     }

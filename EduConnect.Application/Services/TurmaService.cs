@@ -72,7 +72,7 @@ public class TurmaService(ITurmaRepository repo)
             TurmaDisciplinas = [],
             Deletado = false,
         };
-        await _turmaRepository.AddTurmaAsync(turma);
+        await _turmaRepository.AddTurmaAsync(turma, turmaDTO.Disciplinas);
     }
 
     public async Task UpdateTurmaAsync(TurmaUpdateDTO turmaDTO)
@@ -91,10 +91,10 @@ public class TurmaService(ITurmaRepository repo)
             Status = turmaDTO.Status,
             ProfessorResponsavel = turmaDTO.ProfessorResponsavel,
             Alunos = turmaDTO.Alunos,
-            TurmaDisciplinas = turmaDTO.TurmaDisciplina,
+            TurmaDisciplinas = [],
             Deletado = turmaDTO.Deletado,
         };
-        await _turmaRepository.UpdateTurmaAsync(turma);
+        await _turmaRepository.UpdateTurmaAsync(turma, turmaDTO.TurmaDisciplina);
     }
 
     public async Task DeleteTurmaAsync(string id)

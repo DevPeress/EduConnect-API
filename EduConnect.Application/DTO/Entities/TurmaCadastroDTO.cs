@@ -12,4 +12,5 @@ public record TurmaCadastroDTO
     public required TimeOnly Fim { get; set; }
     public required string Sala { get; set; }
     public required List<string> Dias { get; set; }
+    public required List<string> Disciplinas { get; set; }
 }
