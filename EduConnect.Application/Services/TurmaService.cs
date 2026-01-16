@@ -70,6 +70,7 @@ public class TurmaService(ITurmaRepository repo)
             ProfessorResponsavel = turmaDTO.ProfessorResponsavel,
             Alunos = [],
             TurmaDisciplinas = [],
+            Dias = turmaDTO.Dias,
             Deletado = false,
         };
         await _turmaRepository.AddTurmaAsync(turma, turmaDTO.Disciplinas);
@@ -91,8 +92,9 @@ public class TurmaService(ITurmaRepository repo)
             Status = turmaDTO.Status,
             ProfessorResponsavel = turmaDTO.ProfessorResponsavel,
             Alunos = turmaDTO.Alunos,
+            Dias = turmaDTO.Dias,
             TurmaDisciplinas = [],
-            Deletado = turmaDTO.Deletado,
+            Deletado = false,
         };
         await _turmaRepository.UpdateTurmaAsync(turma, turmaDTO.TurmaDisciplina);
     }

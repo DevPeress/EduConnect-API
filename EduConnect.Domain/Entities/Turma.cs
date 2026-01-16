@@ -17,6 +17,7 @@ public class Turma
     public DateOnly DataCriacao { get; set; } 
     public required string Status { get; set; }
     public required string ProfessorResponsavel { get; set; }
+    public required List<string> Dias { get; set; }
     public required bool Deletado { get; set; }
 
     // Relacionamento
