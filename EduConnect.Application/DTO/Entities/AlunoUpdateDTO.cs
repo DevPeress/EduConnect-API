@@ -1,6 +1,4 @@
-﻿using EduConnect.Domain.Entities;
-
-namespace EduConnect.Application.DTO.Entities;
+﻿namespace EduConnect.Application.DTO.Entities;
 
 public record AlunoUpdateDTO
 {
@@ -15,7 +13,5 @@ public record AlunoUpdateDTO
     public required string Cpf { get; init; }
     public required string NomeEmergencia { get; init; }
     public required string ContatoEmergencia { get; init; }
-    public bool Deletado { get; init; }
-    public required int Media { get; init; }
     public string? TurmaRegistro { get; init; }
 }
