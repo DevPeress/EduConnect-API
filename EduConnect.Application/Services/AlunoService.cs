@@ -97,7 +97,7 @@ public class AlunoService(IAlunoRepository repo)
             ContatoEmergencia = AlunoDTO.ContatoEmergencia,
             NomeEmergencia = AlunoDTO.NomeEmergencia,
             DataMatricula = matricula,
-            Deletado = AlunoDTO.Deletado,
+            Deletado = false,
             Media = media,
             TurmaRegistro = AlunoDTO.TurmaRegistro
         };
