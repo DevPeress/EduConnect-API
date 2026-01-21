@@ -13,5 +13,5 @@ public record AlunoUpdateDTO
     public required string Cpf { get; init; }
     public required string NomeEmergencia { get; init; }
     public required string ContatoEmergencia { get; init; }
-    public string? TurmaRegistro { get; init; }
+    public required string TurmaRegistro { get; init; }
 }
