@@ -81,7 +81,7 @@ public class AlunoService(IAlunoRepository repo)
         await _alunoRepository.AddAsync(aluno);
     }
 
-    public async Task UpdateAlunoAsync(AlunoUpdateDTO AlunoDTO, DateOnly matricula)
+    public async Task UpdateAlunoAsync(AlunoUpdateDTO AlunoDTO, DateOnly matricula, int media)
     {
         var aluno = new Aluno
         {
@@ -98,7 +98,7 @@ public class AlunoService(IAlunoRepository repo)
             NomeEmergencia = AlunoDTO.NomeEmergencia,
             DataMatricula = matricula,
             Deletado = AlunoDTO.Deletado,
-            Media = AlunoDTO.Media,
+            Media = media,
             TurmaRegistro = AlunoDTO.TurmaRegistro
         };
         await _alunoRepository.UpdateAsync(aluno);
