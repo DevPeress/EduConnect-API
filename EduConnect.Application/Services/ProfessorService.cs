@@ -79,7 +79,7 @@ public class ProfessorService(IProfessorRepository repo)
     {
         var disciplinas = await _professorRepository.GetDisciplinasByProfessorAsync(ProfessorDTO.Registro);
         ICollection<ProfessorDisciplina> disciplinasDoProfessor = disciplinas != null! ? disciplinas : [];
-
+         
         var turmas = await _professorRepository.GetTurmasByProfessorAsync(ProfessorDTO.Registro);
         ICollection<Turma> turmasDoProfessor = turmas != null! ? turmas : [];
 
@@ -104,6 +104,7 @@ public class ProfessorService(IProfessorRepository repo)
         };
         await _professorRepository.UpdateAsync(professor);
     }
+
     public async Task DeleteProfessorAsync(string Registro)
     {
         await _professorRepository.DeleteAsync(Registro);
