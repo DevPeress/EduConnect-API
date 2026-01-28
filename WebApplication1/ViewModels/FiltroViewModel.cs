@@ -9,4 +9,5 @@ public record FiltroViewModel
     public string Pesquisa { get; set; } = "";
     public string Data { get; set; } = "";
     public string Selecionada { get; set; } = "";
+    public string Turno { get; set; } = "";
 }
