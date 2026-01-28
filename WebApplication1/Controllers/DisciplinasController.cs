@@ -13,16 +13,21 @@ namespace EduConnect.Controllers
     {
         private readonly DisciplinasService _disciplinasService = service;
 
-        [HttpGet("filtro/page/{page}/pesquisa/{pesquisa}")]
-        public async Task<IActionResult> GetDisciplinas(int page, string pesquisa)
+        [HttpGet("filtro")]
+        public async Task<IActionResult> GetDisciplinas([FromQuery] FiltroViewModel viewModel)
         {
             var filtro = new FiltroBaseDTO
             {
-                Page = page,
-                Pesquisa = pesquisa
+                Page = viewModel.Page,
+                Pesquisa = viewModel.Pesquisa
             };
 
-            var (disciplinas, total) = await _disciplinasService.GetDisciplinas(filtro);
+            var result = await _disciplinasService.GetDisciplinas(filtro);
+            if (result == null)
+                return NoContent();
+
+            var (disciplinas, total) = result.Value;
+
             List<DisciplinasResponseViewModel> lista = [];
             foreach (var disciplina in disciplinas)
             {
@@ -34,6 +39,7 @@ namespace EduConnect.Controllers
                     DataCriacao = disciplina.DataCriacao
                 });
             }
+
             return Ok(new FiltroResponseViewModel<DisciplinasResponseViewModel>
             {
                 Total = total,
@@ -45,8 +51,11 @@ namespace EduConnect.Controllers
         public async Task<IActionResult> GetAllDisciplinas()
         {
             var disciplinas = await _disciplinasService.GetAllDisciplinas();
+            if (disciplinas == null)
+                return NoContent();
+
             List<DisciplinasResponseViewModel> lista = [];
-            foreach (var disciplina in disciplinas)
+            foreach (var disciplina in disciplinas.Value)
             {
                 lista.Add(new DisciplinasResponseViewModel
                 {
@@ -56,6 +65,7 @@ namespace EduConnect.Controllers
                     DataCriacao = disciplina.DataCriacao
                 });
             }
+
             return Ok(lista);
         }
 
@@ -64,11 +74,10 @@ namespace EduConnect.Controllers
         {
             var disciplinas = await _disciplinasService.GetLastDisciplina();
             if (disciplinas == null)
-            {
                 return Ok("D000001");
-            }
+         
             // Registro vem no formato MA000123
-            var atual = disciplinas.Registro;
+            var atual = disciplinas.Value.Registro;
 
             // Pega somente os números (6 dígitos)
             var numeros = atual.Substring(2);
@@ -88,14 +97,20 @@ namespace EduConnect.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateDisciplina([FromBody] DisciplinaCadastroDTO DisciplinaDTO)
         {
-            await _disciplinasService.CreateDisciplina(DisciplinaDTO);
+            var create = await _disciplinasService.CreateDisciplina(DisciplinaDTO);
+            if (create == null)
+                return BadRequest("Erro ao criar disciplina.");
+
             return Ok("Disciplina criada com sucesso.");
         }
 
         [HttpDelete("{Registro}")]
         public async Task<IActionResult> DeleteDisciplina(string Registro)
         {
-            await _disciplinasService.DeleteDisciplina(Registro);
+            var delete = await _disciplinasService.DeleteDisciplina(Registro);
+            if (delete == null)
+                return NotFound("Disciplina não encontrada.");
+          
             return Ok();
         }
     }

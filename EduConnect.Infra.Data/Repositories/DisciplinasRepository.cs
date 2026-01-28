@@ -1,6 +1,7 @@
 ﻿using EduConnect.Domain.Entities;
 using EduConnect.Domain.Interfaces;
 using EduConnect.Infra.Data.Context;
+using FluentResults;
 using Microsoft.EntityFrameworkCore;
 
 namespace EduConnect.Infra.Data.Repositories;
@@ -26,7 +27,7 @@ public class DisciplinasRepository(EduContext context) : IDisciplinasRepository
         return query;
     }
 
-    public async Task<(IEnumerable<Disciplinas>, int TotalRegistro)> GetDisciplinas(FiltroDisciplinas filtro)
+    public async Task<Result<(IEnumerable<Disciplinas>, int TotalRegistro)>> GetDisciplinas(FiltroDisciplinas filtro)
     {
         var query = QueryFiltroAluno(filtro);
         var total = await query.CountAsync();
@@ -37,7 +38,7 @@ public class DisciplinasRepository(EduContext context) : IDisciplinasRepository
         return (result, total);
     }
 
-    public async Task<List<Disciplinas>> GetAllDisciplinas()
+    public async Task<Result<List<Disciplinas>>> GetAllDisciplinas()
     {
         return await _context.Disciplinas
             .AsNoTracking()
@@ -45,27 +46,37 @@ public class DisciplinasRepository(EduContext context) : IDisciplinasRepository
             .ToListAsync();
     }
 
-    public async Task<Disciplinas?> GetLastDisciplina()
+    public async Task<Result<Disciplinas>> GetLastDisciplina()
     {
-        return await _context.Disciplinas
+        var lastDisciplina = await _context.Disciplinas
             .OrderBy(d => d.Registro)
             .LastOrDefaultAsync();
+        if (lastDisciplina == null)
+            return Result.Fail("Nenhuma disciplina encontrada.");
+
+        return lastDisciplina;
     }
 
-    public async Task<Disciplinas> CreateDisciplina(Disciplinas disciplina)
+    public async Task<Result<Disciplinas>> CreateDisciplina(Disciplinas disciplina)
     {
+        var discplinas = await _context.Disciplinas.AnyAsync(d => d.Registro == disciplina.Registro);
+        if (discplinas)
+            return Result.Fail("Já existe uma disciplina com esse registro.");
+
         _context.Disciplinas.Add(disciplina);
         await _context.SaveChangesAsync();
         return disciplina;
     }
 
-    public async Task DeleteDisciplina(string Registro)
+    public async Task<Result<bool>> DeleteDisciplina(string Registro)
     {
         var disciplina = await _context.Disciplinas.FirstOrDefaultAsync(d => d.Registro == Registro);
-        if (disciplina != null)
-        {
-            disciplina.Deletado = true;
-            await _context.SaveChangesAsync();
-        }
+        if (disciplina == null)
+            return Result.Fail("Disciplina não encontrada.");
+        
+        disciplina.Deletado = true;
+        await _context.SaveChangesAsync();
+        
+        return Result.Ok(true);
     }
 }

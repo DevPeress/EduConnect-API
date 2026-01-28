@@ -1,12 +1,13 @@
 ﻿using EduConnect.Domain.Entities;
+using FluentResults;
 
 namespace EduConnect.Domain.Interfaces;
 
 public interface IDisciplinasRepository
 {
-    Task<(IEnumerable<Disciplinas>, int TotalRegistro)> GetDisciplinas(FiltroDisciplinas filtro);
-    Task<List<Disciplinas>> GetAllDisciplinas();
-    Task<Disciplinas?> GetLastDisciplina();
-    Task<Disciplinas> CreateDisciplina(Disciplinas disciplina);
-    Task DeleteDisciplina(string Registro);
+    Task<Result<(IEnumerable<Disciplinas>, int TotalRegistro)>> GetDisciplinas(FiltroDisciplinas filtro);
+    Task<Result<List<Disciplinas>>> GetAllDisciplinas();
+    Task<Result<Disciplinas>> GetLastDisciplina();
+    Task<Result<Disciplinas>> CreateDisciplina(Disciplinas disciplina);
+    Task<Result<bool>> DeleteDisciplina(string Registro);
 }
