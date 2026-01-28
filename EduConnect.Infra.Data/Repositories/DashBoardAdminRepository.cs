@@ -33,7 +33,6 @@ public class DashBoardAdminRepository(EduContext context) : IDashboardAdminRepos
 
         var result = resultList.First(); // pega a primeira linha
 
-
         return (
             result.TotalAlunos,
             result.TotalProfessores,
@@ -55,7 +54,6 @@ public class DashBoardAdminRepository(EduContext context) : IDashboardAdminRepos
             .ToListAsync(); // async e funciona com SP não-composable
 
         var result = resultList.First(); // pega a primeira linha
-
 
         return (
             result.AumentoAlunos,
