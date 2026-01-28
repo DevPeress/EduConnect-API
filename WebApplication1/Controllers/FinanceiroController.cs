@@ -133,7 +133,7 @@ namespace EduConnect.Controllers
                 return NotFound();
         
             var aluno = _alunoService.GetAlunoByIdAsync(financeiro.Value.Aluno.Registro).Result;
-            if (aluno == null)
+            if (aluno.IsFailed)
                 return NotFound();
 
             var verificarStatus = financeiro.Value.Pago ? "Pago" : financeiro.Value.Cancelado ? "Cancelado" : financeiro.Value.DataVencimento < DateOnly.FromDateTime(DateTime.Now) ? "Atrasado" : "Pendente";

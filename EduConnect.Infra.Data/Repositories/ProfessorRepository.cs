@@ -2,6 +2,7 @@
 using EduConnect.Domain.Interfaces;
 using EduConnect.Infra.CrossCutting.Utils;
 using EduConnect.Infra.Data.Context;
+using FluentResults;
 using Microsoft.EntityFrameworkCore;
 
 namespace EduConnect.Infra.Data.Repositories;
@@ -46,7 +47,7 @@ public class ProfessorRepository(EduContext context) : IProfessorRepository
         return query;
     }
 
-    public async Task<(IEnumerable<Professor>, int TotalRegistro)> GetByFilters(FiltroPessoa filtro)
+    public async Task<Result<(List<Professor>, int TotalRegistro)>> GetByFilters(FiltroPessoa filtro)
     {
         var query = QueryFiltroProfessor(filtro);
         var total = await query.CountAsync();
@@ -57,7 +58,7 @@ public class ProfessorRepository(EduContext context) : IProfessorRepository
         return (result, total);
     }
 
-    public async Task<(List<string>, List<string>)> GetInformativos()
+    public async Task<Result<(List<string>, List<string>)>> GetInformativos()
     {
         var anos = await _context.Professores
             .Where(a => a.Deletado == false)
@@ -74,30 +75,43 @@ public class ProfessorRepository(EduContext context) : IProfessorRepository
         return (anos, salas);
     }
 
-    public async Task<List<ProfessorDisciplina>?> GetDisciplinasByProfessorAsync(string Registro)
+    public async Task<Result<List<ProfessorDisciplina>>> GetDisciplinasByProfessorAsync(string Registro)
     {
         return await _context.ProfessorDisciplinas.Where(p => p.Professor.Registro == Registro).ToListAsync();
     }
 
-    public async Task<List<Turma>?> GetTurmasByProfessorAsync(string Registro)
+    public async Task<Result<List<Turma>>> GetTurmasByProfessorAsync(string Registro)
     {
         return await _context.Turmas.Where(t => t.ProfessorResponsavel == Registro).ToListAsync();
     }
 
-    public async Task<Professor?> GetByIdAsync(string Registro)
+    public async Task<Result<Professor>> GetByIdAsync(string Registro)
     {
-        return await _context.Professores.Where(p => p.Deletado == false).FirstOrDefaultAsync(a => a.Registro == Registro);
+        var professor = await _context.Professores.Where(p => p.Deletado == false).FirstOrDefaultAsync(a => a.Registro == Registro);
+        if (professor == null)
+            return Result.Fail<Professor>("Professor não encontrado.");
+
+        return professor;
     }
 
-    public async Task<Professor?> GetLastPessoaAsync()
+    public async Task<Result<Professor>> GetLastPessoaAsync()
     {
-        return await _context.Professores.Where(p => p.Deletado == false)
+        var professor = await _context.Professores.Where(p => p.Deletado == false)
         .OrderBy(a => a.Registro)
         .LastOrDefaultAsync();
+
+        if (professor == null)
+            return Result.Fail<Professor>("Nenhum professor encontrado.");
+
+        return professor; 
     }
 
-    public async Task AddAsync(Professor professor)
+    public async Task<Result<bool>> AddAsync(Professor professor)
     {
+        var existingProfessor = await GetByIdAsync(professor.Registro);
+        if (existingProfessor.IsSuccess)
+            return Result.Fail<bool>("Registro de professor já existe.");
+
         var conta = new Conta
         {
             Registro = professor.Registro,
@@ -112,25 +126,33 @@ public class ProfessorRepository(EduContext context) : IProfessorRepository
 
         await _context.Professores.AddAsync(professor);
         await _context.SaveChangesAsync();
+
+        return Result.Ok(true);
     }
 
-    public async Task UpdateAsync(Professor professor)
+    public async Task<Result<bool>> UpdateAsync(Professor professor)
     {
+        var existingProfessor = await GetByIdAsync(professor.Registro);
+        if (existingProfessor == null)
+            return Result.Fail<bool>("Professor não encontrado.");
+
         _context.Professores.Update(professor);
         await _context.SaveChangesAsync();
+
+        return Result.Ok(true);
     }
 
-    public async Task DeleteAsync(string Registro)
+    public async Task<Result<bool>> DeleteAsync(string Registro)
     {
         var professor = await GetByIdAsync(Registro);
-        if (professor != null)
-        {
-            await Task.Run(() =>
-            {
-                professor.Deletado = false;
-                _context.Professores.Update(professor);
-                _context.SaveChanges();
-            });
-        }
+        if (professor.IsFailed)
+            return Result.Fail<bool>("Professor não encontrado.");
+
+       
+        professor.Value.Deletado = false;
+        _context.Professores.Update(professor.Value);
+        await _context.SaveChangesAsync();
+
+        return Result.Ok(true);
     }
 }

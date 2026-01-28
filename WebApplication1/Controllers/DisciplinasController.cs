@@ -73,7 +73,7 @@ namespace EduConnect.Controllers
         public async Task<IActionResult> GetDisciplinaByCadastro()
         {
             var disciplinas = await _disciplinasService.GetLastDisciplina();
-            if (disciplinas == null)
+            if (disciplinas.IsFailed)
                 return Ok("D000001");
          
             // Registro vem no formato MA000123

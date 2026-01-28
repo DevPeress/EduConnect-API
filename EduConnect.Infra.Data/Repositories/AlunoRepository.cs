@@ -130,15 +130,12 @@ public class AlunoRepository(EduContext context) : IAlunoRepository
     public async Task<Result<bool>> DeleteAsync(string Registro)
     {
         var aluno = await GetByIdAsync(Registro);
-        if (aluno == null) 
+        if (aluno.IsFailed) 
             return Result.Fail("Não foi possível localizar o Aluno para a exclusão.");
 
-        await Task.Run(() =>
-        {
-            aluno.Deletado = true;
-            _context.Alunos.Update(aluno);
-            _context.SaveChanges();
-        });
+        aluno.Value.Deletado = true;
+        _context.Alunos.Update(aluno.Value);
+        await _context.SaveChangesAsync();
 
         return Result.Ok(true);
     }

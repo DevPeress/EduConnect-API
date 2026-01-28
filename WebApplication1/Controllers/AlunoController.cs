@@ -127,7 +127,7 @@ namespace EduConnect.Controllers
         public async Task<IActionResult> DeleteAluno(string Registro)
         {
             var existingAluno = await _alunoService.GetAlunoByIdAsync(Registro);
-            if (existingAluno == null)
+            if (existingAluno.IsFailed)
                 return NotFound();
 
             var update = await _alunoService.DeleteAlunoAsync(Registro);

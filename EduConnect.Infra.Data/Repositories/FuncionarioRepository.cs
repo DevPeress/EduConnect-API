@@ -2,6 +2,7 @@
 using EduConnect.Domain.Interfaces;
 using EduConnect.Infra.CrossCutting.Utils;
 using EduConnect.Infra.Data.Context;
+using FluentResults;
 using Microsoft.EntityFrameworkCore;
 
 namespace EduConnect.Infra.Data.Repositories;
@@ -46,7 +47,7 @@ public class FuncionarioRepository(EduContext context) : IFuncionarioRepository
         return query;
     }
 
-    public async Task<(IEnumerable<Funcionario>, int TotalRegistro)> GetByFilters(FiltroPessoa filtro)
+    public async Task<Result<(List<Funcionario>, int TotalRegistro)>> GetByFilters(FiltroPessoa filtro)
     {
         var query = QueryFiltroProfessor(filtro);
         var total = await query.CountAsync();
@@ -57,7 +58,7 @@ public class FuncionarioRepository(EduContext context) : IFuncionarioRepository
         return (result, total);
     }
 
-    public async Task<(List<string>, List<string>)> GetInformativos()
+    public async Task<Result<(List<string>, List<string>)>> GetInformativos()
     {
         var departamentos = await _context.Funcionarios
             .Where(p => p.Deletado == false)
@@ -72,26 +73,38 @@ public class FuncionarioRepository(EduContext context) : IFuncionarioRepository
         return (departamentos, statusList);
     }
 
-    public async Task<Funcionario?> GetByIdAsync(string Registro)
+    public async Task<Result<Funcionario>> GetByIdAsync(string Registro)
     {
-        return await _context.Funcionarios.Where(p => p.Deletado == false).FirstOrDefaultAsync(a => a.Registro == Registro);
+        var funcionario = await _context.Funcionarios
+            .AsNoTracking()
+            .FirstOrDefaultAsync(f => f.Registro == Registro && f.Deletado == false);
+
+        if (funcionario == null)
+            return Result.Fail("Funcionário não encontrado.");
+
+        return funcionario; 
     }
 
-    public async Task<Funcionario?> GetLastPessoaAsync()
+    public async Task<Result<Funcionario>> GetLastPessoaAsync()
     {
         return await _context.Funcionarios.Where(p => p.Deletado == false)
         .OrderBy(a => a.Registro)
         .LastAsync();
     }
 
-    public async Task AddAsync(Funcionario funcionario)
+    public async Task<Result<bool>> AddAsync(Funcionario funcionario)
     {
+        var funcionarioExistente = await GetByIdAsync(funcionario.Registro);
+        if (funcionarioExistente.IsSuccess)
+            return Result.Fail("Funcionário já existente.");
+
         var conta = new Conta
         {
             Registro = funcionario.Registro,
             Senha = SegurancaManager.GerarSenha(),
             Cargo = "Aluno"
         };
+
         await _context.Contas.AddAsync(conta);
         await _context.SaveChangesAsync();
 
@@ -100,25 +113,32 @@ public class FuncionarioRepository(EduContext context) : IFuncionarioRepository
 
         await _context.Funcionarios.AddAsync(funcionario);
         await _context.SaveChangesAsync();
+
+        return Result.Ok();
     }
 
-    public async Task UpdateAsync(Funcionario funcionario)
+    public async Task<Result<bool>> UpdateAsync(Funcionario funcionario)
     {
+        var funcionarioExistente = await GetByIdAsync(funcionario.Registro);
+        if (funcionarioExistente.IsFailed)
+            return Result.Fail("Funcionário não encontrado.");
+
         _context.Funcionarios.Update(funcionario);
         await _context.SaveChangesAsync();
+
+        return Result.Ok();
     }
 
-    public async Task DeleteAsync(string Registro)
+    public async Task<Result<bool>> DeleteAsync(string Registro)
     {
         var funcionario = await GetByIdAsync(Registro);
-        if (funcionario != null)
-        {
-            await Task.Run(() =>
-            {
-                funcionario.Deletado = true;
-                _context.Funcionarios.Update(funcionario);
-                _context.SaveChanges();
-            });
-        }
+        if (funcionario.IsFailed)
+            return Result.Fail("Funcionário não encontrado.");
+
+        funcionario.Value.Deletado = true;
+        _context.Funcionarios.Update(funcionario.Value);
+        await _context.SaveChangesAsync();
+
+        return Result.Ok();
     }
 }

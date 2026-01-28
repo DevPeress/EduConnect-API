@@ -26,8 +26,11 @@ namespace EduConnect.Controllers
                 Pesquisa = pesquisa
             };
 
-            var (professores, total) = await _professorService.GetByFilters(filtro);
+            var result = await _professorService.GetByFilters(filtro);
+            if (result.IsFailed)
+                return BadRequest(result.Errors);
 
+            var (professores, total) = result.Value;
             return Ok(new FiltroResponseViewModel<ProfessorDTO>
             {
                 Dados = professores,
@@ -50,10 +53,9 @@ namespace EduConnect.Controllers
         public async Task<IActionResult> GetProfessorById(string Registro)
         {
             var professores = await _professorService.GetProfessorByIdAsync(Registro);
-            if (professores == null)
-            {
+            if (professores.IsFailed)
                 return NotFound();
-            }
+        
             return Ok(professores);
         }
 
@@ -61,12 +63,11 @@ namespace EduConnect.Controllers
         public async Task<IActionResult> GetLastProfessorAsync()
         {
             var professor = await _professorService.GetLastProfessorAsync();
-            if (professor == null)
-            {
+            if (professor.IsFailed)
                 return Ok("P000001");
-            }
+         
             // Registro vem no formato PO000123
-            var atual = professor.Registro;
+            var atual = professor.Value.Registro;
 
             // Pega somente os números (6 dígitos)
             var numeros = atual.Substring(2);
@@ -94,15 +95,13 @@ namespace EduConnect.Controllers
         public async Task<IActionResult> UpdateProfessor(string Registro, [FromBody] ProfessorUpdateDTO ProfessorDTO)
         {
             if (Registro != ProfessorDTO.Registro)
-            {
                 return BadRequest();
-            }
+         
             var existingProfessor = await _professorService.GetProfessorByIdAsync(Registro);
-            if (existingProfessor == null)
-            {
+            if (existingProfessor.IsFailed)
                 return NotFound();
-            }
-            await _professorService.UpdateProfessorAsync(ProfessorDTO, existingProfessor.Contratacao);
+         
+            await _professorService.UpdateProfessorAsync(ProfessorDTO, existingProfessor.Value.Contratacao);
             return NoContent();
         }
 
@@ -110,10 +109,9 @@ namespace EduConnect.Controllers
         public async Task<IActionResult> DeleteProfessor(string Registro)
         {
             var existingProfessor = await _professorService.GetProfessorByIdAsync(Registro);
-            if (existingProfessor == null)
-            {
+            if (existingProfessor.IsFailed)
                 return NotFound();
-            }
+         
             await _professorService.DeleteProfessorAsync(Registro);
             return NoContent();
         }

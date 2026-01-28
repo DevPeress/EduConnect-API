@@ -25,7 +25,11 @@ namespace EduConnect.Controllers
                 Pesquisa = pesquisa
             };
 
-            var (funcionarios, total) = await _funcionarioService.GetByFilters(filtro);
+            var result = await _funcionarioService.GetByFilters(filtro);
+            if (result.IsFailed)
+                return NotFound();
+
+            var (funcionarios, total) = result.Value;
 
             var funcionarioDTO = new List<FuncionarioResponseViewModel>(
                 funcionarios.Select(f => new FuncionarioResponseViewModel
@@ -54,10 +58,9 @@ namespace EduConnect.Controllers
         public async Task<IActionResult> GetFuncionarioById(string Registro)
         {
             var funcionarios = await _funcionarioService.GetFuncionarioByIdAsync(Registro);
-            if (funcionarios == null)
-            {
-                return NotFound();
-            }
+            if (funcionarios.IsFailed)
+                 return NotFound();
+            
             return Ok(funcionarios);
         }
 
@@ -78,13 +81,11 @@ namespace EduConnect.Controllers
         public async Task<IActionResult> GetLastFuncionarioAsync()
         {
             var funcionario = await _funcionarioService.GetLastFuncionarioAsync();
-            if (funcionario == null)
-            {
+            if (funcionario.IsFailed)
                 return Ok("F000001");
-            }
-
+     
             // Registro vem no formato FO000123
-            var atual = funcionario.Registro;
+            var atual = funcionario.Value.Registro;
 
             // Pega somente os números (6 dígitos)
             var numeros = atual.Substring(2);
@@ -114,15 +115,13 @@ namespace EduConnect.Controllers
         public async Task<IActionResult> UpdateFuncionario(string Registro, [FromBody] FuncionarioUpdateDTO FuncionarioDTO)
         {
             if (Registro != FuncionarioDTO.Registro)
-            {
                 return BadRequest();
-            }
+          
             var existingFuncionario = await _funcionarioService.GetFuncionarioByIdAsync(Registro);
-            if (existingFuncionario == null)
-            {
+            if (existingFuncionario.IsFailed)
                 return NotFound();
-            }
-            await _funcionarioService.UpdateFuncionarioAsync(FuncionarioDTO, existingFuncionario.DataAdmissao);
+            
+            await _funcionarioService.UpdateFuncionarioAsync(FuncionarioDTO, existingFuncionario.Value.DataAdmissao);
             return NoContent();
         }
 
@@ -131,10 +130,9 @@ namespace EduConnect.Controllers
         public async Task<IActionResult> DeleteFuncionario(string Registro)
         {
             var existingFuncionario = await _funcionarioService.GetFuncionarioByIdAsync(Registro);
-            if (existingFuncionario == null)
-            {
+            if (existingFuncionario.IsFailed)
                 return NotFound();
-            }
+           
             await _funcionarioService.DeleteFuncionarioAsync(Registro);
             return NoContent();
         }

@@ -1,6 +1,7 @@
 ﻿using EduConnect.Application.DTO.Entities;
 using EduConnect.Domain.Entities;
 using EduConnect.Domain.Interfaces;
+using FluentResults;
 
 namespace EduConnect.Application.Services;
 
@@ -8,7 +9,7 @@ public class FuncionarioService(IFuncionarioRepository repo)
 {
     private readonly IFuncionarioRepository _funcionarioRepository = repo;
 
-    public async Task<(IEnumerable<Funcionario>, int TotalRegistro)> GetByFilters(FiltroPessoaDTO filtrodto)
+    public async Task<Result<(List<Funcionario>, int TotalRegistro)>> GetByFilters(FiltroPessoaDTO filtrodto)
     {
         var filtro = new FiltroPessoa
         {
@@ -22,22 +23,22 @@ public class FuncionarioService(IFuncionarioRepository repo)
         return await _funcionarioRepository.GetByFilters(filtro);
     }
 
-    public async Task<(List<string>, List<string>?)> GetInformativos()
+    public async Task<Result<(List<string>, List<string>)>> GetInformativos()
     {
         return await _funcionarioRepository.GetInformativos();
     }
 
-    public async Task<Funcionario?> GetFuncionarioByIdAsync(string Registro)
+    public async Task<Result<Funcionario>> GetFuncionarioByIdAsync(string Registro)
     {
         return await _funcionarioRepository.GetByIdAsync(Registro);
     }
 
-    public async Task<Funcionario?> GetLastFuncionarioAsync()
+    public async Task<Result<Funcionario>> GetLastFuncionarioAsync()
     {
         return await _funcionarioRepository.GetLastPessoaAsync();
     }
 
-    public async Task AddFuncionarioAsync(FuncionarioCadastroDTO funcionarioDTO)
+    public async Task<Result<bool>> AddFuncionarioAsync(FuncionarioCadastroDTO funcionarioDTO)
     {
         var funcionario = new Funcionario
         {
@@ -59,10 +60,11 @@ public class FuncionarioService(IFuncionarioRepository repo)
             Turno = funcionarioDTO.Turno,
             Foto = funcionarioDTO.Foto
         };
-        await _funcionarioRepository.AddAsync(funcionario);
+
+        return await _funcionarioRepository.AddAsync(funcionario);
     }
 
-    public async Task UpdateFuncionarioAsync(FuncionarioUpdateDTO funcionarioDTO, DateOnly admissao)
+    public async Task<Result<bool>> UpdateFuncionarioAsync(FuncionarioUpdateDTO funcionarioDTO, DateOnly admissao)
     {
         var funcionario = new Funcionario
         {
@@ -84,11 +86,12 @@ public class FuncionarioService(IFuncionarioRepository repo)
             Turno = funcionarioDTO.Turno,
             Foto = funcionarioDTO.Foto
         };
-        await _funcionarioRepository.UpdateAsync(funcionario);
+
+        return await _funcionarioRepository.UpdateAsync(funcionario);
     }
 
-    public async Task DeleteFuncionarioAsync(string Registro)
+    public async Task<Result<bool>> DeleteFuncionarioAsync(string Registro)
     {
-        await _funcionarioRepository.DeleteAsync(Registro);
+        return await _funcionarioRepository.DeleteAsync(Registro);
     }
 }

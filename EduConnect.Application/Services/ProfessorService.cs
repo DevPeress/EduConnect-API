@@ -1,6 +1,7 @@
 ﻿using EduConnect.Application.DTO.Entities;
 using EduConnect.Domain.Entities;
 using EduConnect.Domain.Interfaces;
+using FluentResults;
 
 namespace EduConnect.Application.Services;
 
@@ -8,7 +9,7 @@ public class ProfessorService(IProfessorRepository repo)
 {
     private readonly IProfessorRepository _professorRepository = repo;
 
-    public async Task<(List<ProfessorDTO>, int TotalRegistro)> GetByFilters(FiltroPessoaDTO filtrodto)
+    public async Task<Result<(List<ProfessorDTO>, int TotalRegistro)>> GetByFilters(FiltroPessoaDTO filtrodto)
     {
         var filtro = new FiltroPessoa
         {
@@ -19,7 +20,11 @@ public class ProfessorService(IProfessorRepository repo)
             Pesquisa = filtrodto.Pesquisa
         };
 
-        var (professores, total) = await _professorRepository.GetByFilters(filtro);
+        var result = await _professorRepository.GetByFilters(filtro);
+        if (result.IsFailed)
+            return Result.Fail(result.Errors);
+
+        var (professores, total) = result.Value;
         List<ProfessorDTO> professoresDTO = professores.Select(professores => new ProfessorDTO(professores)
         {
             Registro = professores.Registro,
@@ -37,22 +42,22 @@ public class ProfessorService(IProfessorRepository repo)
         return (professoresDTO, total);
     }
 
-    public async Task<(List<string>, List<string>?)> GetInformativos()
+    public async Task<Result<(List<string>, List<string>)>> GetInformativos()
     {
         return await _professorRepository.GetInformativos();
     }
 
-    public async Task<Professor?> GetProfessorByIdAsync(string Registro)
+    public async Task<Result<Professor>> GetProfessorByIdAsync(string Registro)
     {
         return await _professorRepository.GetByIdAsync(Registro);
     }
 
-    public async Task<Professor?> GetLastProfessorAsync()
+    public async Task<Result<Professor>> GetLastProfessorAsync()
     {
         return await _professorRepository.GetLastPessoaAsync();
     }
 
-    public async Task AddProfessorAsync(ProfessorCadastroDTO ProfessorDTO)
+    public async Task<Result<bool>> AddProfessorAsync(ProfessorCadastroDTO ProfessorDTO)
     {
         var professor = new Professor
         {
@@ -72,16 +77,23 @@ public class ProfessorService(IProfessorRepository repo)
             Contratacao = DateOnly.FromDateTime(DateTime.Now),
             Salario = 0m
         };
-        await _professorRepository.AddAsync(professor);
+
+        return await _professorRepository.AddAsync(professor);
     }
 
-    public async Task UpdateProfessorAsync(ProfessorUpdateDTO ProfessorDTO, DateOnly DataContrato)
+    public async Task<Result<bool>> UpdateProfessorAsync(ProfessorUpdateDTO ProfessorDTO, DateOnly DataContrato)
     {
         var disciplinas = await _professorRepository.GetDisciplinasByProfessorAsync(ProfessorDTO.Registro);
-        ICollection<ProfessorDisciplina> disciplinasDoProfessor = disciplinas != null! ? disciplinas : [];
+        if (disciplinas.IsFailed)
+            return Result.Fail("Disciplinas do professor não encontradas.");
+
+        ICollection<ProfessorDisciplina> disciplinasDoProfessor = disciplinas != null! ? disciplinas.Value : [];
          
         var turmas = await _professorRepository.GetTurmasByProfessorAsync(ProfessorDTO.Registro);
-        ICollection<Turma> turmasDoProfessor = turmas != null! ? turmas : [];
+        if (turmas.IsFailed)
+            return Result.Fail("Turmas do professor não encontradas.");
+
+        ICollection<Turma> turmasDoProfessor = turmas != null! ? turmas.Value : [];
 
         var professor = new Professor
         {
@@ -102,11 +114,12 @@ public class ProfessorService(IProfessorRepository repo)
             Contratacao = DataContrato,
             Salario = ProfessorDTO.Salario
         };
-        await _professorRepository.UpdateAsync(professor);
+
+        return await _professorRepository.UpdateAsync(professor);
     }
 
-    public async Task DeleteProfessorAsync(string Registro)
+    public async Task<Result<bool>> DeleteProfessorAsync(string Registro)
     {
-        await _professorRepository.DeleteAsync(Registro);
+        return await _professorRepository.DeleteAsync(Registro);
     }
 }

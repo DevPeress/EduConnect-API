@@ -58,10 +58,6 @@ namespace EduConnect.Controllers
                 return Unauthorized("Credenciais inválidas.");
 
             var (nome, foto) = resultInfos.Value;
-
-            if (nome == null || foto == null)
-                return Unauthorized("Credenciais inválidas.");
-          
          
             var token = _jwtService.GenerateToken(contaDto.Registro, conta.Value.Cargo, nome, foto, contaDto.Lembrar);
             var tempo = contaDto.Lembrar != null && contaDto.Lembrar == true ? 9 : 1;
