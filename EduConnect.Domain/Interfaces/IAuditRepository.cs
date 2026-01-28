@@ -1,8 +1,9 @@
 ﻿using EduConnect.Domain.Entities;
+using FluentResults;
 
 namespace EduConnect.Domain.Interfaces;
 
 public interface IAuditRepository
 {
-    Task AddAsync(Registro registro);
+    Task<Result<bool>> AddAsync(Registro registro);
 }

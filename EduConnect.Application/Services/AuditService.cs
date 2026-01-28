@@ -2,15 +2,16 @@
 using EduConnect.Domain.Entities;
 using EduConnect.Domain.Enums;
 using EduConnect.Domain.Interfaces;
+using FluentResults;
 
 namespace EduConnect.Application.Services;
 
 public class AuditService(IAuditContext context, IAuditRepository repo)
 {
     private readonly IAuditContext _context = context;
-    private readonly IAuditRepository _repo = repo;
+    private readonly IAuditRepository _auditRepository = repo;
 
-    public async Task LogAsync(AuditAction action, string entity, string entityId, string detalhes)
+    public async Task<Result<bool>> LogAsync(AuditAction action, string entity, string entityId, string detalhes)
     {
         var registro = new Registro
         {
@@ -26,6 +27,6 @@ public class AuditService(IAuditContext context, IAuditRepository repo)
             CreatedAt = DateTime.UtcNow
         };
 
-        await _repo.AddAsync(registro);
+        return await _auditRepository.AddAsync(registro);
     }
 }
