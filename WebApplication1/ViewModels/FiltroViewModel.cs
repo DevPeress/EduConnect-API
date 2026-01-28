@@ -7,4 +7,5 @@ public record FiltroViewModel
     public int Page { get; set; } = 1;
     public string Ano { get; set; } = "";
     public string Pesquisa { get; set; } = "";
+    public string Data { get; set; } = "";
 }

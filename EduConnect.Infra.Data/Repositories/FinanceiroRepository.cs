@@ -1,6 +1,7 @@
 ﻿using EduConnect.Domain.Entities;
 using EduConnect.Domain.Interfaces;
 using EduConnect.Infra.Data.Context;
+using FluentResults;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 
@@ -70,12 +71,12 @@ public class FinanceiroRepository(EduContext context) : IFinanceiroRepository
         return query;
     }
 
-    public async Task<List<Financeiro>> GetByAlunoId(string Registro)
+    public async Task<Result<List<Financeiro>>> GetByAlunoId(string Registro)
     {
         return await _context.Financeiros.Where(dados => dados.Aluno.Registro == Registro && dados.Deletado == false).ToListAsync();
     }
 
-    public async Task<(decimal TotalRecebido, decimal TotalPendente, decimal TotalAtrasado)> GetDashBoard()
+    public async Task<Result<(decimal TotalRecebido, decimal TotalPendente, decimal TotalAtrasado)>> GetDashBoard()
     {
         var query = _context.Financeiros.AsNoTracking().Where(p => p.Deletado == false);
         decimal totalRecebido = query.Where(p => p.Pago == true).Sum(p => p.Valor);
@@ -88,7 +89,7 @@ public class FinanceiroRepository(EduContext context) : IFinanceiroRepository
         return (totalRecebido, totalPendente, totalAtrasado);
     }
 
-    public async Task<(IEnumerable<Financeiro>, int TotalRegistro)> GetByFilters(FiltroFinanceiro filtro)
+    public async Task<Result<(List<Financeiro>, int TotalRegistro)>> GetByFilters(FiltroFinanceiro filtro)
     {
         var query = QueryFiltroFinanceiro(filtro);
         var total = await query.CountAsync();
@@ -99,34 +100,47 @@ public class FinanceiroRepository(EduContext context) : IFinanceiroRepository
         return (result, total);
     }
 
-    public async Task<Financeiro?> GetById(string Registro)
+    public async Task<Result<Financeiro>> GetById(string Registro)
     {
-        return await _context.Financeiros.FirstOrDefaultAsync(dados => dados.Registro == Registro && dados.Deletado == false);
+        var existing = await _context.Financeiros.FirstOrDefaultAsync(dados => dados.Registro == Registro && dados.Deletado == false);
+        if (existing == null)
+            return Result.Fail("Não existe um registro financeiro com esse identificador.");
+
+        return existing;
     }
 
-    public async Task Add(Financeiro financeiro)
+    public async Task<Result<bool>> Add(Financeiro financeiro)
     {
+        if (await GetById(financeiro.Registro) != null)
+            return Result.Fail("Já existe um registro financeiro com esse identificador.");
+
         await _context.Financeiros.AddAsync(financeiro);
         await _context.SaveChangesAsync();
+
+        return Result.Ok();
     }
 
-    public async Task Update(Financeiro financeiro)
+    public async Task<Result<bool>> Update(Financeiro financeiro)
     {
+        if (await GetById(financeiro.Registro) == null)
+            return Result.Fail("Não existe um registro financeiro com esse identificador.");
+
         _context.Financeiros.Update(financeiro);
         await _context.SaveChangesAsync();
+
+        return Result.Ok();
     }
 
-    public async Task Delete(string Registro)
+    public async Task<Result<bool>> Delete(string Registro)
     {
         var financeiro = await GetById(Registro);
-        if (financeiro != null)
-        {
-            await Task.Run(() =>
-            {
-                financeiro.Deletado = true;
-                _context.Financeiros.Update(financeiro);
-                _context.SaveChanges();
-            });
-        }
+        if (financeiro.IsFailed)
+            return Result.Fail("Não existe um registro financeiro com esse identificador.");
+
+        financeiro.Value.Deletado = true;
+        _context.Financeiros.Update(financeiro.Value);
+        await _context.SaveChangesAsync();
+         
+        return Result.Ok();
     }
 }

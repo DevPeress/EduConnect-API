@@ -1,6 +1,7 @@
 ﻿using EduConnect.Application.DTO.Entities;
 using EduConnect.Domain.Entities;
 using EduConnect.Domain.Interfaces;
+using FluentResults;
 
 namespace EduConnect.Application.Services;
 
@@ -8,17 +9,17 @@ public class FinanceiroService(IFinanceiroRepository repo)
 {
     private readonly IFinanceiroRepository _financeiroRepository = repo;
 
-    public async Task<List<Financeiro>> GetByAlunoId(string Registro)
+    public async Task<Result<List<Financeiro>>> GetByAlunoId(string Registro)
     {
         return await _financeiroRepository.GetByAlunoId(Registro);
     }
 
-    public async Task<(decimal TotalRecebido, decimal TotalPendente, decimal TotalAtrasado)> GetDashBoard()
+    public async Task<Result<(decimal TotalRecebido, decimal TotalPendente, decimal TotalAtrasado)>> GetDashBoard()
     {
         return await _financeiroRepository.GetDashBoard();
     }
 
-    public async Task<(IEnumerable<Financeiro>, int totalRegistro)> GetByFilters(FiltroFinanceiroDTO filtrodto)
+    public async Task<Result<(List<Financeiro>, int totalRegistro)>> GetByFilters(FiltroFinanceiroDTO filtrodto)
     {
         var  filtro = new FiltroFinanceiro
         {
@@ -27,15 +28,16 @@ public class FinanceiroService(IFinanceiroRepository repo)
             Meses = filtrodto.Meses,
             Pesquisa = filtrodto.Pesquisa
         };
+
         return await _financeiroRepository.GetByFilters(filtro);
     }
 
-    public async Task<Financeiro?> GetById(string Registro)
+    public async Task<Result<Financeiro>> GetById(string Registro)
     {
         return await _financeiroRepository.GetById(Registro);
     }
 
-    public async Task AddFinanceiroAsync(FinanceiroCadastroDTO FinanceiroDTO)
+    public async Task<Result<bool>> AddFinanceiroAsync(FinanceiroCadastroDTO FinanceiroDTO)
     {
         var financeiro = new Financeiro
         {
@@ -50,10 +52,11 @@ public class FinanceiroService(IFinanceiroRepository repo)
             Observacoes = FinanceiroDTO.Observacoes,
             AlunoRegistro = FinanceiroDTO.AlunoRegistro
         };
-        await _financeiroRepository.Add(financeiro);
+
+        return await _financeiroRepository.Add(financeiro);
     }
 
-    public async Task UpdateFinanceiroAsync(FinanceiroUpdateDTO FinanceiroDTO)
+    public async Task<Result<bool>> UpdateFinanceiroAsync(FinanceiroUpdateDTO FinanceiroDTO)
     {
         var financeiro = new Financeiro
         {
@@ -70,10 +73,12 @@ public class FinanceiroService(IFinanceiroRepository repo)
             Observacoes = FinanceiroDTO.Observacoes,
             AlunoRegistro = FinanceiroDTO.AlunoRegistro
         };
-        await _financeiroRepository.Update(financeiro);
+
+        return await _financeiroRepository.Update(financeiro);
     }
-    public async Task DeleteFinanceiroAsync(string Registro)
+
+    public async Task<Result<bool>> DeleteFinanceiroAsync(string Registro)
     {
-        await _financeiroRepository.Delete(Registro);
+        return await _financeiroRepository.Delete(Registro);
     }
 }
