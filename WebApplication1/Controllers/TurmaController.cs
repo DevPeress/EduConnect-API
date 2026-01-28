@@ -13,19 +13,23 @@ namespace EduConnect.Controllers
         private readonly TurmaService _turmaService = TurmaService;
 
         [Authorize(Roles = "Administrador, Funcionario, Professor")]
-        [HttpGet("filtro/turno/{turno}/status/{status}/page/{page}/ano/{ano}/pesquisa/{pesquisa}")]
-        public async Task<IActionResult> GetAllTurmas(string turno, string status, int page, string ano, string pesquisa)
+        [HttpGet("filtro")]
+        public async Task<IActionResult> GetAllTurmas([FromQuery] FiltroViewModel viewModel)
         {
             var filtro = new FiltroTurmaDTO
             {
-                Turno = turno,
-                Status = status,
-                Page = page,
-                Ano = ano,
-                Pesquisa = pesquisa
+                Turno = viewModel.Turno,
+                Status = viewModel.Status,
+                Page = viewModel.Page,
+                Ano = viewModel.Ano,
+                Pesquisa = viewModel.Pesquisa
             };
 
-            var (turmas, total) = await _turmaService.GetByFilters(filtro);
+            var result = await _turmaService.GetByFilters(filtro);
+            if (result.IsFailed)
+                return BadRequest(result.Errors);
+
+            var (turmas, total) = result.Value;
 
             return Ok(new FiltroResponseViewModel<TurmaDTO>
             {
@@ -47,10 +51,9 @@ namespace EduConnect.Controllers
         public async Task<IActionResult> GetTurmaById(string Registro)
         {
             var turma = await _turmaService.GetTurmaByIdAsync(Registro);
-            if (turma == null)
-            {
+            if (turma.IsFailed)
                 return NotFound();
-            }
+
             return Ok(turma);
         }
 
@@ -67,12 +70,11 @@ namespace EduConnect.Controllers
         public async Task<IActionResult> GetTurmaByCadastro()
         {
             var turma = await _turmaService.GetLastTurma();
-            if (turma == null)
-            {
+            if (turma.IsFailed)
                 return Ok("T000001");
-            }
+
             // Registro vem no formato MA000123
-            var atual = turma.Registro;
+            var atual = turma.Value.Registro;
 
             // Pega somente os números (6 dígitos)
             var numeros = atual.Substring(2);
@@ -93,7 +95,10 @@ namespace EduConnect.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateTurma([FromBody] TurmaCadastroDTO turmaDTO)
         {
-            await _turmaService.AddTurmaAsync(turmaDTO);
+            var add = await _turmaService.AddTurmaAsync(turmaDTO);
+            if (add.IsFailed)
+                return BadRequest(add.Errors);
+
             return Ok();
         }
 
@@ -102,19 +107,24 @@ namespace EduConnect.Controllers
         public async Task<IActionResult> UpdateTurma(string Registro, [FromBody] TurmaUpdateDTO turmaDTO)
         {
             if (Registro != turmaDTO.Registro)
-            {
                 return BadRequest();
-            }
-            await _turmaService.UpdateTurmaAsync(turmaDTO);
-            return NoContent();
+
+            var update = await _turmaService.UpdateTurmaAsync(turmaDTO);
+            if (update.IsFailed)
+                return BadRequest(update.Errors);
+
+            return Ok();
         }
 
         [Authorize(Roles = "Administrador, Funcionario")]
         [HttpDelete("{Registro}")]
         public async Task<IActionResult> DeleteTurma(string Registro)
         {
-            await _turmaService.DeleteTurmaAsync(Registro);
-            return NoContent();
+            var delete = await _turmaService.DeleteTurmaAsync(Registro);
+            if (delete.IsFailed)
+                return BadRequest(delete.Errors);
+
+            return Ok();
         }
     }
 }

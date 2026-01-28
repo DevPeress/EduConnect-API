@@ -1,13 +1,14 @@
 ﻿using EduConnect.Application.DTO.Entities;
 using EduConnect.Domain.Entities;
 using EduConnect.Domain.Interfaces;
+using FluentResults;
 
 namespace EduConnect.Application.Services;
 public class TurmaService(ITurmaRepository repo)
 {
     private readonly ITurmaRepository _turmaRepository = repo;
 
-    public async Task<(List<TurmaDTO>, int TotalRegistro)> GetByFilters(FiltroTurmaDTO filtrodto)
+    public async Task<Result<(List<TurmaDTO>, int TotalRegistro)>> GetByFilters(FiltroTurmaDTO filtrodto)
     {
         var filtro = new FiltroTurma
         {
@@ -18,7 +19,11 @@ public class TurmaService(ITurmaRepository repo)
             Pesquisa = filtrodto.Pesquisa
         };
 
-        var (turmas, total) = await _turmaRepository.GetByFilters(filtro);
+        var result = await _turmaRepository.GetByFilters(filtro);
+        if (result.IsFailed)
+            return Result.Fail(result.Errors);
+
+        var (turmas, total) = result.Value;
         List<TurmaDTO> turmaDTO = turmas.Select(turmas => new TurmaDTO(turmas)
         {
             Registro = turmas.Registro,
@@ -33,27 +38,27 @@ public class TurmaService(ITurmaRepository repo)
         return (turmaDTO, total);
     }
 
-    public async Task<Turma?> GetLastTurma()
+    public async Task<Result<Turma>> GetLastTurma()
     {
         return await _turmaRepository.GetLastTurma();
     }
 
-    public async Task<List<string>> GetTurmasValidasAsync()
+    public async Task<Result<List<string>>> GetTurmasValidasAsync()
     {
         return await _turmaRepository.GetTurmasValidasAsync();
     }
 
-    public async Task<List<string>> GetInformativos()
+    public async Task<Result<List<string>>> GetInformativos()
     {
         return await _turmaRepository.GetInformativos();
     }
 
-    public async Task<Turma?> GetTurmaByIdAsync(string id)
+    public async Task<Result<Turma>> GetTurmaByIdAsync(string id)
     {
         return await _turmaRepository.GetTurmaByIdAsync(id);
     }
 
-    public async Task AddTurmaAsync(TurmaCadastroDTO turmaDTO)
+    public async Task<Result<bool>> AddTurmaAsync(TurmaCadastroDTO turmaDTO)
     {
         var turma = new Turma
         {
@@ -73,10 +78,11 @@ public class TurmaService(ITurmaRepository repo)
             Dias = turmaDTO.Dias,
             Deletado = false,
         };
-        await _turmaRepository.AddTurmaAsync(turma, turmaDTO.Disciplinas);
+
+        return await _turmaRepository.AddTurmaAsync(turma, turmaDTO.Disciplinas);
     }
 
-    public async Task UpdateTurmaAsync(TurmaUpdateDTO turmaDTO)
+    public async Task<Result<bool>> UpdateTurmaAsync(TurmaUpdateDTO turmaDTO)
     {
         var turma = new Turma
         {
@@ -96,11 +102,12 @@ public class TurmaService(ITurmaRepository repo)
             TurmaDisciplinas = [],
             Deletado = false,
         };
-        await _turmaRepository.UpdateTurmaAsync(turma, turmaDTO.TurmaDisciplina);
+
+        return await _turmaRepository.UpdateTurmaAsync(turma, turmaDTO.TurmaDisciplina);
     }
 
-    public async Task DeleteTurmaAsync(string id)
+    public async Task<Result<bool>> DeleteTurmaAsync(string id)
     {
-        await _turmaRepository.DeleteTurmaAsync(id);
+        return await _turmaRepository.DeleteTurmaAsync(id);
     }
 }

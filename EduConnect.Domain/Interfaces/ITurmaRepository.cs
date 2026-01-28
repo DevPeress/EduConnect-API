@@ -1,15 +1,16 @@
 ﻿using EduConnect.Domain.Entities;
+using FluentResults;
 
 namespace EduConnect.Domain.Interfaces;
 
 public interface ITurmaRepository
 {
-    Task<(IEnumerable<Turma>, int TotalRegistro)> GetByFilters(FiltroTurma filtro);
-    Task<Turma?> GetLastTurma();
-    Task<List<string>> GetTurmasValidasAsync();
-    Task<List<string>> GetInformativos();
-    Task<Turma?> GetTurmaByIdAsync(string id);
-    Task AddTurmaAsync(Turma turma, List<string> disciplinas);
-    Task UpdateTurmaAsync(Turma turma, List<string> disciplinas);
-    Task DeleteTurmaAsync(string id);
+    Task<Result<(List<Turma>, int TotalRegistro)>> GetByFilters(FiltroTurma filtro);
+    Task<Result<Turma>> GetLastTurma();
+    Task<Result<List<string>>> GetTurmasValidasAsync();
+    Task<Result<List<string>>> GetInformativos();
+    Task<Result<Turma>> GetTurmaByIdAsync(string id);
+    Task<Result<bool>> AddTurmaAsync(Turma turma, List<string> disciplinas);
+    Task<Result<bool>> UpdateTurmaAsync(Turma turma, List<string> disciplinas);
+    Task<Result<bool>> DeleteTurmaAsync(string id);
 }
