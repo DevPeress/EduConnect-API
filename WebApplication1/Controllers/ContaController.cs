@@ -32,12 +32,15 @@ namespace EduConnect.Controllers
         public async Task<IActionResult> Login([FromBody] ContaDTO contaDto)
         {
             var conta = await _contaService.GetConta(contaDto.Registro);
-            if (conta == null)
-            {
+            if (conta.IsFailed)
                 return Unauthorized("Credenciais inválidas.");
-            }
+          
             
-            var (login, tentativas) = await _contaService.VerifyLogin(conta.Registro, contaDto.Senha, maxTentativas);
+            var result = await _contaService.VerifyLogin(conta.Value.Registro, contaDto.Senha, maxTentativas);
+            if (result.IsFailed)
+                return Unauthorized("Credenciais inválidas.");
+
+            var (login, tentativas) = result.Value;
             if (login == false)
             {
                if (tentativas == -1)
@@ -49,16 +52,20 @@ namespace EduConnect.Controllers
                     return Unauthorized(maxTentativas - tentativas);
                }
             }
-           
-            (string nome, string foto) = await _contaService.GetInfos(conta.Cargo, conta.Registro);
-            if (nome == null || foto == null)
-            {
+
+            var resultInfos = await _contaService.GetInfos(conta.Value.Cargo, conta.Value.Registro);
+            if (resultInfos.IsFailed)
                 return Unauthorized("Credenciais inválidas.");
-            }
+
+            var (nome, foto) = resultInfos.Value;
+
+            if (nome == null || foto == null)
+                return Unauthorized("Credenciais inválidas.");
+          
          
-            var token = _jwtService.GenerateToken(contaDto.Registro, conta.Cargo, nome, foto, contaDto.Lembrar);
+            var token = _jwtService.GenerateToken(contaDto.Registro, conta.Value.Cargo, nome, foto, contaDto.Lembrar);
             var tempo = contaDto.Lembrar != null && contaDto.Lembrar == true ? 9 : 1;
-            Console.WriteLine("Tempo: " + tempo);
+
             Response.Cookies.Append("auth", token, new CookieOptions
             {
                 HttpOnly = true,
@@ -67,18 +74,17 @@ namespace EduConnect.Controllers
                 Expires = DateTimeOffset.UtcNow.AddHours(tempo)
             });
 
-            return Ok(conta.Cargo);
+            return Ok(conta.Value.Cargo);
         }
 
         [Authorize]
         [HttpPost("redefinir")]
         public async Task<IActionResult> Redefinir(string registro, string senha, string senhaNova)
         {
-            var (conta, _) = await _contaService.VerifyLogin(registro, SegurancaManager.GerarHash(senha), maxTentativas);
-            if (conta == false)
-            {
+            var result = await _contaService.VerifyLogin(registro, SegurancaManager.GerarHash(senha), maxTentativas);
+            if (result.IsFailed)
                 return Unauthorized("Credenciais inválidas.");
-            }
+
             await _contaService.ChancePassword(registro, SegurancaManager.GerarHash(senhaNova));
             return BadRequest();
         }
@@ -94,7 +100,10 @@ namespace EduConnect.Controllers
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteConta(int id)
         {
-            await _contaService.DeleteContaAsync(id);
+            var delete = await _contaService.DeleteContaAsync(id);
+            if (delete.IsFailed)
+                return BadRequest("Erro ao deletar a conta.");
+           
             return Ok("Conta deletada com sucesso.");
         }
     }
