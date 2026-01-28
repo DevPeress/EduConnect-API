@@ -1,6 +1,7 @@
 ﻿using EduConnect.Application.DTO.Entities;
 using EduConnect.Domain.Entities;
 using EduConnect.Domain.Interfaces;
+using FluentResults;
 
 namespace EduConnect.Application.Services;
 
@@ -8,7 +9,7 @@ public class AlunoService(IAlunoRepository repo)
 {
     private readonly IAlunoRepository _alunoRepository = repo;
 
-    public async Task<(List<AlunoDTO>, int TotalRegistro)> GetByFilters(FiltroPessoaDTO filtrodto)
+    public async Task<Result<(List<AlunoDTO>, int TotalRegistro)>> GetByFilters(FiltroPessoaDTO filtrodto)
     {
         var filtro = new FiltroPessoa
         {
@@ -19,7 +20,11 @@ public class AlunoService(IAlunoRepository repo)
             Pesquisa = filtrodto.Pesquisa
         };
 
-        var (alunos, total) = await _alunoRepository.GetByFilters(filtro);
+        var result = await _alunoRepository.GetByFilters(filtro);
+        if (result.IsFailed)
+            return Result.Fail("Não foi possível realizar a filtragem");
+
+        var (alunos, total) = result.Value;
 
         List<AlunoDTO> alunosDTO = [];
         foreach(var aluno in alunos)
@@ -43,22 +48,22 @@ public class AlunoService(IAlunoRepository repo)
         return (alunosDTO, total);
     }
 
-    public async Task<(List<string>, List<string>?)> GetInformativos()
+    public async Task<Result<(List<string>, List<string>)>> GetInformativos()
     {
         return await _alunoRepository.GetInformativos();
     }
 
-    public async Task<Aluno?> GetAlunoByIdAsync(string Registro)
+    public async Task<Result<Aluno>> GetAlunoByIdAsync(string Registro)
     {
         return await _alunoRepository.GetByIdAsync(Registro);
     }
 
-    public async Task<Aluno?> GetLastAluno()
+    public async Task<Result<Aluno>> GetLastAluno()
     {
         return await _alunoRepository.GetLastPessoaAsync();
     }
 
-    public async Task AddAlunoAsync(AlunoCadastroDTO AlunoDTO)
+    public async Task<Result<bool>> AddAlunoAsync(AlunoCadastroDTO AlunoDTO)
     {
         var aluno = new Aluno
         {
@@ -78,10 +83,11 @@ public class AlunoService(IAlunoRepository repo)
             Deletado = false,
             TurmaRegistro = AlunoDTO.Turma
         };
-        await _alunoRepository.AddAsync(aluno);
+
+        return await _alunoRepository.AddAsync(aluno);
     }
 
-    public async Task UpdateAlunoAsync(AlunoUpdateDTO AlunoDTO, DateOnly matricula, int media)
+    public async Task<Result<bool>> UpdateAlunoAsync(AlunoUpdateDTO AlunoDTO, DateOnly matricula, int media)
     {
         var aluno = new Aluno
         {
@@ -101,11 +107,12 @@ public class AlunoService(IAlunoRepository repo)
             Media = media,
             TurmaRegistro = AlunoDTO.TurmaRegistro
         };
-        await _alunoRepository.UpdateAsync(aluno);
+
+        return await _alunoRepository.UpdateAsync(aluno);
     }
 
-    public async Task DeleteAlunoAsync(string Registro)
+    public async Task<Result<bool>> DeleteAlunoAsync(string Registro)
     {
-        await _alunoRepository.DeleteAsync(Registro);
+        return await _alunoRepository.DeleteAsync(Registro);
     }
 }

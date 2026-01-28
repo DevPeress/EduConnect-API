@@ -1,8 +1,10 @@
 ﻿using EduConnect.Application.Common.Auditing;
 using EduConnect.Application.DTO.Entities;
 using EduConnect.Application.Services;
+using EduConnect.Domain.Entities;
 using EduConnect.Domain.Enums;
 using EduConnect.ViewModels;
+using FluentResults;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,19 +17,23 @@ namespace EduConnect.Controllers
         private readonly AlunoService _alunoService = service;
 
         [Authorize(Roles = "Administrador, Funcionario, Professor")]
-        [HttpGet("filtro/selecionada/{categoria}/status/{status}/page/{page}/ano/{ano}/pesquisa/{pesquisa}")]
-        public async Task<IActionResult> GetAlunos(string categoria, string status, int page, string ano, string pesquisa)
+        [HttpGet("filtro")]
+        public async Task<IActionResult> GetAlunos([FromQuery] FiltroViewModel viewModel)
         {
             var filtro = new FiltroPessoaDTO
             {
-                Categoria = categoria,
-                Status = status,
-                Page = page,
-                Ano = ano,
-                Pesquisa = pesquisa
+                Categoria = viewModel.Categoria,
+                Status = viewModel.Status,
+                Page = viewModel.Page,
+                Ano = viewModel.Ano,
+                Pesquisa = viewModel.Pesquisa
             };
 
-            var (alunos, total) = await _alunoService.GetByFilters(filtro);
+            var result = await _alunoService.GetByFilters(filtro);
+            if (result.IsFailed)
+                return BadRequest(result.Errors);
+
+            var (alunos, total) = result.Value;
 
             return Ok(new FiltroResponseViewModel<AlunoDTO>
             {
@@ -42,10 +48,8 @@ namespace EduConnect.Controllers
         public async Task<IActionResult> GetAlunoById(string Registro)
         {
             var aluno = await _alunoService.GetAlunoByIdAsync(Registro);
-            if (aluno == null)
-            {
-                return NotFound();
-            }
+            if (aluno.IsFailed) return NotFound();
+
             return Ok(aluno);
         }
 
@@ -66,12 +70,11 @@ namespace EduConnect.Controllers
         public async Task<IActionResult> GetAlunosByCadastro()
         {
             var aluno = await _alunoService.GetLastAluno();
-            if (aluno == null)
-            {
+            if (aluno.IsFailed)
                 return Ok("A000001");
-            }
+          
             // Registro vem no formato MA000123
-            var atual = aluno.Registro;
+            var atual = aluno.Value.Registro;
 
             // Pega somente os números (6 dígitos)
             var numeros = atual.Substring(2);
@@ -111,11 +114,14 @@ namespace EduConnect.Controllers
                 return BadRequest();
 
             var existingAluno = await _alunoService.GetAlunoByIdAsync(Registro);
-            if (existingAluno == null)
+            if (existingAluno.IsFailed)
                 return NotFound();
 
-            await _alunoService.UpdateAlunoAsync(AlunoDTO, existingAluno.DataMatricula, existingAluno.Media);
-            return NoContent();
+            var update = await _alunoService.UpdateAlunoAsync(AlunoDTO, existingAluno.Value.DataMatricula, existingAluno.Value.Media);
+            if (update.IsFailed)
+                return BadRequest(update.Errors);
+
+            return Ok();
         }
 
         [Authorize(Roles = "Administrador, Funcionario")]
@@ -126,8 +132,11 @@ namespace EduConnect.Controllers
             if (existingAluno == null)
                 return NotFound();
 
-            await _alunoService.DeleteAlunoAsync(Registro);
-            return NoContent();
+            var update = await _alunoService.DeleteAlunoAsync(Registro);
+            if (update.IsFailed)
+                return BadRequest(update.Errors);
+
+            return Ok();
         }
     }
 }

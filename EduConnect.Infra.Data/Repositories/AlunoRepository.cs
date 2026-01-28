@@ -2,6 +2,7 @@
 using EduConnect.Domain.Interfaces;
 using EduConnect.Infra.CrossCutting.Utils;
 using EduConnect.Infra.Data.Context;
+using FluentResults;
 using Microsoft.EntityFrameworkCore;
 
 namespace EduConnect.Infra.Data.Repositories;
@@ -44,7 +45,7 @@ public class AlunoRepository(EduContext context) : IAlunoRepository
         return query;
     }
 
-    public async Task<(IEnumerable<Aluno>, int TotalRegistro)> GetByFilters(FiltroPessoa filtro)
+    public async Task<Result<(List<Aluno>, int TotalRegistro)>> GetByFilters(FiltroPessoa filtro)
     {
         var query = QueryFiltroAluno(filtro);
         var total = await query.CountAsync();
@@ -55,7 +56,7 @@ public class AlunoRepository(EduContext context) : IAlunoRepository
         return (result, total);
     }
 
-    public async Task<(List<string>, List<string>)> GetInformativos()
+    public async Task<Result<(List<string>, List<string>)>> GetInformativos()
     {
         var anos = await _context.Alunos
             .Where(a => a.Deletado == false)
@@ -67,56 +68,78 @@ public class AlunoRepository(EduContext context) : IAlunoRepository
             .Select(a => a.Turma!.Nome)
             .Distinct()
             .ToListAsync();
+
         return (anos, salas);
     }
 
-    public async Task<Aluno?> GetByIdAsync(string Registro)
+    public async Task<Result<Aluno>> GetByIdAsync(string Registro)
     {
-        return await _context.Alunos.FirstOrDefaultAsync(a => a.Registro == Registro);
+        var aluno = await _context.Alunos.FirstOrDefaultAsync(a => a.Registro == Registro);
+        if (aluno == null)
+            return Result.Fail("Aluno não encontrado.");
+
+        return aluno;
     }
 
-    public async Task<Aluno?> GetLastPessoaAsync()
+    public async Task<Result<Aluno>> GetLastPessoaAsync()
     {
-        return await _context.Alunos
-        .OrderBy(a => a.Id)
-        .LastOrDefaultAsync();
+        var lastAluno = await _context.Alunos
+            .OrderBy(a => a.Id)
+            .LastOrDefaultAsync();
+        if (lastAluno == null)
+            return Result.Fail("Nenhum Aluno encontrado.");
+
+        return lastAluno;
     }
 
-    public async Task AddAsync(Aluno aluno)
+    public async Task<Result<bool>> AddAsync(Aluno alunoAdd)
     {
+        var aluno = await GetByIdAsync(alunoAdd.Registro);
+        if (aluno != null)
+            return Result.Fail("Já existe um Aluno com esse Registro!.");
+
         var conta = new Conta
         {
-            Registro = aluno.Registro,
+            Registro = alunoAdd.Registro,
             Senha = SegurancaManager.GerarSenha(),
             Cargo = "Aluno"
         };
+
         await _context.Contas.AddAsync(conta);
         await _context.SaveChangesAsync();
 
-        aluno.ContaId = conta.Id;
-        aluno.Conta = conta;
+        alunoAdd.ContaId = conta.Id;
+        alunoAdd.Conta = conta;
 
-        await _context.Alunos.AddAsync(aluno);
+        await _context.Alunos.AddAsync(alunoAdd);
         await _context.SaveChangesAsync();
+        return Result.Ok(true);
     }
 
-    public async Task UpdateAsync(Aluno aluno)
+    public async Task<Result<bool>> UpdateAsync(Aluno alunoUpdate)
     {
-        _context.Alunos.Update(aluno);
+        var aluno = await GetByIdAsync(alunoUpdate.Registro);
+        if (aluno == null)
+            return Result.Fail("Não foi possível localizar o Aluno para a edição.");
+
+        _context.Alunos.Update(alunoUpdate);
         await _context.SaveChangesAsync();
+        return Result.Ok(true);
     }
 
-    public async Task DeleteAsync(string Registro)
+    public async Task<Result<bool>> DeleteAsync(string Registro)
     {
         var aluno = await GetByIdAsync(Registro);
-        if (aluno != null)
+        if (aluno == null) 
+            return Result.Fail("Não foi possível localizar o Aluno para a exclusão.");
+
+        await Task.Run(() =>
         {
-            await Task.Run(() =>
-            {
-                aluno.Deletado = true;
-                _context.Alunos.Update(aluno);
-                _context.SaveChanges();
-            });
-        }
+            aluno.Deletado = true;
+            _context.Alunos.Update(aluno);
+            _context.SaveChanges();
+        });
+
+        return Result.Ok(true);
     }
 }
