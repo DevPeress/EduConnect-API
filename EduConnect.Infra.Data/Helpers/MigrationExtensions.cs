@@ -12,9 +12,9 @@ public static class MigrationExtensions
 
         if (!Directory.Exists(basePath))
             return;
-        Console.WriteLine("2");
+        
         var files = Directory.GetFiles(basePath, "*.sql", SearchOption.AllDirectories);
-        Console.WriteLine("3");
+
         foreach (var file in files)
         {
             var sql = File.ReadAllText(file);
