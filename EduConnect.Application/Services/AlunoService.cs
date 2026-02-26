@@ -9,7 +9,7 @@ public class AlunoService(IAlunoRepository repo)
 {
     private readonly IAlunoRepository _alunoRepository = repo;
 
-    public async Task<Result<(List<AlunoDTO>, int TotalRegistro)>> GetByFilters(FiltroPessoaDTO filtrodto)
+    public async Task<Result<(List<AlunoDTO>, int TotalRegistro)>> GetByFilters(FiltroPessoaDTO filtrodto, string id, string cargo)
     {
         var filtro = new FiltroPessoa
         {
@@ -20,7 +20,7 @@ public class AlunoService(IAlunoRepository repo)
             Pesquisa = filtrodto.Pesquisa
         };
 
-        var result = await _alunoRepository.GetByFilters(filtro);
+        var result = await _alunoRepository.GetByFilters(filtro, id, cargo);
         if (result.IsFailed)
             return Result.Fail("Não foi possível realizar a filtragem");
 

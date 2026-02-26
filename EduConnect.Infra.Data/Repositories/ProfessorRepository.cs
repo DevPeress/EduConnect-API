@@ -11,7 +11,7 @@ public class ProfessorRepository(EduContext context) : IProfessorRepository
 {
     private readonly EduContext _context = context;
 
-    private IQueryable<Professor> QueryFiltroProfessor(FiltroPessoa filtro)
+    private IQueryable<Professor> QueryFiltroProfessor(FiltroPessoa filtro, string id, string cargo)
     {
         var query = _context.Professores.AsNoTracking().Where(p => p.Deletado == false);
 
@@ -44,12 +44,17 @@ public class ProfessorRepository(EduContext context) : IProfessorRepository
             query = query.Where(dados => dados.Turmas.Any(turma => turma.Nome == filtro.Categoria));
         }
 
+        if (cargo != "Administrador" && cargo != "Funcionário")
+        {
+            return Enumerable.Empty<Professor>().AsQueryable();
+        }
+
         return query;
     }
 
-    public async Task<Result<(List<Professor>, int TotalRegistro)>> GetByFilters(FiltroPessoa filtro)
+    public async Task<Result<(List<Professor>, int TotalRegistro)>> GetByFilters(FiltroPessoa filtro, string id, string cargo)
     {
-        var query = QueryFiltroProfessor(filtro);
+        var query = QueryFiltroProfessor(filtro, id, cargo);
         var total = await query.CountAsync();
 
         query = query.Skip(filtro.Offset).Take(6);

@@ -3,6 +3,7 @@ using EduConnect.Application.Services;
 using EduConnect.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 
 namespace EduConnect.Controllers
@@ -17,6 +18,11 @@ namespace EduConnect.Controllers
         [HttpGet("filtro")]
         public async Task<IActionResult> GetAllProfessor([FromQuery] FiltroViewModel viewModel)
         {
+            var id = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var role = User.FindFirst(ClaimTypes.Role)?.Value;
+            if (id == null || role == null)
+                return BadRequest();
+
             var filtro = new FiltroPessoaDTO
             {
                 Categoria = viewModel.Selecionada,
@@ -26,7 +32,7 @@ namespace EduConnect.Controllers
                 Pesquisa = viewModel.Pesquisa
             };
 
-            var result = await _professorService.GetByFilters(filtro);
+            var result = await _professorService.GetByFilters(filtro, id, role);
             if (result.IsFailed)
                 return BadRequest(result.Errors);
 

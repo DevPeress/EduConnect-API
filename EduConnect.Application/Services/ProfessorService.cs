@@ -9,7 +9,7 @@ public class ProfessorService(IProfessorRepository repo)
 {
     private readonly IProfessorRepository _professorRepository = repo;
 
-    public async Task<Result<(List<ProfessorDTO>, int TotalRegistro)>> GetByFilters(FiltroPessoaDTO filtrodto)
+    public async Task<Result<(List<ProfessorDTO>, int TotalRegistro)>> GetByFilters(FiltroPessoaDTO filtrodto, string id, string cargo)
     {
         var filtro = new FiltroPessoa
         {
@@ -20,7 +20,7 @@ public class ProfessorService(IProfessorRepository repo)
             Pesquisa = filtrodto.Pesquisa
         };
 
-        var result = await _professorRepository.GetByFilters(filtro);
+        var result = await _professorRepository.GetByFilters(filtro, id, cargo);
         if (result.IsFailed)
             return Result.Fail(result.Errors);
 

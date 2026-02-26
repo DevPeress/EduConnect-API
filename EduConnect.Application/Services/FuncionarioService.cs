@@ -9,7 +9,7 @@ public class FuncionarioService(IFuncionarioRepository repo)
 {
     private readonly IFuncionarioRepository _funcionarioRepository = repo;
 
-    public async Task<Result<(List<Funcionario>, int TotalRegistro)>> GetByFilters(FiltroPessoaDTO filtrodto)
+    public async Task<Result<(List<Funcionario>, int TotalRegistro)>> GetByFilters(FiltroPessoaDTO filtrodto, string id, string cargo)
     {
         var filtro = new FiltroPessoa
         {
@@ -20,7 +20,7 @@ public class FuncionarioService(IFuncionarioRepository repo)
             Pesquisa = filtrodto.Pesquisa
         };
 
-        return await _funcionarioRepository.GetByFilters(filtro);
+        return await _funcionarioRepository.GetByFilters(filtro, id, cargo);
     }
 
     public async Task<Result<(List<string>, List<string>)>> GetInformativos()

@@ -10,7 +10,7 @@ public class TurmaRepository(EduContext context) : ITurmaRepository
     private readonly EduContext _context = context;
     private readonly string Year = DateTime.Now.Year.ToString();
 
-    private IQueryable<Turma> QueryFiltroTurma(FiltroTurma filtro)
+    private IQueryable<Turma> QueryFiltroTurma(FiltroTurma filtro, string id, string cargo)
     {
         var query = _context.Turmas.AsNoTracking().Where(p => p.Deletado == false);
 
@@ -42,12 +42,20 @@ public class TurmaRepository(EduContext context) : ITurmaRepository
             query = query.Where(dados => dados.Turno == filtro.Turno);
         }
 
-        return query;
+        if (cargo == "Administrador" || cargo == "Funcionário")
+        {
+            return query;
+        }
+        else
+        {
+            query = query.Where(dados => dados.ProfessorResponsavel == id);
+            return query;
+        }
     }
 
-    public async Task<Result<(List<Turma>, int TotalRegistro)>> GetByFilters(FiltroTurma filtro)
+    public async Task<Result<(List<Turma>, int TotalRegistro)>> GetByFilters(FiltroTurma filtro, string id, string cargo)
     {
-        var query = QueryFiltroTurma(filtro);
+        var query = QueryFiltroTurma(filtro, id, cargo);
         var total = await query.CountAsync();
 
         query = query.Skip(filtro.Offset).Take(6);

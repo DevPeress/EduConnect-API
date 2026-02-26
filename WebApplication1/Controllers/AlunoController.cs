@@ -5,6 +5,7 @@ using EduConnect.Domain.Enums;
 using EduConnect.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace EduConnect.Controllers
 {
@@ -18,6 +19,11 @@ namespace EduConnect.Controllers
         [HttpGet("filtro")]
         public async Task<IActionResult> GetAlunos([FromQuery] FiltroViewModel viewModel)
         {
+            var id = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var role = User.FindFirst(ClaimTypes.Role)?.Value;
+            if (id == null || role == null)
+                return BadRequest();
+
             var filtro = new FiltroPessoaDTO
             {
                 Categoria = viewModel.Categoria,
@@ -27,7 +33,7 @@ namespace EduConnect.Controllers
                 Pesquisa = viewModel.Pesquisa
             };
 
-            var result = await _alunoService.GetByFilters(filtro);
+            var result = await _alunoService.GetByFilters(filtro, id, role);
             if (result.IsFailed)
                 return BadRequest(result.Errors);
 

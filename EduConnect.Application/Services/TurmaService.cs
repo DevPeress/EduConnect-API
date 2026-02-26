@@ -8,7 +8,7 @@ public class TurmaService(ITurmaRepository repo)
 {
     private readonly ITurmaRepository _turmaRepository = repo;
 
-    public async Task<Result<(List<TurmaDTO>, int TotalRegistro)>> GetByFilters(FiltroTurmaDTO filtrodto)
+    public async Task<Result<(List<TurmaDTO>, int TotalRegistro)>> GetByFilters(FiltroTurmaDTO filtrodto, string id, string cargo)
     {
         var filtro = new FiltroTurma
         {
@@ -19,7 +19,7 @@ public class TurmaService(ITurmaRepository repo)
             Pesquisa = filtrodto.Pesquisa
         };
 
-        var result = await _turmaRepository.GetByFilters(filtro);
+        var result = await _turmaRepository.GetByFilters(filtro, id, cargo);
         if (result.IsFailed)
             return Result.Fail(result.Errors);
 
