@@ -2,6 +2,7 @@
 using EduConnect.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace EduConnect.Controllers
 {
@@ -15,6 +16,11 @@ namespace EduConnect.Controllers
         [HttpGet("Cards")]
         public async Task<IActionResult> GetCardsData()
         {
+            var id = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var role = User.FindFirst(ClaimTypes.Role)?.Value;
+            if (id == null || role == null)
+                return BadRequest();
+
             var (totalAlunos, totalProfessores, totalTurmas, totalPresenca) = await _dashBoardAdminService.GetTotalsAsync();
             var (aumentoAlunos, aumentoProfessores, aumentoTurmas, aumentoPresenca) = await _dashBoardAdminService.GetAumentoAsync();
             var (porcentagemAlunos, porcentagemProfessores, porcentagemTurmas, porcentagemPresenca) = await _dashBoardAdminService.GetPorcentagemAsync();
@@ -54,7 +60,12 @@ namespace EduConnect.Controllers
         [HttpGet("Atividades")]
         public async Task<IActionResult> GetAtividadesData()
         {
-            var atividades = await _dashBoardAdminService.GetAtividadesAsync();
+            var id = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var role = User.FindFirst(ClaimTypes.Role)?.Value;
+            if (id == null || role == null)
+                return BadRequest();
+
+            var atividades = await _dashBoardAdminService.GetAtividadesAsync(role, id);
             List<AtividadesDashBoardResponseViewModel> resposta = [];
 
             foreach (var atividade in atividades)

@@ -22,8 +22,8 @@ public class DashBoardAdminService(IDashboardAdminRepository repo)
         return await _dashboardAdminRepository.GetPorcentagemAsync();
     }
 
-    public async Task<List<Registro>> GetAtividadesAsync()
+    public async Task<List<Registro>> GetAtividadesAsync(string cargo, int id)
     {
-        return await _dashboardAdminRepository.GetAtividadesAsync();
+        return await _dashboardAdminRepository.GetAtividadesAsync(cargo, id);
     }
 }

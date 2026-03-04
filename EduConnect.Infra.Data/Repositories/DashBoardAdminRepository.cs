@@ -80,9 +80,22 @@ public class DashBoardAdminRepository(EduContext context) : IDashboardAdminRepos
         return (CalcularPorcentagem(result.AumentoAluno,result.DecrementoAluno), CalcularPorcentagem(result.AumentoProfessor, result.DecrementoProfessor), CalcularPorcentagem(result.AumentoTurma, result.DecrementoTurma), CalcularPorcentagem(result.AumentoPresenca, result.DecrementoPresenca));
     }
 
-    public async Task<List<Registro>> GetAtividadesAsync()
+    public async Task<List<Registro>> GetAtividadesAsync(string cargo, int id)
     {
         var query = _context.Registros.AsNoTracking().Where(p => p.Deletado == false);
+
+        if (cargo == "Professor")
+        {
+            query = query.Where(p => p.UserRole == "Professor" && p.UserId == id.ToString());
+        }
+        else if (cargo == "Aluno")
+        {
+            query = query.Where(p => p.UserRole == "Aluno" && p.UserId == id.ToString());
+        }
+        else if (cargo == "Funcionário")
+        {
+            query = query.Where(p => p.UserRole == "Funcionário" && p.UserId == id.ToString());
+        }
 
         var result = await query
             .OrderByDescending(p => p.CreatedAt)
