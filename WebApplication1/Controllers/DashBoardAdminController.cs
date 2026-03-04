@@ -49,5 +49,25 @@ namespace EduConnect.Controllers
                 }
             });
         }
+
+        [Authorize(Roles = "Administrador, Funcionario")]
+        [HttpGet("Atividades")]
+        public async Task<IActionResult> GetAtividadesData()
+        {
+            var atividades = await _dashBoardAdminService.GetAtividadesAsync();
+            List<AtividadesDashBoardResponseViewModel> resposta = [];
+
+            foreach (var atividade in atividades)
+            {
+                resposta.Add(new AtividadesDashBoardResponseViewModel
+                {
+                    Tipo = atividade.Action,
+                    Dado = atividade.Detalhes,
+                    Horario = (int)(DateTime.Now - atividade.CreatedAt).TotalMinutes,
+                });
+            }
+
+            return Ok(atividades);
+        }
     }
 }

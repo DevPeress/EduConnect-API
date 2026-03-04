@@ -1,4 +1,5 @@
-﻿using EduConnect.Domain.Interfaces;
+﻿using EduConnect.Domain.Entities;
+using EduConnect.Domain.Interfaces;
 
 namespace EduConnect.Application.Services;
 
@@ -19,5 +20,10 @@ public class DashBoardAdminService(IDashboardAdminRepository repo)
     public async Task<(double, double, double, double)> GetPorcentagemAsync()
     {
         return await _dashboardAdminRepository.GetPorcentagemAsync();
+    }
+
+    public async Task<List<Registro>> GetAtividadesAsync()
+    {
+        return await _dashboardAdminRepository.GetAtividadesAsync();
     }
 }

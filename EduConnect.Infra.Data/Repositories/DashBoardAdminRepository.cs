@@ -1,4 +1,5 @@
-﻿using EduConnect.Domain.Interfaces;
+﻿using EduConnect.Domain.Entities;
+using EduConnect.Domain.Interfaces;
 using EduConnect.Infra.Data.Context;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -77,5 +78,17 @@ public class DashBoardAdminRepository(EduContext context) : IDashboardAdminRepos
         var result = resultList.First(); // pega a primeira linha
 
         return (CalcularPorcentagem(result.AumentoAluno,result.DecrementoAluno), CalcularPorcentagem(result.AumentoProfessor, result.DecrementoProfessor), CalcularPorcentagem(result.AumentoTurma, result.DecrementoTurma), CalcularPorcentagem(result.AumentoPresenca, result.DecrementoPresenca));
+    }
+
+    public async Task<List<Registro>> GetAtividadesAsync()
+    {
+        var query = _context.Registros.AsNoTracking().Where(p => p.Deletado == false);
+
+        var result = await query
+            .OrderByDescending(p => p.CreatedAt)
+            .Take(4)
+            .ToListAsync();
+
+        return result;
     }
 }
