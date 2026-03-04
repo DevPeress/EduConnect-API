@@ -15,7 +15,7 @@ namespace EduConnect.Controllers
         private readonly JWTService _jwtService = jwt;
         private const int maxTentativas = 5;
 
-        [Authorize]
+        [AllowAnonymous]
         [HttpGet("usuario")]
         public IActionResult Get()
         {
@@ -93,6 +93,7 @@ namespace EduConnect.Controllers
             return Ok();
         }
 
+        [Authorize]
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteConta(int id)
         {
