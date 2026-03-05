@@ -27,11 +27,19 @@ namespace EduConnect.Application.Services
 
         public async Task<Result<Disciplinas>> GetLastDisciplina()
         {
-            return await _disciplinasRepository.GetLastDisciplina();
+            var disciplina = await _disciplinasRepository.GetLastDisciplina();
+            if (disciplina == null) 
+                return Result.Fail("Nenhuma disciplina encontrada.");
+
+            return disciplina;
         }
 
-        public async Task<Result<Disciplinas>> CreateDisciplina(DisciplinaCadastroDTO DisciplinaDTO)
+        public async Task<Result<bool>> CreateDisciplina(DisciplinaCadastroDTO DisciplinaDTO)
         {
+            var disciplinaExisting = await _disciplinasRepository.GetDisciplinaById(DisciplinaDTO.Registro);
+            if (disciplinaExisting == null)
+                return Result.Fail("Disciplina não encontrada.");
+
             var disciplina = new Disciplinas
             {
                 Registro = DisciplinaDTO.Registro,
@@ -45,7 +53,11 @@ namespace EduConnect.Application.Services
 
         public async Task<Result<bool>> DeleteDisciplina(string Registro)
         {
-            return await _disciplinasRepository.DeleteDisciplina(Registro);
+            var disciplina = await _disciplinasRepository.GetDisciplinaById(Registro);
+            if (disciplina == null)
+                return Result.Fail("Disciplina não encontrada.");
+
+            return await _disciplinasRepository.DeleteDisciplina(disciplina);
         }
     }
 }
