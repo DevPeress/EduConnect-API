@@ -31,12 +31,20 @@ public class FuncionarioService(IFuncionarioRepository repo)
 
     public async Task<Result<Funcionario>> GetFuncionarioByIdAsync(string Registro)
     {
-        return await _funcionarioRepository.GetByIdAsync(Registro);
+        var funcionario = await _funcionarioRepository.GetByIdAsync(Registro);
+        if (funcionario == null)
+            return Result.Fail("Funcionário não encontrado.");
+
+        return funcionario;
     }
 
     public async Task<Result<Funcionario>> GetLastFuncionarioAsync()
     {
-        return await _funcionarioRepository.GetLastPessoaAsync();
+        var funcionario = await _funcionarioRepository.GetLastPessoaAsync();
+        if (funcionario == null)
+            return Result.Fail("Registro não encontrado.");
+
+        return funcionario;
     }
 
     public async Task<Result<bool>> AddFuncionarioAsync(FuncionarioCadastroDTO funcionarioDTO)
@@ -78,6 +86,10 @@ public class FuncionarioService(IFuncionarioRepository repo)
 
     public async Task<Result<bool>> UpdateFuncionarioAsync(FuncionarioUpdateDTO funcionarioDTO, DateOnly admissao)
     {
+        var funcionarioExistente = await _funcionarioRepository.GetByIdAsync(funcionarioDTO.Registro);
+        if (funcionarioExistente == null)
+            return Result.Fail("Funcionário não encontrado.");
+
         var funcionario = new Funcionario
         {
             Nome = funcionarioDTO.Nome,
@@ -104,6 +116,10 @@ public class FuncionarioService(IFuncionarioRepository repo)
 
     public async Task<Result<bool>> DeleteFuncionarioAsync(string Registro)
     {
-        return await _funcionarioRepository.DeleteAsync(Registro);
+        var funcionarioExistente = await _funcionarioRepository.GetByIdAsync(Registro);
+        if (funcionarioExistente == null)
+            return Result.Fail("Funcionário não encontrado.");
+
+        return await _funcionarioRepository.DeleteAsync(funcionarioExistente);
     }
 }

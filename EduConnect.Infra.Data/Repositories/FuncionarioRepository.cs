@@ -52,7 +52,7 @@ public class FuncionarioRepository(EduContext context) : IFuncionarioRepository
         return query;
     }
 
-    public async Task<Result<(List<Funcionario>, int TotalRegistro)>> GetByFilters(FiltroPessoa filtro, string id, string cargo)
+    public async Task<(List<Funcionario>, int TotalRegistro)> GetByFilters(FiltroPessoa filtro, string id, string cargo)
     {
         var query = QueryFiltroProfessor(filtro, id, cargo);
         var total = await query.CountAsync();
@@ -63,7 +63,7 @@ public class FuncionarioRepository(EduContext context) : IFuncionarioRepository
         return (result, total);
     }
 
-    public async Task<Result<(List<string>, List<string>)>> GetInformativos()
+    public async Task<(List<string>, List<string>)> GetInformativos()
     {
         var departamentos = await _context.Funcionarios
             .Where(p => p.Deletado == false)
@@ -78,26 +78,26 @@ public class FuncionarioRepository(EduContext context) : IFuncionarioRepository
         return (departamentos, statusList);
     }
 
-    public async Task<Result<Funcionario>> GetByIdAsync(string Registro)
+    public async Task<Funcionario?> GetByIdAsync(string Registro)
     {
         var funcionario = await _context.Funcionarios
             .AsNoTracking()
             .FirstOrDefaultAsync(f => f.Registro == Registro && f.Deletado == false);
 
         if (funcionario == null)
-            return Result.Fail("Funcionário não encontrado.");
+            return null;
 
         return funcionario; 
     }
 
-    public async Task<Result<Funcionario>> GetLastPessoaAsync()
+    public async Task<Funcionario?> GetLastPessoaAsync()
     {
         return await _context.Funcionarios.Where(p => p.Deletado == false)
         .OrderBy(a => a.Registro)
         .LastAsync();
     }
 
-    public async Task<Result<bool>> AddAsync(Funcionario funcionario, Conta conta)
+    public async Task<bool> AddAsync(Funcionario funcionario, Conta conta)
     {
         await _context.Contas.AddAsync(conta);
         await _context.SaveChangesAsync();
@@ -108,31 +108,23 @@ public class FuncionarioRepository(EduContext context) : IFuncionarioRepository
         await _context.Funcionarios.AddAsync(funcionario);
         await _context.SaveChangesAsync();
 
-        return Result.Ok();
+        return true;
     }
 
-    public async Task<Result<bool>> UpdateAsync(Funcionario funcionario)
+    public async Task<bool> UpdateAsync(Funcionario funcionario)
     {
-        var funcionarioExistente = await GetByIdAsync(funcionario.Registro);
-        if (funcionarioExistente.IsFailed)
-            return Result.Fail("Funcionário não encontrado.");
-
         _context.Funcionarios.Update(funcionario);
         await _context.SaveChangesAsync();
 
-        return Result.Ok();
+        return true;
     }
 
-    public async Task<Result<bool>> DeleteAsync(string Registro)
+    public async Task<bool> DeleteAsync(Funcionario funcionario)
     {
-        var funcionario = await GetByIdAsync(Registro);
-        if (funcionario.IsFailed)
-            return Result.Fail("Funcionário não encontrado.");
-
-        funcionario.Value.Deletado = true;
-        _context.Funcionarios.Update(funcionario.Value);
+        funcionario.Deletado = true;
+        _context.Funcionarios.Update(funcionario);
         await _context.SaveChangesAsync();
 
-        return Result.Ok();
+        return true;
     }
 }

@@ -5,11 +5,11 @@ namespace EduConnect.Domain.Interfaces;
 
 public interface IPessoaRepository <T> where T : class
 {
-    Task<Result<(List<T>, int TotalRegistro)>> GetByFilters(FiltroPessoa filtro, string id, string cargo);
-    Task<Result<(List<string>, List<string>)>> GetInformativos();
-    Task<Result<T>> GetByIdAsync(string Registro);
-    Task<Result<T>> GetLastPessoaAsync();
-    Task<Result<bool>> AddAsync(T pessoa, Conta conta);
-    Task<Result<bool>> UpdateAsync(T pessoa);
-    Task<Result<bool>> DeleteAsync(string Registro);
+    Task<(List<T>, int TotalRegistro)> GetByFilters(FiltroPessoa filtro, string id, string cargo);
+    Task<(List<string>, List<string>)> GetInformativos();
+    Task<T?> GetByIdAsync(string Registro);
+    Task<T?> GetLastPessoaAsync();
+    Task<bool> AddAsync(T pessoa, Conta conta);
+    Task<bool> UpdateAsync(T pessoa);
+    Task<bool> DeleteAsync(T pessoa);
 }

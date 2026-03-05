@@ -1,8 +1,6 @@
 ﻿using EduConnect.Domain.Entities;
 using EduConnect.Domain.Interfaces;
-using EduConnect.Infra.CrossCutting.Utils;
 using EduConnect.Infra.Data.Context;
-using FluentResults;
 using Microsoft.EntityFrameworkCore;
 
 namespace EduConnect.Infra.Data.Repositories;
@@ -54,7 +52,7 @@ public class AlunoRepository(EduContext context) : IAlunoRepository
         }
     }
 
-    public async Task<Result<(List<Aluno>, int TotalRegistro)>> GetByFilters(FiltroPessoa filtro, string id, string cargo)
+    public async Task<(List<Aluno>, int TotalRegistro)> GetByFilters(FiltroPessoa filtro, string id, string cargo)
     {
         var query = QueryFiltroAluno(filtro, id, cargo);
         var total = await query.CountAsync();
@@ -65,7 +63,7 @@ public class AlunoRepository(EduContext context) : IAlunoRepository
         return (result, total);
     }
 
-    public async Task<Result<(List<string>, List<string>)>> GetInformativos()
+    public async Task<(List<string>, List<string>)> GetInformativos()
     {
         var anos = await _context.Alunos
             .Where(a => a.Deletado == false)
@@ -81,27 +79,23 @@ public class AlunoRepository(EduContext context) : IAlunoRepository
         return (anos, salas);
     }
 
-    public async Task<Result<Aluno>> GetByIdAsync(string Registro)
+    public async Task<Aluno?> GetByIdAsync(string Registro)
     {
         var aluno = await _context.Alunos.FirstOrDefaultAsync(a => a.Registro == Registro);
         if (aluno == null)
-            return Result.Fail("Aluno não encontrado.");
+            return null;
 
         return aluno;
     }
 
-    public async Task<Result<Aluno>> GetLastPessoaAsync()
+    public async Task<Aluno?> GetLastPessoaAsync()
     {
-        var lastAluno = await _context.Alunos
+        return await _context.Alunos
             .OrderBy(a => a.Id)
             .LastOrDefaultAsync();
-        if (lastAluno == null)
-            return Result.Fail("Nenhum Aluno encontrado.");
-
-        return lastAluno;
     }
 
-    public async Task<Result<bool>> AddAsync(Aluno alunoAdd, Conta conta)
+    public async Task<bool> AddAsync(Aluno alunoAdd, Conta conta)
     {
         await _context.Contas.AddAsync(conta);
         await _context.SaveChangesAsync();
@@ -111,30 +105,22 @@ public class AlunoRepository(EduContext context) : IAlunoRepository
 
         await _context.Alunos.AddAsync(alunoAdd);
         await _context.SaveChangesAsync();
-        return Result.Ok(true);
+        return true;
     }
 
-    public async Task<Result<bool>> UpdateAsync(Aluno alunoUpdate)
+    public async Task<bool> UpdateAsync(Aluno alunoUpdate)
     {
-        var aluno = await GetByIdAsync(alunoUpdate.Registro);
-        if (aluno == null)
-            return Result.Fail("Não foi possível localizar o Aluno para a edição.");
-
         _context.Alunos.Update(alunoUpdate);
         await _context.SaveChangesAsync();
-        return Result.Ok(true);
+        return true;
     }
 
-    public async Task<Result<bool>> DeleteAsync(string Registro)
+    public async Task<bool> DeleteAsync(Aluno aluno)
     {
-        var aluno = await GetByIdAsync(Registro);
-        if (aluno.IsFailed) 
-            return Result.Fail("Não foi possível localizar o Aluno para a exclusão.");
-
-        aluno.Value.Deletado = true;
-        _context.Alunos.Update(aluno.Value);
+        aluno.Deletado = true;
+        _context.Alunos.Update(aluno);
         await _context.SaveChangesAsync();
 
-        return Result.Ok(true);
+        return true;
     }
 }

@@ -21,11 +21,7 @@ public class AlunoService(IAlunoRepository repo)
             Pesquisa = filtrodto.Pesquisa
         };
 
-        var result = await _alunoRepository.GetByFilters(filtro, id, cargo);
-        if (result.IsFailed)
-            return Result.Fail("Não foi possível realizar a filtragem");
-
-        var (alunos, total) = result.Value;
+        var (alunos, total) = await _alunoRepository.GetByFilters(filtro, id, cargo);
 
         List<AlunoDTO> alunosDTO = [];
         foreach(var aluno in alunos)
@@ -56,12 +52,20 @@ public class AlunoService(IAlunoRepository repo)
 
     public async Task<Result<Aluno>> GetAlunoByIdAsync(string Registro)
     {
-        return await _alunoRepository.GetByIdAsync(Registro);
+        var aluno = await _alunoRepository.GetByIdAsync(Registro);
+        if (aluno == null)
+            return Result.Fail("Aluno não encontrado.");
+
+        return aluno;
     }
 
     public async Task<Result<Aluno>> GetLastAluno()
     {
-        return await _alunoRepository.GetLastPessoaAsync();
+        var aluno = await _alunoRepository.GetLastPessoaAsync();
+        if (aluno == null)
+            return Result.Fail("Registro não encontrado.");
+
+        return aluno;
     }
 
     public async Task<Result<bool>> AddAlunoAsync(AlunoCadastroDTO AlunoDTO)
@@ -101,6 +105,10 @@ public class AlunoService(IAlunoRepository repo)
 
     public async Task<Result<bool>> UpdateAlunoAsync(AlunoUpdateDTO AlunoDTO, DateOnly matricula, int media)
     {
+        var alunoExting = await _alunoRepository.GetByIdAsync(AlunoDTO.Registro);
+        if (alunoExting == null)
+            return Result.Fail("Não foi possível localizar o Aluno para a edição.");
+
         var aluno = new Aluno
         {
             Registro = AlunoDTO.Registro,
@@ -125,6 +133,10 @@ public class AlunoService(IAlunoRepository repo)
 
     public async Task<Result<bool>> DeleteAlunoAsync(string Registro)
     {
-        return await _alunoRepository.DeleteAsync(Registro);
+        var alunoExting = await _alunoRepository.GetByIdAsync(Registro);
+        if (alunoExting == null)
+            return Result.Fail("Não foi possível localizar o Aluno para a exclusão.");
+
+        return await _alunoRepository.DeleteAsync(alunoExting);
     }
 }

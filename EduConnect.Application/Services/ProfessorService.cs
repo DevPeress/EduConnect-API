@@ -21,11 +21,8 @@ public class ProfessorService(IProfessorRepository repo)
             Pesquisa = filtrodto.Pesquisa
         };
 
-        var result = await _professorRepository.GetByFilters(filtro, id, cargo);
-        if (result.IsFailed)
-            return Result.Fail(result.Errors);
+        var (professores, total) = await _professorRepository.GetByFilters(filtro, id, cargo);
 
-        var (professores, total) = result.Value;
         List<ProfessorDTO> professoresDTO = professores.Select(professores => new ProfessorDTO(professores)
         {
             Registro = professores.Registro,
@@ -50,18 +47,26 @@ public class ProfessorService(IProfessorRepository repo)
 
     public async Task<Result<Professor>> GetProfessorByIdAsync(string Registro)
     {
-        return await _professorRepository.GetByIdAsync(Registro);
+        var professor = await _professorRepository.GetByIdAsync(Registro);
+        if (professor == null)
+            return Result.Fail("Professor não encontrado.");
+
+        return professor;
     }
 
     public async Task<Result<Professor>> GetLastProfessorAsync()
     {
-        return await _professorRepository.GetLastPessoaAsync();
+        var professor = await _professorRepository.GetLastPessoaAsync();
+        if (professor == null)
+            return Result.Fail("Registro não encontrado.");
+
+        return professor;
     }
 
     public async Task<Result<bool>> AddProfessorAsync(ProfessorCadastroDTO ProfessorDTO)
     {
         var existingProfessor = await _professorRepository.GetByIdAsync(ProfessorDTO.Registro);
-        if (existingProfessor.IsSuccess)
+        if (existingProfessor == null)
             return Result.Fail<bool>("Registro de professor já existe.");
 
         var conta = new Conta
@@ -132,6 +137,10 @@ public class ProfessorService(IProfessorRepository repo)
 
     public async Task<Result<bool>> DeleteProfessorAsync(string Registro)
     {
-        return await _professorRepository.DeleteAsync(Registro);
+        var professor = await _professorRepository.GetByIdAsync(Registro);
+        if (professor == null)
+            return Result.Fail("Professor não encontrado");
+
+        return await _professorRepository.DeleteAsync(professor);
     }
 }
