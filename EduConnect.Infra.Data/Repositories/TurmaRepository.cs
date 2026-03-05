@@ -1,7 +1,6 @@
 ﻿using EduConnect.Domain.Entities;
 using EduConnect.Domain.Interfaces;
 using EduConnect.Infra.Data.Context;
-using FluentResults;
 using Microsoft.EntityFrameworkCore;
 
 namespace EduConnect.Infra.Data.Repositories;
@@ -53,7 +52,7 @@ public class TurmaRepository(EduContext context) : ITurmaRepository
         }
     }
 
-    public async Task<Result<(List<Turma>, int TotalRegistro)>> GetByFilters(FiltroTurma filtro, string id, string cargo)
+    public async Task<(List<Turma>, int TotalRegistro)> GetByFilters(FiltroTurma filtro, string id, string cargo)
     {
         var query = QueryFiltroTurma(filtro, id, cargo);
         var total = await query.CountAsync();
@@ -64,16 +63,12 @@ public class TurmaRepository(EduContext context) : ITurmaRepository
         return (result, total);
     }
 
-    public async Task<Result<Turma>> GetLastTurma()
+    public async Task<Turma?> GetLastTurma()
     {
-        var turma = await _context.Turmas.OrderBy(a => a.Registro).LastOrDefaultAsync();
-        if (turma == null)
-            return Result.Fail("Nenhuma turma encontrada.");
-      
-        return turma;
+        return await _context.Turmas.OrderBy(a => a.Registro).LastOrDefaultAsync();
     }
 
-    public async Task<Result<List<string>>> GetTurmasValidasAsync()
+    public async Task<List<string>> GetTurmasValidasAsync()
     {
         return await _context.Turmas
             .Where(a => a.Deletado == false && a.Status == "Ativa" && a.AnoLetivo == Year)
@@ -81,7 +76,7 @@ public class TurmaRepository(EduContext context) : ITurmaRepository
             .ToListAsync();
     }
 
-    public async Task<Result<List<string>>> GetInformativos()
+    public async Task<List<string>> GetInformativos()
     {
         return await _context.Turmas
             .Where(a => a.Deletado == false)
@@ -90,27 +85,31 @@ public class TurmaRepository(EduContext context) : ITurmaRepository
             .ToListAsync();
     }
 
-    public async Task<Result<Turma>> GetTurmaByIdAsync(string id)
+    public async Task<Turma?> GetTurmaByIdAsync(string id)
     {
         var turma = await _context.Turmas.FirstOrDefaultAsync(dados => dados.Registro == id && dados.Deletado == false);
         if (turma == null)
-            return Result.Fail("Turma não encontrada.");
+            return null;
 
         return turma;
     }
 
-    public async Task<Result<bool>> AddTurmaAsync(Turma turma, List<string> disciplinas)
+    public async Task<Turma?> GetTurmaByDados(string Registro, string AnoLetivo)
     {
-        var existTurma = await _context.Turmas
-            .AnyAsync(t => t.Registro == turma.Registro && t.AnoLetivo == turma.AnoLetivo && t.Deletado == false);
-        if (existTurma)
-            return Result.Fail("Já existe uma turma cadastrada com este registro para o ano letivo.");
+        var turma = await _context.Turmas.FirstOrDefaultAsync(dados => dados.Registro == Registro && dados.AnoLetivo == AnoLetivo && dados.Deletado == false);
+        if (turma == null)
+            return null;
 
+        return turma;
+    }
+
+    public async Task<bool> AddTurmaAsync(Turma turma, List<string> disciplinas)
+    {
         var disciplinasRegistradas = await _context.TurmaDisciplinas
            .Where(td => td.TurmaRegistro == turma.Registro && turma.AnoLetivo == td.AnoLetivo)
            .ToListAsync();
         if (disciplinasRegistradas.Count > 0)
-            return Result.Fail("Disciplinas já cadastradas para esta turma.");
+            return false;
 
         foreach (var disciplina in disciplinas)
         {
@@ -129,16 +128,11 @@ public class TurmaRepository(EduContext context) : ITurmaRepository
         await _context.Turmas.AddAsync(turma);
         await _context.SaveChangesAsync();
 
-        return Result.Ok(true);
+        return true;
     }
 
-    public async Task<Result<bool>> UpdateTurmaAsync(Turma turma, List<string> disciplinas)
+    public async Task<bool> UpdateTurmaAsync(Turma turma, List<string> disciplinas)
     {
-        var existTurma = await _context.Turmas
-            .AnyAsync(t => t.Registro == turma.Registro && t.AnoLetivo == turma.AnoLetivo && t.Deletado == false);
-        if (!existTurma)
-            return Result.Fail("Não existe uma turma com esse registro!");
-
         foreach (var disciplina in disciplinas)
         {
             var existingEntry = await _context.TurmaDisciplinas
@@ -165,19 +159,15 @@ public class TurmaRepository(EduContext context) : ITurmaRepository
         _context.Turmas.Update(turma);
         await _context.SaveChangesAsync();
 
-        return Result.Ok(true);
+        return true;
     }
 
-    public async Task<Result<bool>> DeleteTurmaAsync(string id)
+    public async Task<bool> DeleteTurmaAsync(Turma turma)
     {
-        var turma = await _context.Turmas.FindAsync(id);
-        if (turma == null)
-            return Result.Fail("Turma não encontrada.");
-
         turma.Deletado = true;
         _context.Turmas.Update(turma);
         await _context.SaveChangesAsync();
 
-        return Result.Ok(true);
+        return true;
     }
 }

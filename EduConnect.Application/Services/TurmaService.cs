@@ -19,12 +19,9 @@ public class TurmaService(ITurmaRepository repo)
             Pesquisa = filtrodto.Pesquisa
         };
 
-        var result = await _turmaRepository.GetByFilters(filtro, id, cargo);
-        if (result.IsFailed)
-            return Result.Fail(result.Errors);
+        var (turmas, total) = await _turmaRepository.GetByFilters(filtro, id, cargo);
 
-        var (turmas, total) = result.Value;
-        List<TurmaDTO> turmaDTO = turmas.Select(turmas => new TurmaDTO(turmas)
+        List<TurmaDTO> turmaDTO = [.. turmas.Select(turmas => new TurmaDTO(turmas)
         {
             Registro = turmas.Registro,
             Nome = turmas.Nome,
@@ -33,14 +30,18 @@ public class TurmaService(ITurmaRepository repo)
             Horario = $"{turmas.Inicio} - {turmas.Fim}",
             Sala = turmas.Sala,
             Capacidade = turmas.Capacidade,
-        }).ToList();
+        })];
 
         return (turmaDTO, total);
     }
 
     public async Task<Result<Turma>> GetLastTurma()
     {
-        return await _turmaRepository.GetLastTurma();
+        var turma = await _turmaRepository.GetLastTurma();
+        if (turma == null)
+            return Result.Fail("Nenhuma turma encontrada.");
+        
+        return turma;
     }
 
     public async Task<Result<List<string>>> GetTurmasValidasAsync()
@@ -55,11 +56,19 @@ public class TurmaService(ITurmaRepository repo)
 
     public async Task<Result<Turma>> GetTurmaByIdAsync(string id)
     {
-        return await _turmaRepository.GetTurmaByIdAsync(id);
+        var turma = await _turmaRepository.GetTurmaByIdAsync(id);
+        if (turma == null)
+            return Result.Fail("Nenhuma turma encontrada.");
+
+        return turma;
     }
 
     public async Task<Result<bool>> AddTurmaAsync(TurmaCadastroDTO turmaDTO)
     {
+        var turmaExisting = await _turmaRepository.GetTurmaByDados(turmaDTO.Registro, turmaDTO.AnoEletivo);
+        if (turmaExisting == null)
+            return Result.Fail("Já existe uma turma com o mesmo registro e ano letivo.");
+
         var turma = new Turma
         {
             Registro = turmaDTO.Registro,
@@ -84,6 +93,10 @@ public class TurmaService(ITurmaRepository repo)
 
     public async Task<Result<bool>> UpdateTurmaAsync(TurmaUpdateDTO turmaDTO)
     {
+        var turmaExisting = await _turmaRepository.GetTurmaByDados(turmaDTO.Registro, turmaDTO.AnoEletivo);
+        if (turmaExisting == null)
+            return Result.Fail("Não existe uma turma com esse registro!");
+
         var turma = new Turma
         {
             Registro = turmaDTO.Registro,
@@ -108,6 +121,10 @@ public class TurmaService(ITurmaRepository repo)
 
     public async Task<Result<bool>> DeleteTurmaAsync(string id)
     {
-        return await _turmaRepository.DeleteTurmaAsync(id);
+        var turma = await _turmaRepository.GetTurmaByIdAsync(id);
+        if (turma == null)
+            return Result.Fail("Turma não encontrada.");
+
+        return await _turmaRepository.DeleteTurmaAsync(turma);
     }
 }
