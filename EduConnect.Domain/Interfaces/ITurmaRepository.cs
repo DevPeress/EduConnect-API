@@ -9,7 +9,7 @@ public interface ITurmaRepository
     Task<List<string>> GetTurmasValidasAsync();
     Task<List<string>> GetInformativos();
     Task<Turma?> GetTurmaByIdAsync(string id);
-    Task<Turma?> GetTurmaByDados(string Registro, string AnoLetivo)
+    Task<Turma?> GetTurmaByDados(string Registro, string AnoLetivo);
     Task<bool> AddTurmaAsync(Turma turma, List<string> disciplinas);
     Task<bool> UpdateTurmaAsync(Turma turma, List<string> disciplinas);
     Task<bool> DeleteTurmaAsync(Turma turma);
