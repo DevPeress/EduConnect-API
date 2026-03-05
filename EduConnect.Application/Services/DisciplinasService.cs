@@ -1,13 +1,15 @@
-﻿using EduConnect.Application.DTO.Entities;
+﻿using AutoMapper;
+using EduConnect.Application.DTO.Entities;
 using EduConnect.Domain.Entities;
 using EduConnect.Domain.Interfaces;
 using FluentResults;
 
 namespace EduConnect.Application.Services
 {
-    public class DisciplinasService(IDisciplinasRepository disciplinasRepository)
+    public class DisciplinasService(IDisciplinasRepository disciplinasRepository, IMapper mapper)
     {
         private readonly IDisciplinasRepository _disciplinasRepository = disciplinasRepository;
+        private readonly IMapper _mapper = mapper;
 
         public async Task<Result<(IEnumerable<Disciplinas>, int TotalRegistro)>> GetDisciplinas(FiltroBaseDTO FiltroDTO)
         {
@@ -40,13 +42,7 @@ namespace EduConnect.Application.Services
             if (disciplinaExisting == null)
                 return Result.Fail("Disciplina não encontrada.");
 
-            var disciplina = new Disciplinas
-            {
-                Registro = DisciplinaDTO.Registro,
-                Nome = DisciplinaDTO.Nome,
-                Descricao = DisciplinaDTO.Descricao,
-                DataCriacao = DateOnly.FromDateTime(DateTime.Now)
-            };
+            var disciplina = _mapper.Map<Disciplinas>(DisciplinaDTO);
 
             return await _disciplinasRepository.CreateDisciplina(disciplina);
         }
