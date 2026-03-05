@@ -94,10 +94,10 @@ namespace EduConnect.Controllers
         }
 
         [Authorize]
-        [HttpDelete("{id:int}")]
-        public async Task<IActionResult> DeleteConta(int id)
+        [HttpDelete]
+        public async Task<IActionResult> DeleteConta(string registro)
         {
-            var delete = await _contaService.DeleteContaAsync(id);
+            var delete = await _contaService.DeleteContaAsync(registro);
             if (delete.IsFailed)
                 return BadRequest("Erro ao deletar a conta.");
            

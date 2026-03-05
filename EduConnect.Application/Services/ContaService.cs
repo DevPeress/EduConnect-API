@@ -10,26 +10,47 @@ public class ContaService(IContaRepository contaRepository)
 
     public async Task<Result<(bool, int)>> VerifyLogin(string registro, string senha, int maxTentativas)
     {
-        return await _contaRepository.VerifyLogin(registro, senha, maxTentativas);
+        var (result, tentativas) = await _contaRepository.VerifyLogin(registro, senha, maxTentativas);
+
+        if (result == null)
+            return Result.Fail("Registro não encontrado.");
+
+        return Result.Ok((result.Value, tentativas));
     }
 
     public async Task<Result<(string nome, string foto)>> GetInfos(string cargo, string registro)
     {
-        return await _contaRepository.GetInfos(cargo, registro);
+        var (nome, foto) = await _contaRepository.GetInfos(cargo, registro);
+        if (string.IsNullOrEmpty(nome) || string.IsNullOrEmpty(foto))
+            return Result.Fail("Informações do usuário não encontradas.");
+
+        return (nome, foto);
     }
 
     public async Task<Result<bool>> ChancePassword(string registro, string senhaNova)
     {
-        return await _contaRepository.ChancePassword(registro, senhaNova);
+        var conta = await _contaRepository.GetConta(registro);
+        if (conta == null)
+            return Result.Fail("Conta não encontrada.");
+
+        return await _contaRepository.ChancePassword(conta, senhaNova);
     }
 
     public async Task<Result<Conta>> GetConta(string registro)
     {
-        return await _contaRepository.GetConta(registro);
+        var conta = await _contaRepository.GetConta(registro);
+        if (conta == null)
+            return Result.Fail("Conta não encontrada.");
+
+        return conta;
     }
 
-    public async Task<Result<bool>> DeleteContaAsync(int id)
+    public async Task<Result<bool>> DeleteContaAsync(string registro)
     {
-        return await _contaRepository.DeleteContaAsync(id);
+        var conta = await _contaRepository.GetConta(registro);
+        if (conta == null)
+            return Result.Fail("Conta não encontrada.");
+
+        return await _contaRepository.DeleteContaAsync(conta);
     }
 }

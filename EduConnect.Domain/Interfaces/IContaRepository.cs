@@ -5,11 +5,11 @@ namespace EduConnect.Domain.Interfaces;
 
 public interface IContaRepository
 {
-    Task<Result<(bool, int)>> VerifyLogin(string registro, string senha, int maxTentativas);
-    Task<Result<Conta>> GetConta(string registro);
-    Task<Result<bool>> EmailExistsAsync(string registro);
-    Task<Result<(string nome, string foto)>> GetInfos(string cargo, string registro);
-    Task<Result<bool>> ChancePassword(string registro, string senhaNova);
-    Task<Result<bool>> AddContaAsync(Conta conta);
-    Task<Result<bool>> DeleteContaAsync(int id);
+    Task<(bool?, int)> VerifyLogin(string registro, string senha, int maxTentativas);
+    Task<Conta?> GetConta(string registro);
+    Task<bool> EmailExistsAsync(string registro);
+    Task<(string? nome, string? foto)> GetInfos(string cargo, string registro);
+    Task<bool> ChancePassword(Conta conta, string senhaNova);
+    Task<bool> AddContaAsync(Conta conta);
+    Task<bool> DeleteContaAsync(Conta conta);
 }

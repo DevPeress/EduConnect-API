@@ -2,7 +2,6 @@
 using EduConnect.Domain.Interfaces;
 using EduConnect.Infra.CrossCutting.Utils;
 using EduConnect.Infra.Data.Context;
-using FluentResults;
 using Microsoft.EntityFrameworkCore;
 
 namespace EduConnect.Infra.Data.Repositories;
@@ -16,18 +15,18 @@ public class ContaRepository(EduContext context) : IContaRepository
         return dataLogin > currentDate;
     }
 
-    public async Task<Result<(bool, int)>> VerifyLogin(string registro, string senha, int maxTentativas)
+    public async Task<(bool?, int)> VerifyLogin(string registro, string senha, int maxTentativas)
     {
         var conta = await _context.Contas.FirstOrDefaultAsync(c => c.Registro == registro);
         if (conta == null)
-            return Result.Fail("Não foi localizado a conta!");
+            return (null, 0);
 
         if (conta.DataLogin != null)
         {
             var isBlocked = VerifyDate(conta.DataLogin.Value);
             if (isBlocked)
             {
-                return Result.Fail("Conta bloqueada!");
+                return (false, 0);
             }
             else
             {
@@ -57,22 +56,17 @@ public class ContaRepository(EduContext context) : IContaRepository
         }
     }
 
-    public async Task<Result<Conta>> GetConta(string registro)
+    public async Task<Conta?> GetConta(string registro)
     {
-
-        var conta = await _context.Contas.FirstOrDefaultAsync(c => c.Registro == registro);
-        if (conta == null)
-            return Result.Fail("Conta não encontrada.");
-
-        return conta;
+        return await _context.Contas.FirstOrDefaultAsync(c => c.Registro == registro) ?? null;
     }
 
-    public async Task<Result<bool>> EmailExistsAsync(string registro)
+    public async Task<bool> EmailExistsAsync(string registro)
     {
         return await _context.Contas.AnyAsync(c => c.Registro == registro);
     }
 
-    public async Task<Result<(string nome, string foto)>> GetInfos(string cargo, string registro)
+    public async Task<(string? nome, string? foto)> GetInfos(string cargo, string registro)
     {
         switch(cargo) 
         {
@@ -101,27 +95,24 @@ public class ContaRepository(EduContext context) : IContaRepository
                 }
                 break;
         }
-        return Result.Fail("Não foi encontrado o usuário");
+
+        return (null, null);
     }
 
-    public async Task<Result<bool>> ChancePassword(string registro, string senhaNova)
+    public async Task<bool> ChancePassword(Conta conta, string senhaNova)
     {
-        var conta = await GetConta(registro);
-        if (conta.IsFailed)
-            return Result.Fail("Conta não encontrada.");
-        
-        conta.Value.Senha = senhaNova;
-        _context.Contas.Update(conta.Value);
+        conta.Senha = senhaNova;
+        _context.Contas.Update(conta);
         await _context.SaveChangesAsync();
 
         return true;
     }
 
-    public async Task<Result<bool>> AddContaAsync(Conta contaAdd)
+    public async Task<bool> AddContaAsync(Conta contaAdd)
     {
         var conta = await GetConta(contaAdd.Registro);
-        if (conta.IsFailed)
-            return Result.Fail("Conta não encontrada.");
+        if (conta == null)
+            return false;
 
         await _context.Contas.AddAsync(contaAdd);
         await _context.SaveChangesAsync();
@@ -129,12 +120,8 @@ public class ContaRepository(EduContext context) : IContaRepository
         return true;
     }
 
-    public async Task<Result<bool>> DeleteContaAsync(int id)
+    public async Task<bool> DeleteContaAsync(Conta conta)
     {
-        var conta = await _context.Contas.FindAsync(id);
-        if (conta == null)
-            return Result.Fail("Conta não encontrada.");
-
         conta.Deletado = true;
         _context.Contas.Update(conta);
         await _context.SaveChangesAsync();
