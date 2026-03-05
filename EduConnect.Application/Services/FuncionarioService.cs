@@ -1,4 +1,5 @@
-﻿using EduConnect.Application.DTO.Entities;
+﻿using AutoMapper;
+using EduConnect.Application.DTO.Entities;
 using EduConnect.Domain.Entities;
 using EduConnect.Domain.Interfaces;
 using EduConnect.Infra.CrossCutting.Utils;
@@ -6,9 +7,10 @@ using FluentResults;
 
 namespace EduConnect.Application.Services;
 
-public class FuncionarioService(IFuncionarioRepository repo)
+public class FuncionarioService(IFuncionarioRepository repo, IMapper mapper)
 {
     private readonly IFuncionarioRepository _funcionarioRepository = repo;
+    private readonly IMapper _mapper = mapper;
 
     public async Task<Result<(List<Funcionario>, int TotalRegistro)>> GetByFilters(FiltroPessoaDTO filtrodto, string id, string cargo)
     {
@@ -60,26 +62,7 @@ public class FuncionarioService(IFuncionarioRepository repo)
             Cargo = "Aluno"
         };
 
-        var funcionario = new Funcionario
-        {
-            Nome = funcionarioDTO.Nome,
-            Email = funcionarioDTO.Email,
-            Telefone = funcionarioDTO.Telefone,
-            Status = funcionarioDTO.Status,
-            Nasc = funcionarioDTO.Nasc,
-            Endereco = funcionarioDTO.Endereco,
-            Cpf = funcionarioDTO.CPF,
-            NomeEmergencia = funcionarioDTO.NomeEmergencia,
-            ContatoEmergencia = funcionarioDTO.ContatoEmergencia,
-            Registro = funcionarioDTO.Registro,
-            Cargo = funcionarioDTO.Cargo,
-            DataAdmissao = DateOnly.FromDateTime(DateTime.Now),
-            Salario = 0m,
-            Departamento = funcionarioDTO.Departamento,
-            Supervisor = funcionarioDTO.Supervisor,
-            Turno = funcionarioDTO.Turno,
-            Foto = funcionarioDTO.Foto
-        };
+        var funcionario = _mapper.Map<Funcionario>(funcionarioDTO);
 
         return await _funcionarioRepository.AddAsync(funcionario, conta);
     }
@@ -90,26 +73,7 @@ public class FuncionarioService(IFuncionarioRepository repo)
         if (funcionarioExistente == null)
             return Result.Fail("Funcionário não encontrado.");
 
-        var funcionario = new Funcionario
-        {
-            Nome = funcionarioDTO.Nome,
-            Email = funcionarioDTO.Email,
-            Telefone = funcionarioDTO.Telefone,
-            Status = funcionarioDTO.Status,
-            Nasc = funcionarioDTO.Nasc,
-            Endereco = funcionarioDTO.Endereco,
-            Cpf = funcionarioDTO.CPF,
-            NomeEmergencia = funcionarioDTO.NomeEmergencia,
-            ContatoEmergencia = funcionarioDTO.ContatoEmergencia,
-            Registro = funcionarioDTO.Registro,
-            Cargo = funcionarioDTO.Cargo,
-            DataAdmissao = admissao,
-            Salario = funcionarioDTO.Salario,
-            Departamento = funcionarioDTO.Departamento,
-            Supervisor = funcionarioDTO.Supervisor,
-            Turno = funcionarioDTO.Turno,
-            Foto = funcionarioDTO.Foto
-        };
+        var funcionario = _mapper.Map<Funcionario>(funcionarioDTO);
 
         return await _funcionarioRepository.UpdateAsync(funcionario);
     }
