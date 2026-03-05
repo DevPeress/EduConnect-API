@@ -69,6 +69,6 @@ public class DisciplinasRepository(EduContext context) : IDisciplinasRepository
         disciplina.Deletado = true;
         await _context.SaveChangesAsync();
         
-        return Result.Ok(true);
+        return true;
     }
 }
