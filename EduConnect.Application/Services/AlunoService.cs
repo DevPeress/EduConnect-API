@@ -1,6 +1,7 @@
 ﻿using EduConnect.Application.DTO.Entities;
 using EduConnect.Domain.Entities;
 using EduConnect.Domain.Interfaces;
+using EduConnect.Infra.CrossCutting.Utils;
 using FluentResults;
 
 namespace EduConnect.Application.Services;
@@ -65,6 +66,17 @@ public class AlunoService(IAlunoRepository repo)
 
     public async Task<Result<bool>> AddAlunoAsync(AlunoCadastroDTO AlunoDTO)
     {
+        var alunoExiting = await _alunoRepository.GetByIdAsync(AlunoDTO.Registro);
+        if (alunoExiting != null)
+            return Result.Fail("Já existe um Aluno com esse Registro!.");
+
+        var conta = new Conta
+        {
+            Registro = AlunoDTO.Registro,
+            Senha = SegurancaManager.GerarSenha(),
+            Cargo = "Aluno"
+        };
+
         var aluno = new Aluno
         {
             Registro = AlunoDTO.Registro,
@@ -84,7 +96,7 @@ public class AlunoService(IAlunoRepository repo)
             TurmaRegistro = AlunoDTO.Turma
         };
 
-        return await _alunoRepository.AddAsync(aluno);
+        return await _alunoRepository.AddAsync(aluno, conta);
     }
 
     public async Task<Result<bool>> UpdateAlunoAsync(AlunoUpdateDTO AlunoDTO, DateOnly matricula, int media)

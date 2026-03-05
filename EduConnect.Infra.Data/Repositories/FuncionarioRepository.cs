@@ -97,19 +97,8 @@ public class FuncionarioRepository(EduContext context) : IFuncionarioRepository
         .LastAsync();
     }
 
-    public async Task<Result<bool>> AddAsync(Funcionario funcionario)
+    public async Task<Result<bool>> AddAsync(Funcionario funcionario, Conta conta)
     {
-        var funcionarioExistente = await GetByIdAsync(funcionario.Registro);
-        if (funcionarioExistente.IsSuccess)
-            return Result.Fail("Funcionário já existente.");
-
-        var conta = new Conta
-        {
-            Registro = funcionario.Registro,
-            Senha = SegurancaManager.GerarSenha(),
-            Cargo = "Aluno"
-        };
-
         await _context.Contas.AddAsync(conta);
         await _context.SaveChangesAsync();
 

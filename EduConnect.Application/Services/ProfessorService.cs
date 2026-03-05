@@ -1,6 +1,7 @@
 ﻿using EduConnect.Application.DTO.Entities;
 using EduConnect.Domain.Entities;
 using EduConnect.Domain.Interfaces;
+using EduConnect.Infra.CrossCutting.Utils;
 using FluentResults;
 
 namespace EduConnect.Application.Services;
@@ -59,6 +60,17 @@ public class ProfessorService(IProfessorRepository repo)
 
     public async Task<Result<bool>> AddProfessorAsync(ProfessorCadastroDTO ProfessorDTO)
     {
+        var existingProfessor = await _professorRepository.GetByIdAsync(ProfessorDTO.Registro);
+        if (existingProfessor.IsSuccess)
+            return Result.Fail<bool>("Registro de professor já existe.");
+
+        var conta = new Conta
+        {
+            Registro = ProfessorDTO.Registro,
+            Senha = SegurancaManager.GerarSenha(),
+            Cargo = "Aluno"
+        };
+
         var professor = new Professor
         {
             Registro = ProfessorDTO.Registro,
@@ -78,7 +90,7 @@ public class ProfessorService(IProfessorRepository repo)
             Salario = 0m
         };
 
-        return await _professorRepository.AddAsync(professor);
+        return await _professorRepository.AddAsync(professor, conta);
     }
 
     public async Task<Result<bool>> UpdateProfessorAsync(ProfessorUpdateDTO ProfessorDTO, DateOnly DataContrato)

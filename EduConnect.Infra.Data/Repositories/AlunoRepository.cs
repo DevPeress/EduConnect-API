@@ -101,19 +101,8 @@ public class AlunoRepository(EduContext context) : IAlunoRepository
         return lastAluno;
     }
 
-    public async Task<Result<bool>> AddAsync(Aluno alunoAdd)
+    public async Task<Result<bool>> AddAsync(Aluno alunoAdd, Conta conta)
     {
-        var aluno = await GetByIdAsync(alunoAdd.Registro);
-        if (aluno != null)
-            return Result.Fail("Já existe um Aluno com esse Registro!.");
-
-        var conta = new Conta
-        {
-            Registro = alunoAdd.Registro,
-            Senha = SegurancaManager.GerarSenha(),
-            Cargo = "Aluno"
-        };
-
         await _context.Contas.AddAsync(conta);
         await _context.SaveChangesAsync();
 

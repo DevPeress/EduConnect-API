@@ -1,6 +1,7 @@
 ﻿using EduConnect.Application.DTO.Entities;
 using EduConnect.Domain.Entities;
 using EduConnect.Domain.Interfaces;
+using EduConnect.Infra.CrossCutting.Utils;
 using FluentResults;
 
 namespace EduConnect.Application.Services;
@@ -40,6 +41,17 @@ public class FuncionarioService(IFuncionarioRepository repo)
 
     public async Task<Result<bool>> AddFuncionarioAsync(FuncionarioCadastroDTO funcionarioDTO)
     {
+        var alunoExiting = await _funcionarioRepository.GetByIdAsync(funcionarioDTO.Registro);
+        if (alunoExiting != null)
+            return Result.Fail("Já existe um Funcionário com esse Registro!.");
+
+        var conta = new Conta
+        {
+            Registro = funcionarioDTO.Registro,
+            Senha = SegurancaManager.GerarSenha(),
+            Cargo = "Aluno"
+        };
+
         var funcionario = new Funcionario
         {
             Nome = funcionarioDTO.Nome,
@@ -61,7 +73,7 @@ public class FuncionarioService(IFuncionarioRepository repo)
             Foto = funcionarioDTO.Foto
         };
 
-        return await _funcionarioRepository.AddAsync(funcionario);
+        return await _funcionarioRepository.AddAsync(funcionario, conta);
     }
 
     public async Task<Result<bool>> UpdateFuncionarioAsync(FuncionarioUpdateDTO funcionarioDTO, DateOnly admissao)

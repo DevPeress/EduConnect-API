@@ -9,7 +9,7 @@ public interface IPessoaRepository <T> where T : class
     Task<Result<(List<string>, List<string>)>> GetInformativos();
     Task<Result<T>> GetByIdAsync(string Registro);
     Task<Result<T>> GetLastPessoaAsync();
-    Task<Result<bool>> AddAsync(T pessoa);
+    Task<Result<bool>> AddAsync(T pessoa, Conta conta);
     Task<Result<bool>> UpdateAsync(T pessoa);
     Task<Result<bool>> DeleteAsync(string Registro);
 }

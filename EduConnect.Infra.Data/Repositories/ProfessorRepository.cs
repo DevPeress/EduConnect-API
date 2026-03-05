@@ -111,18 +111,8 @@ public class ProfessorRepository(EduContext context) : IProfessorRepository
         return professor; 
     }
 
-    public async Task<Result<bool>> AddAsync(Professor professor)
+    public async Task<Result<bool>> AddAsync(Professor professor, Conta conta)
     {
-        var existingProfessor = await GetByIdAsync(professor.Registro);
-        if (existingProfessor.IsSuccess)
-            return Result.Fail<bool>("Registro de professor já existe.");
-
-        var conta = new Conta
-        {
-            Registro = professor.Registro,
-            Senha = SegurancaManager.GerarSenha(),
-            Cargo = "Aluno"
-        };
         await _context.Contas.AddAsync(conta);
         await _context.SaveChangesAsync();
 
