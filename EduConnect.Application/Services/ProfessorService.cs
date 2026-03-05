@@ -101,7 +101,7 @@ public class ProfessorService(IProfessorRepository repo)
     public async Task<Result<bool>> UpdateProfessorAsync(ProfessorUpdateDTO ProfessorDTO, DateOnly DataContrato)
     {
         var disciplinas = await _professorRepository.GetDisciplinasByProfessorAsync(ProfessorDTO.Registro);
-        if (disciplinas.IsFailed)
+        if (disciplinas == null)
             return Result.Fail("Disciplinas do professor não encontradas.");
 
         ICollection<ProfessorDisciplina> disciplinasDoProfessor = disciplinas != null! ? disciplinas.Value : [];
