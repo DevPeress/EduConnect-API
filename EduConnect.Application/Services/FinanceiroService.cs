@@ -1,13 +1,15 @@
-﻿using EduConnect.Application.DTO.Entities;
+﻿using AutoMapper;
+using EduConnect.Application.DTO.Entities;
 using EduConnect.Domain.Entities;
 using EduConnect.Domain.Interfaces;
 using FluentResults;
 
 namespace EduConnect.Application.Services;
 
-public class FinanceiroService(IFinanceiroRepository repo)
+public class FinanceiroService(IFinanceiroRepository repo, IMapper mapper)
 {
     private readonly IFinanceiroRepository _financeiroRepository = repo;
+    private readonly IMapper _mapper = mapper;
 
     public async Task<Result<List<Financeiro>>> GetByAlunoId(string Registro)
     {
@@ -47,19 +49,7 @@ public class FinanceiroService(IFinanceiroRepository repo)
         if (financeiroExistente != null)
             return Result.Fail("Já existe um registro financeiro com esse identificador.");
 
-        var financeiro = new Financeiro
-        {
-            Registro = FinanceiroDTO.Registro,
-            Categoria = FinanceiroDTO.Categoria,
-            Metodo = FinanceiroDTO.Metodo,
-            Descricao = FinanceiroDTO.Descricao,
-            Valor = FinanceiroDTO.Valor,
-            DataVencimento = FinanceiroDTO.DataVencimento,
-            Pago = FinanceiroDTO.Pago,
-            DataPagamento = FinanceiroDTO.DataPagamento,
-            Observacoes = FinanceiroDTO.Observacoes,
-            AlunoRegistro = FinanceiroDTO.AlunoRegistro
-        };
+        var financeiro = _mapper.Map<Financeiro>(FinanceiroDTO);
 
         return await _financeiroRepository.Add(financeiro);
     }
@@ -70,21 +60,7 @@ public class FinanceiroService(IFinanceiroRepository repo)
         if (financeiroExistente == null)
             return Result.Fail("Não existe um registro financeiro com esse identificador.");
 
-        var financeiro = new Financeiro
-        {
-            Registro = FinanceiroDTO.Registro,
-            Categoria = FinanceiroDTO.Categoria,
-            Metodo = FinanceiroDTO.Metodo,
-            Descricao = FinanceiroDTO.Descricao,
-            Valor = FinanceiroDTO.Valor,
-            DataVencimento = FinanceiroDTO.DataVencimento,
-            Pago = FinanceiroDTO.Pago,
-            Cancelado = FinanceiroDTO.Cancelado,
-            Deletado = FinanceiroDTO.Deletado,
-            DataPagamento = FinanceiroDTO.DataPagamento,
-            Observacoes = FinanceiroDTO.Observacoes,
-            AlunoRegistro = FinanceiroDTO.AlunoRegistro
-        };
+        var financeiro = _mapper.Map<Financeiro>(FinanceiroDTO);
 
         return await _financeiroRepository.Update(financeiro);
     }
