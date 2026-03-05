@@ -1,12 +1,14 @@
-﻿using EduConnect.Application.DTO.Entities;
+﻿using AutoMapper;
+using EduConnect.Application.DTO.Entities;
 using EduConnect.Domain.Entities;
 using EduConnect.Domain.Interfaces;
 using FluentResults;
 
 namespace EduConnect.Application.Services;
-public class TurmaService(ITurmaRepository repo)
+public class TurmaService(ITurmaRepository repo, IMapper mapper)
 {
     private readonly ITurmaRepository _turmaRepository = repo;
+    private readonly IMapper _mapper = mapper;
 
     public async Task<Result<(List<TurmaDTO>, int TotalRegistro)>> GetByFilters(FiltroTurmaDTO filtrodto, string id, string cargo)
     {
@@ -21,16 +23,7 @@ public class TurmaService(ITurmaRepository repo)
 
         var (turmas, total) = await _turmaRepository.GetByFilters(filtro, id, cargo);
 
-        List<TurmaDTO> turmaDTO = [.. turmas.Select(turmas => new TurmaDTO(turmas)
-        {
-            Registro = turmas.Registro,
-            Nome = turmas.Nome,
-            Turno = turmas.Turno,
-            Professor = turmas.ProfessorResponsavel,
-            Horario = $"{turmas.Inicio} - {turmas.Fim}",
-            Sala = turmas.Sala,
-            Capacidade = turmas.Capacidade,
-        })];
+        List<TurmaDTO> turmaDTO = _mapper.Map<List<TurmaDTO>>(turmas);
 
         return (turmaDTO, total);
     }
@@ -69,24 +62,7 @@ public class TurmaService(ITurmaRepository repo)
         if (turmaExisting == null)
             return Result.Fail("Já existe uma turma com o mesmo registro e ano letivo.");
 
-        var turma = new Turma
-        {
-            Registro = turmaDTO.Registro,
-            Nome = turmaDTO.Nome,
-            Turno = turmaDTO.Turno,
-            Inicio = turmaDTO.Inicio,
-            Fim = turmaDTO.Fim,
-            Sala = turmaDTO.Sala,
-            Capacidade = turmaDTO.Capacidade,
-            AnoLetivo = turmaDTO.AnoEletivo,
-            DataCriacao = DateOnly.FromDateTime(DateTime.Now),
-            Status = turmaDTO.Status,
-            ProfessorResponsavel = turmaDTO.ProfessorResponsavel,
-            Alunos = [],
-            TurmaDisciplinas = [],
-            Dias = turmaDTO.Dias,
-            Deletado = false,
-        };
+        var turma = _mapper.Map<Turma>(turmaDTO);
 
         return await _turmaRepository.AddTurmaAsync(turma, turmaDTO.Disciplinas);
     }
@@ -97,24 +73,7 @@ public class TurmaService(ITurmaRepository repo)
         if (turmaExisting == null)
             return Result.Fail("Não existe uma turma com esse registro!");
 
-        var turma = new Turma
-        {
-            Registro = turmaDTO.Registro,
-            Nome = turmaDTO.Nome,
-            Turno = turmaDTO.Turno,
-            Inicio = turmaDTO.Inicio,
-            Fim = turmaDTO.Fim,
-            Sala = turmaDTO.Sala,
-            Capacidade = turmaDTO.Capacidade,
-            AnoLetivo = turmaDTO.AnoEletivo,
-            DataCriacao = DateOnly.FromDateTime(DateTime.Now),
-            Status = turmaDTO.Status,
-            ProfessorResponsavel = turmaDTO.ProfessorResponsavel,
-            Alunos = turmaDTO.Alunos,
-            Dias = turmaDTO.Dias,
-            TurmaDisciplinas = [],
-            Deletado = false,
-        };
+        var turma = _mapper.Map<Turma>(turmaDTO);
 
         return await _turmaRepository.UpdateTurmaAsync(turma, turmaDTO.TurmaDisciplina);
     }
