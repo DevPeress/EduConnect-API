@@ -18,6 +18,8 @@ namespace EduConnect.Infra.IoC
 
             services.AddHttpContextAccessor();
 
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
             services.AddScoped<IAlunoRepository, AlunoRepository>();
             services.AddScoped<AlunoService>();
             services.AddScoped<IProfessorRepository, ProfessorRepository>();
