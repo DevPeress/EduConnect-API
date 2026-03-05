@@ -1,8 +1,6 @@
 ﻿using EduConnect.Domain.Entities;
 using EduConnect.Domain.Interfaces;
-using EduConnect.Infra.CrossCutting.Utils;
 using EduConnect.Infra.Data.Context;
-using FluentResults;
 using Microsoft.EntityFrameworkCore;
 
 namespace EduConnect.Infra.Data.Repositories;
