@@ -1,7 +1,6 @@
 ﻿using EduConnect.Domain.Entities;
 using EduConnect.Domain.Interfaces;
 using EduConnect.Infra.Data.Context;
-using FluentResults;
 using Microsoft.EntityFrameworkCore;
 
 namespace EduConnect.Infra.Data.Repositories;
@@ -65,7 +64,7 @@ public class DisciplinasRepository(EduContext context) : IDisciplinasRepository
         return true;
     }
 
-    public async Task<Result<bool>> DeleteDisciplina(Disciplinas disciplina)
+    public async Task<bool> DeleteDisciplina(Disciplinas disciplina)
     {
         disciplina.Deletado = true;
         await _context.SaveChangesAsync();
