@@ -1,4 +1,5 @@
-﻿using EduConnect.Application.DTO.Entities;
+﻿using AutoMapper;
+using EduConnect.Application.DTO.Entities;
 using EduConnect.Domain.Entities;
 using EduConnect.Domain.Interfaces;
 using EduConnect.Infra.CrossCutting.Utils;
@@ -6,9 +7,10 @@ using FluentResults;
 
 namespace EduConnect.Application.Services;
 
-public class ProfessorService(IProfessorRepository repo)
+public class ProfessorService(IProfessorRepository repo, IMapper mapper)
 {
     private readonly IProfessorRepository _professorRepository = repo;
+    private readonly IMapper _mapper = mapper;
 
     public async Task<Result<(List<ProfessorDTO>, int TotalRegistro)>> GetByFilters(FiltroPessoaDTO filtrodto, string id, string cargo)
     {
@@ -23,19 +25,7 @@ public class ProfessorService(IProfessorRepository repo)
 
         var (professores, total) = await _professorRepository.GetByFilters(filtro, id, cargo);
 
-        List<ProfessorDTO> professoresDTO = professores.Select(professores => new ProfessorDTO(professores)
-        {
-            Registro = professores.Registro,
-            Nome = professores.Nome,
-            Email = professores.Email,
-            Telefone = professores.Telefone,
-            Status = professores.Status,
-            Nasc = professores.Nasc,
-            Endereco = professores.Endereco,
-            Cpf = professores.Cpf,
-            ContatoEmergencia = professores.ContatoEmergencia,
-            Foto = professores.Foto
-        }).ToList();
+        List<ProfessorDTO> professoresDTO = _mapper.Map<List<ProfessorDTO>>(professores);
        
         return (professoresDTO, total);
     }
@@ -76,24 +66,7 @@ public class ProfessorService(IProfessorRepository repo)
             Cargo = "Aluno"
         };
 
-        var professor = new Professor
-        {
-            Registro = ProfessorDTO.Registro,
-            Nome = ProfessorDTO.Nome,
-            Email = ProfessorDTO.Email,
-            Telefone = ProfessorDTO.Telefone,
-            Status = ProfessorDTO.Status,
-            Nasc = ProfessorDTO.Nasc,
-            Endereco = ProfessorDTO.Endereco,
-            Cpf = ProfessorDTO.CPF,
-            NomeEmergencia = ProfessorDTO.NomeEmergencia,
-            ContatoEmergencia = ProfessorDTO.ContatoEmergencia,
-            Turmas = [],
-            Foto = ProfessorDTO.Foto,
-            Formacao = ProfessorDTO.Formacao,
-            Contratacao = DateOnly.FromDateTime(DateTime.Now),
-            Salario = 0m
-        };
+        var professor = _mapper.Map<Professor>(ProfessorDTO);
 
         return await _professorRepository.AddAsync(professor, conta);
     }
@@ -112,25 +85,7 @@ public class ProfessorService(IProfessorRepository repo)
 
         ICollection<Turma> turmasDoProfessor = turmas != null! ? turmas : [];
 
-        var professor = new Professor
-        {
-            Registro = ProfessorDTO.Registro,
-            Nome = ProfessorDTO.Nome,
-            Email = ProfessorDTO.Email,
-            Telefone = ProfessorDTO.Telefone,
-            Status = ProfessorDTO.Status,
-            Nasc = ProfessorDTO.Nasc,
-            Endereco = ProfessorDTO.Endereco,
-            Cpf = ProfessorDTO.CPF,
-            NomeEmergencia  = ProfessorDTO.NomeEmergencia,
-            ContatoEmergencia = ProfessorDTO.ContatoEmergencia,
-            Turmas = turmasDoProfessor,
-            ProfessorDisciplinas = disciplinasDoProfessor,
-            Foto = ProfessorDTO.Foto,
-            Formacao = ProfessorDTO.Formacao,
-            Contratacao = DataContrato,
-            Salario = ProfessorDTO.Salario
-        };
+        var professor = _mapper.Map<Professor>(ProfessorDTO);
 
         return await _professorRepository.UpdateAsync(professor);
     }
