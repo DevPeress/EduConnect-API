@@ -34,11 +34,19 @@ public class FinanceiroService(IFinanceiroRepository repo)
 
     public async Task<Result<Financeiro>> GetById(string Registro)
     {
-        return await _financeiroRepository.GetById(Registro);
+        var financeiro = await _financeiroRepository.GetById(Registro);
+        if (financeiro == null)
+            return Result.Fail("Registro financeiro não encontrado.");
+
+        return financeiro;
     }
 
     public async Task<Result<bool>> AddFinanceiroAsync(FinanceiroCadastroDTO FinanceiroDTO)
     {
+        var financeiroExistente = await _financeiroRepository.GetById(FinanceiroDTO.Registro);
+        if (financeiroExistente != null)
+            return Result.Fail("Já existe um registro financeiro com esse identificador.");
+
         var financeiro = new Financeiro
         {
             Registro = FinanceiroDTO.Registro,
@@ -58,6 +66,10 @@ public class FinanceiroService(IFinanceiroRepository repo)
 
     public async Task<Result<bool>> UpdateFinanceiroAsync(FinanceiroUpdateDTO FinanceiroDTO)
     {
+        var financeiroExistente = await _financeiroRepository.GetById(FinanceiroDTO.Registro);
+        if (financeiroExistente == null)
+            return Result.Fail("Não existe um registro financeiro com esse identificador.");
+
         var financeiro = new Financeiro
         {
             Registro = FinanceiroDTO.Registro,
@@ -79,6 +91,10 @@ public class FinanceiroService(IFinanceiroRepository repo)
 
     public async Task<Result<bool>> DeleteFinanceiroAsync(string Registro)
     {
-        return await _financeiroRepository.Delete(Registro);
+        var financeiroExistente = await _financeiroRepository.GetById(Registro);
+        if (financeiroExistente == null)
+            return Result.Fail("Não existe um registro financeiro com esse identificador.");
+
+        return await _financeiroRepository.Delete(financeiroExistente);
     }
 }
