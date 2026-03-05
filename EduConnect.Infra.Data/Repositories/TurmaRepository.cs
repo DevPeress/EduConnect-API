@@ -65,7 +65,7 @@ public class TurmaRepository(EduContext context) : ITurmaRepository
 
     public async Task<Turma?> GetLastTurma()
     {
-        return await _context.Turmas.OrderBy(a => a.Registro).LastOrDefaultAsync();
+        return await _context.Turmas.OrderBy(a => a.Registro).LastOrDefaultAsync() ?? null;
     }
 
     public async Task<List<string>> GetTurmasValidasAsync()
@@ -87,11 +87,7 @@ public class TurmaRepository(EduContext context) : ITurmaRepository
 
     public async Task<Turma?> GetTurmaByIdAsync(string id)
     {
-        var turma = await _context.Turmas.FirstOrDefaultAsync(dados => dados.Registro == id && dados.Deletado == false);
-        if (turma == null)
-            return null;
-
-        return turma;
+        return await _context.Turmas.FirstOrDefaultAsync(dados => dados.Registro == id && dados.Deletado == false) ?? null;
     }
 
     public async Task<Turma?> GetTurmaByDados(string Registro, string AnoLetivo)

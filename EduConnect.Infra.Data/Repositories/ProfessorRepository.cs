@@ -90,11 +90,7 @@ public class ProfessorRepository(EduContext context) : IProfessorRepository
 
     public async Task<Professor?> GetByIdAsync(string Registro)
     {
-        var professor = await _context.Professores.Where(p => p.Deletado == false).FirstOrDefaultAsync(a => a.Registro == Registro);
-        if (professor == null)
-            return null;
-
-        return professor;
+        return await _context.Professores.Where(p => p.Deletado == false).FirstOrDefaultAsync(a => a.Registro == Registro) ?? null;
     }
 
     public async Task<Professor?> GetLastPessoaAsync()

@@ -102,11 +102,7 @@ public class FinanceiroRepository(EduContext context) : IFinanceiroRepository
 
     public async Task<Financeiro?> GetById(string Registro)
     {
-        var existing = await _context.Financeiros.FirstOrDefaultAsync(dados => dados.Registro == Registro && dados.Deletado == false);
-        if (existing == null)
-            return null;
-
-        return existing;
+        return await _context.Financeiros.FirstOrDefaultAsync(dados => dados.Registro == Registro && dados.Deletado == false) ?? null;
     }
 
     public async Task<bool> Add(Financeiro financeiro)

@@ -27,7 +27,7 @@ public class RegistroRepository(EduContext context) : IRegistroRepository
 
     public async Task<Registro?> GetRegistroByIdAsync(int registro)
     {
-        return await _context.Registros.Where(p => p.Deletado == false).FirstOrDefaultAsync(r => r.Id == registro);
+        return await _context.Registros.Where(p => p.Deletado == false).FirstOrDefaultAsync(r => r.Id == registro) ?? null;
     }
 
     public async Task DeleteRegistroAsync(int id)

@@ -81,11 +81,7 @@ public class AlunoRepository(EduContext context) : IAlunoRepository
 
     public async Task<Aluno?> GetByIdAsync(string Registro)
     {
-        var aluno = await _context.Alunos.FirstOrDefaultAsync(a => a.Registro == Registro);
-        if (aluno == null)
-            return null;
-
-        return aluno;
+        return await _context.Alunos.FirstOrDefaultAsync(a => a.Registro == Registro) ?? null;
     }
 
     public async Task<Aluno?> GetLastPessoaAsync()

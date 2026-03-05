@@ -78,14 +78,9 @@ public class FuncionarioRepository(EduContext context) : IFuncionarioRepository
 
     public async Task<Funcionario?> GetByIdAsync(string Registro)
     {
-        var funcionario = await _context.Funcionarios
+        return await _context.Funcionarios
             .AsNoTracking()
-            .FirstOrDefaultAsync(f => f.Registro == Registro && f.Deletado == false);
-
-        if (funcionario == null)
-            return null;
-
-        return funcionario; 
+            .FirstOrDefaultAsync(f => f.Registro == Registro && f.Deletado == false) ?? null; 
     }
 
     public async Task<Funcionario?> GetLastPessoaAsync()

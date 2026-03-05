@@ -55,7 +55,7 @@ public class DisciplinasRepository(EduContext context) : IDisciplinasRepository
     {
         return await _context.Disciplinas
             .OrderBy(d => d.Registro)
-            .LastOrDefaultAsync();
+            .LastOrDefaultAsync() ?? null;
     }
 
     public async Task<bool> CreateDisciplina(Disciplinas disciplina)
