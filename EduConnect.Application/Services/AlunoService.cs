@@ -1,4 +1,5 @@
-﻿using EduConnect.Application.DTO.Entities;
+﻿using AutoMapper;
+using EduConnect.Application.DTO.Entities;
 using EduConnect.Domain.Entities;
 using EduConnect.Domain.Interfaces;
 using EduConnect.Infra.CrossCutting.Utils;
@@ -6,9 +7,10 @@ using FluentResults;
 
 namespace EduConnect.Application.Services;
 
-public class AlunoService(IAlunoRepository repo)
+public class AlunoService(IAlunoRepository repo, IMapper mapper)
 {
     private readonly IAlunoRepository _alunoRepository = repo;
+    private readonly IMapper _mapper = mapper;
 
     public async Task<Result<(List<AlunoDTO>, int TotalRegistro)>> GetByFilters(FiltroPessoaDTO filtrodto, string id, string cargo)
     {
@@ -23,24 +25,7 @@ public class AlunoService(IAlunoRepository repo)
 
         var (alunos, total) = await _alunoRepository.GetByFilters(filtro, id, cargo);
 
-        List<AlunoDTO> alunosDTO = [];
-        foreach(var aluno in alunos)
-        {
-            var dto = new AlunoDTO(aluno)
-            {
-                Registro = aluno.Registro,
-                Nome = aluno.Nome,
-                Email = aluno.Email,
-                Telefone = aluno.Telefone,
-                Status = aluno.Status,
-                Nasc = aluno.Nasc,
-                Endereco = aluno.Endereco,
-                Cpf = aluno.Cpf,
-                ContatoEmergencia = aluno.ContatoEmergencia,
-                Foto = aluno.Foto
-            };
-            alunosDTO.Add(dto);
-        }
+        List<AlunoDTO> alunosDTO = _mapper.Map<List<AlunoDTO>>(alunos);
 
         return (alunosDTO, total);
     }
@@ -81,24 +66,7 @@ public class AlunoService(IAlunoRepository repo)
             Cargo = "Aluno"
         };
 
-        var aluno = new Aluno
-        {
-            Registro = AlunoDTO.Registro,
-            Nome = AlunoDTO.Nome,
-            Email = AlunoDTO.Email,
-            Foto = AlunoDTO.Foto,
-            Telefone = AlunoDTO.Telefone,
-            Status = AlunoDTO.Status,
-            Nasc = AlunoDTO.Nasc,
-            Endereco = AlunoDTO.Endereco,
-            Cpf = AlunoDTO.CPF,
-            ContatoEmergencia = AlunoDTO.ContatoEmergencia,
-            NomeEmergencia = AlunoDTO.NomeEmergencia,
-            DataMatricula = DateOnly.FromDateTime(DateTime.Now),
-            Media = 0,
-            Deletado = false,
-            TurmaRegistro = AlunoDTO.Turma
-        };
+        var aluno = _mapper.Map<Aluno>(AlunoDTO);
 
         return await _alunoRepository.AddAsync(aluno, conta);
     }
@@ -109,24 +77,7 @@ public class AlunoService(IAlunoRepository repo)
         if (alunoExting == null)
             return Result.Fail("Não foi possível localizar o Aluno para a edição.");
 
-        var aluno = new Aluno
-        {
-            Registro = AlunoDTO.Registro,
-            Nome = AlunoDTO.Nome,
-            Email = AlunoDTO.Email,
-            Foto = AlunoDTO.Foto,
-            Telefone = AlunoDTO.Telefone,
-            Status = AlunoDTO.Status,
-            Nasc = AlunoDTO.Nasc,
-            Endereco = AlunoDTO.Endereco,
-            Cpf = AlunoDTO.Cpf,
-            ContatoEmergencia = AlunoDTO.ContatoEmergencia,
-            NomeEmergencia = AlunoDTO.NomeEmergencia,
-            DataMatricula = matricula,
-            Deletado = false,
-            Media = media,
-            TurmaRegistro = AlunoDTO.TurmaRegistro
-        };
+        var aluno = _mapper.Map<Aluno>(AlunoDTO);
 
         return await _alunoRepository.UpdateAsync(aluno);
     }
