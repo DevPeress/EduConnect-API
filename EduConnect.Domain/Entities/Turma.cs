@@ -18,9 +18,9 @@ public class Turma
     public required string Status { get; set; }
     public required string ProfessorResponsavel { get; set; }
     public required List<string> Dias { get; set; }
-    public required bool Deletado { get; set; }
+    public required bool Deletado { get; set; } = false;
 
     // Relacionamento
-    public required ICollection<Aluno> Alunos { get; set; } 
-    public required ICollection<TurmaDisciplina> TurmaDisciplinas { get; set; } 
+    public required ICollection<Aluno> Alunos { get; set; } = [];
+    public required ICollection<TurmaDisciplina> TurmaDisciplinas { get; set; } = [];
 }
