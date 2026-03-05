@@ -104,13 +104,13 @@ public class ProfessorService(IProfessorRepository repo)
         if (disciplinas == null)
             return Result.Fail("Disciplinas do professor não encontradas.");
 
-        ICollection<ProfessorDisciplina> disciplinasDoProfessor = disciplinas != null! ? disciplinas.Value : [];
+        ICollection<ProfessorDisciplina> disciplinasDoProfessor = disciplinas != null! ? disciplinas : [];
          
         var turmas = await _professorRepository.GetTurmasByProfessorAsync(ProfessorDTO.Registro);
-        if (turmas.IsFailed)
+        if (turmas == null)
             return Result.Fail("Turmas do professor não encontradas.");
 
-        ICollection<Turma> turmasDoProfessor = turmas != null! ? turmas.Value : [];
+        ICollection<Turma> turmasDoProfessor = turmas != null! ? turmas : [];
 
         var professor = new Professor
         {
