@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using EduConnect.Domain.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace EduConnect.Domain.Entities;
 
@@ -9,6 +10,7 @@ public class Notas
     public required int Nota { get; set; }
     public required bool Deletado { get; set; }
     public required DateTime Data { get; set; }
+    public required TiposAvalicaoes TipoAvalicao { get; set; }
 
     // Relacionamento com Aluno
     public required int AlunoId { get; set; }
