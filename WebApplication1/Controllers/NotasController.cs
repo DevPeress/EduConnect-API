@@ -13,9 +13,9 @@ namespace EduConnect.Controllers
     {
         private readonly NotasService _notasService = service;
 
-        [Authorize(Roles = "Administrador, Funcionario, Professor")]
+        [Authorize(Roles = "Administrador, Funcionario, Professor, Aluno")]
         [HttpGet("filtro")]
-        public async Task<IActionResult> GetAlunos([FromQuery] FiltroViewModel viewModel)
+        public async Task<IActionResult> GetNotas([FromQuery] FiltroViewModel viewModel)
         {
             var id = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var role = User.FindFirst(ClaimTypes.Role)?.Value;
@@ -49,10 +49,10 @@ namespace EduConnect.Controllers
         [HttpGet("{Registro}")]
         public async Task<IActionResult> GetNotasById(int Registro)
         {
-            var aluno = await _notasService.GetNotasByIdAsync(Registro);
-            if (aluno.IsFailed) return NotFound();
+            var nota = await _notasService.GetNotasByIdAsync(Registro);
+            if (nota.IsFailed) return NotFound();
 
-            return Ok(aluno);
+            return Ok(nota);
         }
 
         [Authorize(Roles = "Administrador, Funcionario, Professor")]
@@ -69,16 +69,16 @@ namespace EduConnect.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> AddAluno([FromBody] NotasCadastroDTO NotaDTO)
+        public async Task<IActionResult> AddNota([FromBody] NotasCadastroDTO NotaDTO)
         {
             await _notasService.AddNotaAsync(NotaDTO);
 
             return Ok();
         }
 
-        [Authorize(Roles = "Administrador, Funcionario")]
+        [Authorize(Roles = "Administrador, Funcionario, Professor")]
         [HttpPut("{Registro}")]
-        public async Task<IActionResult> UpdateAluno(int Registro, [FromBody] NotasUpdateDTO NotaDTO)
+        public async Task<IActionResult> UpdateNota(int Registro, [FromBody] NotasUpdateDTO NotaDTO)
         {
             if (Registro != NotaDTO.Registro)
                 return BadRequest();
@@ -94,12 +94,12 @@ namespace EduConnect.Controllers
             return Ok();
         }
 
-        [Authorize(Roles = "Administrador, Funcionario")]
+        [Authorize(Roles = "Administrador, Funcionario, Professor")]
         [HttpDelete("{Registro}")]
-        public async Task<IActionResult> DeleteAluno(int Registro)
+        public async Task<IActionResult> DeleteNota(int Registro)
         {
-            var existingAluno = await _notasService.GetNotasByIdAsync(Registro);
-            if (existingAluno.IsFailed)
+            var existingNota = await _notasService.GetNotasByIdAsync(Registro);
+            if (existingNota.IsFailed)
                 return NotFound();
 
             var update = await _notasService.DeleteNotaAsync(Registro);
