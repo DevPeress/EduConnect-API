@@ -29,6 +29,9 @@ namespace EduConnect.Infra.IoC
             CreateMap<TurmaDTO, Turma>();
             CreateMap<TurmaCadastroDTO, Turma>().ReverseMap();
             CreateMap<TurmaUpdateDTO, Turma>().ReverseMap();
+            CreateMap<NotasDTO, Notas>().ReverseMap();
+            CreateMap<NotasCadastroDTO, Notas>().ReverseMap();
+            CreateMap<NotasUpdateDTO, Notas>().ReverseMap();
         }
     }
 }
