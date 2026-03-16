@@ -41,6 +41,8 @@ namespace EduConnect.Infra.IoC
             services.AddScoped<IAuditContext, AuditContext>();
             services.AddScoped<IDisciplinasRepository, DisciplinasRepository>();
             services.AddScoped<DisciplinasService>();
+            services.AddScoped<NotasRepository, NotasRepository>();
+            services.AddScoped<NotasService>();
 
             services.AddScoped<JWTService>();   
         }
