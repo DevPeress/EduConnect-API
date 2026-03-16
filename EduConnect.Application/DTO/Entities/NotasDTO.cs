@@ -5,4 +5,5 @@ public class NotasDTO
     public int Nota { get; set; }
     public required string Materia { get; set; }
     public required string Professor { get; set; }
+    public required DateTime Data { get; set; }
 }
