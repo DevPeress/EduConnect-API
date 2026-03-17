@@ -18,7 +18,7 @@ namespace EduConnect.Infra.IoC
 
             services.AddHttpContextAccessor();
 
-            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.AddAutoMapper(cfg => { }, typeof(Mapper).Assembly);
 
             services.AddScoped<IAlunoRepository, AlunoRepository>();
             services.AddScoped<AlunoService>();
@@ -41,7 +41,7 @@ namespace EduConnect.Infra.IoC
             services.AddScoped<IAuditContext, AuditContext>();
             services.AddScoped<IDisciplinasRepository, DisciplinasRepository>();
             services.AddScoped<DisciplinasService>();
-            services.AddScoped<NotasRepository, NotasRepository>();
+            services.AddScoped<INotasRepository, NotasRepository>();
             services.AddScoped<NotasService>();
 
             services.AddScoped<JWTService>();   
