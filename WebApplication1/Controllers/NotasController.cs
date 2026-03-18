@@ -52,14 +52,19 @@ namespace EduConnect.Controllers
             var nota = await _notasService.GetNotasByIdAsync(Registro);
             if (nota.IsFailed) return NotFound();
 
-            return Ok(nota);
+            return Ok(nota.Value);
         }
 
         [Authorize(Roles = "Administrador, Funcionario, Professor")]
         [HttpGet("pegarInformativos")]
         public async Task<IActionResult> GetInformativosNotasAsync()
         {
-            var (anos, salas) = await _notasService.GetInformativos();
+            var result = await _notasService.GetInformativos();
+            if (result.IsFailed) 
+                return BadRequest();
+
+            var (anos, salas) = result.Value;
+
             return Ok(new 
             {
                 Anos = anos,
