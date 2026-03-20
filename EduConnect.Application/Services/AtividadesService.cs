@@ -38,7 +38,7 @@ public class AtividadesService(IAtividadesRepository repo, IMapper mapper)
         return await _atividadesRepository.GetInformativos();
     }
 
-    public async Task<Result<Atividades>> GetatividadesByIdAsync(int Registro)
+    public async Task<Result<Atividades>> GetAtividadesByIdAsync(int Registro)
     {
         var aluno = await _atividadesRepository.GetByIdAsync(Registro);
         if (aluno == null)
@@ -47,14 +47,14 @@ public class AtividadesService(IAtividadesRepository repo, IMapper mapper)
         return aluno;
     }
 
-    public async Task<Result<bool>> AddatividadesAsync(AtividadesCadastroDTO atividadesDTO)
+    public async Task<Result<bool>> AddAtividadesAsync(AtividadesCadastroDTO atividadesDTO)
     {
         var atividade = _mapper.Map<Atividades>(atividadesDTO);
 
         return await _atividadesRepository.AddAsync(atividade);
     }
 
-    public async Task<Result<bool>> UpdateatividadesAsync(AtividadesUpdateDTO atividadesDTO)
+    public async Task<Result<bool>> UpdateAtividadesAsync(AtividadesUpdateDTO atividadesDTO)
     {
         var atividadeExting = await _atividadesRepository.GetByIdAsync(atividadesDTO.Id);
         if (atividadeExting == null)
@@ -65,7 +65,7 @@ public class AtividadesService(IAtividadesRepository repo, IMapper mapper)
         return await _atividadesRepository.UpdateAsync(atividade);
     }
 
-    public async Task<Result<bool>> DeleteatividadesAsync(int Registro)
+    public async Task<Result<bool>> DeleteAtividadesAsync(int Registro)
     {
         var atividadeExting = await _atividadesRepository.GetByIdAsync(Registro);
         if (atividadeExting == null)
