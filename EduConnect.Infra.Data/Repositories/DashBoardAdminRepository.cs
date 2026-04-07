@@ -1,6 +1,7 @@
 ﻿using EduConnect.Domain.Entities;
 using EduConnect.Domain.Interfaces;
 using EduConnect.Infra.Data.Context;
+using EduConnect.Infra.Data.Migrations;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
@@ -103,5 +104,55 @@ public class DashBoardAdminRepository(EduContext context) : IDashboardAdminRepos
             .ToListAsync();
 
         return result;
+    }
+
+    public async Task<(int[], int[])> GetGraficoAsync(string cargo, string id)
+    {
+        if (cargo == "Administrador" || cargo == "Funcionário")
+        {
+            var notas = await _context.Notas.ToListAsync();
+            List<int> notasValor = [];
+
+            foreach (var valor in notas) {
+                notasValor.Add(valor.Nota);
+            }
+
+            int[] notasArray = [.. notasValor];
+            int[] notasMedia7 = [.. Enumerable.Repeat(7, notasArray.Length)];
+
+            return (notasArray, notasMedia7);
+        } 
+        else if (cargo == "Professor")
+        {
+            List<int> notasValor = [];
+            var alunosProfessor = await _context.Turmas.Where(d => d.ProfessorResponsavel == id).Select(d => d.Alunos).Distinct().ToListAsync();
+            foreach(var aluno in alunosProfessor)
+            {
+                var notas = await _context.Notas.Where(d => d.Aluno == aluno).ToListAsync();
+                foreach(var valor in notas)
+                {
+                    notasValor.Add(valor.Nota);
+                }
+            }
+
+            int[] notasArray = [.. notasValor];
+            int[] notasMedia7 = [.. Enumerable.Repeat(7, notasArray.Length)];
+
+            return (notasArray, notasMedia7);
+        }
+        else
+        {
+            List<int> notasValor = [];
+            var notas = await _context.Notas.Where(d => d.Aluno.Registro == id).ToListAsync();
+            foreach (var valor in notas)
+            {
+                notasValor.Add(valor.Nota);
+            }
+
+            int[] notasArray = [.. notasValor];
+            int[] notasMedia7 = [.. Enumerable.Repeat(7, notasArray.Length)];
+
+            return (notasArray, notasMedia7);
+        }
     }
 }

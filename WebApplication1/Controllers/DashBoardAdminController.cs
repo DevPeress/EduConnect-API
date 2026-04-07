@@ -80,5 +80,19 @@ namespace EduConnect.Controllers
 
             return Ok(atividades);
         }
+
+        [Authorize(Roles = "Administrador, Funcionario, Professor, Aluno")]
+        [HttpGet("Grafico")]
+        public async Task<IActionResult> GetGraficoData()
+        {
+            var id = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var role = User.FindFirst(ClaimTypes.Role)?.Value;
+            if (id == null || role == null)
+                return BadRequest();
+
+            var grafico = await _dashBoardAdminService.GetGraficoAsync(role, id);
+
+            return Ok(grafico);
+        }
     }
 }

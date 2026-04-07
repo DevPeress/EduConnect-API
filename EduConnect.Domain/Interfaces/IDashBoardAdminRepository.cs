@@ -8,4 +8,5 @@ public interface IDashboardAdminRepository
     Task<(int, int, int, int)> GetAumentoAsync();
     Task<(double, double, double, double)> GetPorcentagemAsync();
     Task<List<Registro>> GetAtividadesAsync(string cargo, string id);
+    Task<(int[], int[])> GetGraficoAsync(string cargo, string id);
 }

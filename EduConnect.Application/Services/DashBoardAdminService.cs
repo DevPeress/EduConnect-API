@@ -26,4 +26,9 @@ public class DashBoardAdminService(IDashboardAdminRepository repo)
     {
         return await _dashboardAdminRepository.GetAtividadesAsync(cargo, id);
     }
+
+    public async Task<(int[], int[])> GetGraficoAsync(string cargo, string id)
+    {
+        return await _dashboardAdminRepository.GetGraficoAsync(cargo, id);
+    }
 }
