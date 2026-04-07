@@ -22,9 +22,9 @@ namespace EduConnect.Application.Services
             return await _disciplinasRepository.GetDisciplinas(filtro);
         }
 
-        public async Task<Result<List<Disciplinas>>> GetAllDisciplinas()
+        public async Task<Result<List<Disciplinas>>> GetAllDisciplinas(string registro, string id)
         {
-            return await _disciplinasRepository.GetAllDisciplinas();
+            return await _disciplinasRepository.GetAllDisciplinas(registro, id);
         }
 
         public async Task<Result<Disciplinas>> GetLastDisciplina()

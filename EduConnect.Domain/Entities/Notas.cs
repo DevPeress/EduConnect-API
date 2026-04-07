@@ -13,7 +13,7 @@ public class Notas
     public required TiposAvalicaoes TipoAvalicao { get; set; }
 
     // Relacionamento com Aluno
-    public required int AlunoId { get; set; }
+    public required string AlunoRegistro { get; set; }
     public required Aluno Aluno { get; set; }
 
     public required int MateriaId { get; set; }

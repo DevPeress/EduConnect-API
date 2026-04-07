@@ -42,11 +42,17 @@ public class DisciplinasRepository(EduContext context) : IDisciplinasRepository
         return await _context.Disciplinas.FirstOrDefaultAsync(d => d.Registro == Registro) ?? null;
     }
 
-    public async Task<List<Disciplinas>> GetAllDisciplinas()
+    public async Task<List<Disciplinas>> GetAllDisciplinas(string cargo, string id)
     {
-        return await _context.Disciplinas
+        if (cargo == "Administrador" || cargo == "Funcionário")
+            return await _context.Disciplinas
             .AsNoTracking()
             .Where(d => d.Deletado == false)
+            .ToListAsync();
+
+        return await _context.Disciplinas
+            .AsNoTracking()
+            .Where(d => d.Deletado == false && d.ProfessorDisciplinas.Any(pd => pd.Professor.Registro == id))
             .ToListAsync();
     }
 

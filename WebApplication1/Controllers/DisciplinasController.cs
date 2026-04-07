@@ -3,6 +3,7 @@ using EduConnect.Application.Services;
 using EduConnect.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace EduConnect.Controllers
 {
@@ -50,7 +51,12 @@ namespace EduConnect.Controllers
         [HttpGet("pegarDisciplinas")]
         public async Task<IActionResult> GetAllDisciplinas()
         {
-            var disciplinas = await _disciplinasService.GetAllDisciplinas();
+            var id = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var role = User.FindFirst(ClaimTypes.Role)?.Value;
+            if (id == null || role == null)
+                return BadRequest();
+
+            var disciplinas = await _disciplinasService.GetAllDisciplinas(role, id);
             if (disciplinas == null)
                 return NoContent();
 

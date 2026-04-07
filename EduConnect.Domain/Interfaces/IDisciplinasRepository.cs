@@ -5,7 +5,7 @@ namespace EduConnect.Domain.Interfaces;
 public interface IDisciplinasRepository
 {
     Task<(IEnumerable<Disciplinas>, int TotalRegistro)> GetDisciplinas(FiltroDisciplinas filtro);
-    Task<List<Disciplinas>> GetAllDisciplinas();
+    Task<List<Disciplinas>> GetAllDisciplinas(string registro, string id);
     Task<Disciplinas?> GetDisciplinaById(string Registro);
     Task<Disciplinas?> GetLastDisciplina();
     Task<bool> CreateDisciplina(Disciplinas disciplina);
