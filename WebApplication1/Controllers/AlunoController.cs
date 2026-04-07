@@ -95,6 +95,25 @@ namespace EduConnect.Controllers
             return Ok("A" + proximoFormatado);
         }
 
+        [Authorize(Roles = "Aluno, Professor, Administrador, Funcionario")]
+        [HttpGet("boletim/{Registro}")]
+        public async Task<IActionResult> GetBoletim(string Registro)
+        {
+            var existingAluno = await _alunoService.GetAlunoByIdAsync(Registro);
+            if (existingAluno.IsFailed)
+                return NotFound();
+
+            var boletim = await _alunoService.GetBoletimAsync(Registro);
+            if (boletim.IsFailed)
+                return BadRequest(boletim.Errors);
+
+            return File(
+                boletim.Value,
+                "application/pdf",
+                $"boletim_{existingAluno.Value.Nome}.pdf"
+            );
+        }
+
         [HttpPost]
         public async Task<IActionResult> AddAluno([FromBody] AlunoCadastroDTO AlunoDTO)
         {

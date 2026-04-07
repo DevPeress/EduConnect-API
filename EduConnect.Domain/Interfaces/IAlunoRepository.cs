@@ -2,4 +2,7 @@
 
 namespace EduConnect.Domain.Interfaces;
 
-public interface IAlunoRepository : IPessoaRepository<Aluno>;
+public interface IAlunoRepository : IPessoaRepository<Aluno>
+{
+    Task<byte[]> GetBoletimAsync(string Registro);
+}

@@ -2,6 +2,7 @@
 using EduConnect.Domain.Interfaces;
 using EduConnect.Infra.Data.Context;
 using Microsoft.EntityFrameworkCore;
+using QuestPDF.Fluent;
 
 namespace EduConnect.Infra.Data.Repositories;
 
@@ -118,5 +119,89 @@ public class AlunoRepository(EduContext context) : IAlunoRepository
         await _context.SaveChangesAsync();
 
         return true;
+    }
+
+    public async Task<byte[]> GetBoletimAsync(string Registro)
+    {
+        var aluno = await _context.Alunos
+         .FirstOrDefaultAsync(a => a.Registro == Registro) ?? throw new Exception("Aluno não encontrado");
+
+        var turma = await _context.Turmas
+            .Include(t => t.TurmaDisciplinas)
+            .FirstOrDefaultAsync(t => t.Registro == aluno.TurmaRegistro) ?? throw new Exception("Turma não encontrada");
+
+        var notasAluno = await _context.Notas
+            .Where(n => n.AlunoId == aluno.Id)
+            .ToListAsync();
+
+        // 🔥 Aqui está o ponto importante
+        var disciplinas = turma.TurmaDisciplinas.Select(td =>
+        {
+            var nota = notasAluno
+                .FirstOrDefault(n => n.MateriaId == td.Id);
+
+            return new DisciplinaNota
+            {
+                Nome = td.Disciplina.Nome,
+                Nota = nota?.Nota
+            };
+        }).ToList();
+
+        var boletim = new Boletim
+        {
+            NomeAluno = aluno.Nome,
+            Turma = turma.Nome,
+            Disciplinas = disciplinas
+        };
+
+        return GerarPdf(boletim);
+    }
+
+    public static byte[] GerarPdf(Boletim boletim)
+    {
+        return Document.Create(container =>
+        {
+            container.Page(page =>
+            {
+                page.Margin(30);
+
+                page.Header()
+                    .Text("Boletim Escolar")
+                    .FontSize(20)
+                    .Bold()
+                    .AlignCenter();
+
+                page.Content().Column(col =>
+                {
+                    col.Item().Text($"Aluno: {boletim.NomeAluno}");
+                    col.Item().Text($"Turma: {boletim.Turma}");
+
+                    col.Item().Table(table =>
+                    {
+                        table.ColumnsDefinition(columns =>
+                        {
+                            columns.RelativeColumn();
+                            columns.ConstantColumn(80);
+                        });
+
+                        table.Header(header =>
+                        {
+                            header.Cell().Text("Disciplina").Bold();
+                            header.Cell().Text("Nota").Bold();
+                        });
+
+                        foreach (var d in boletim.Disciplinas)
+                        {
+                            table.Cell().Text(d.Nome);
+                            table.Cell().Text(d.Nota?.ToString("F1") ?? "-");
+                        }
+                    });
+                });
+
+                page.Footer()
+                    .AlignCenter()
+                    .Text($"Gerado em {DateTime.Now:dd/MM/yyyy}");
+            });
+        }).GeneratePdf();
     }
 }

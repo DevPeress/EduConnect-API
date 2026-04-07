@@ -90,4 +90,13 @@ public class AlunoService(IAlunoRepository repo, IMapper mapper)
 
         return await _alunoRepository.DeleteAsync(alunoExting);
     }
+
+    public async Task<Result<byte[]>> GetBoletimAsync(string Registro)
+    {
+        var alunoExting = await _alunoRepository.GetByIdAsync(Registro);
+        if (alunoExting == null)
+            return Result.Fail("Não foi possível localizar o Aluno para pegar o boletim.");
+
+        return await _alunoRepository.GetBoletimAsync(Registro);
+    }
 }
