@@ -131,7 +131,7 @@ public class AlunoRepository(EduContext context) : IAlunoRepository
             .FirstOrDefaultAsync(t => t.Registro == aluno.TurmaRegistro) ?? throw new Exception("Turma não encontrada");
 
         var notasAluno = await _context.Notas
-            .Where(n => n.AlunoRegistro == aluno.Id)
+            .Where(n => n.Aluno.Id == aluno.Id)
             .ToListAsync();
 
         // 🔥 Aqui está o ponto importante
