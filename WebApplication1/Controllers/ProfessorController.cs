@@ -47,7 +47,12 @@ namespace EduConnect.Controllers
         [HttpGet("pegarInformativos")]
         public async Task<IActionResult> GetInformativosAlunosAsync()
         {
-            var (anos, salas) = await _professorService.GetInformativos();
+            var result = await _professorService.GetInformativos();
+            if (result.IsFailed)
+                return NotFound();
+
+            var (anos, salas) = result.Value;
+
             return Ok(new
             {
                 Anos = anos,
@@ -62,7 +67,7 @@ namespace EduConnect.Controllers
             if (professores.IsFailed)
                 return NotFound();
         
-            return Ok(professores);
+            return Ok(professores.Value);
         }
 
         [HttpGet("Cadastro")]
@@ -108,7 +113,7 @@ namespace EduConnect.Controllers
                 return NotFound();
          
             await _professorService.UpdateProfessorAsync(ProfessorDTO, existingProfessor.Value.Contratacao);
-            return NoContent();
+            return Ok();
         }
 
         [HttpDelete("{Registro}")]
@@ -119,7 +124,7 @@ namespace EduConnect.Controllers
                 return NotFound();
          
             await _professorService.DeleteProfessorAsync(Registro);
-            return NoContent();
+            return Ok();
         }
     }
 }

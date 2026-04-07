@@ -54,14 +54,19 @@ namespace EduConnect.Controllers
             var aluno = await _alunoService.GetAlunoByIdAsync(Registro);
             if (aluno.IsFailed) return NotFound();
 
-            return Ok(aluno);
+            return Ok(aluno.Value);
         }
 
         [Authorize(Roles = "Administrador, Funcionario, Professor")]
         [HttpGet("pegarInformativos")]
         public async Task<IActionResult> GetInformativosAlunosAsync()
         {
-            var (anos, salas) = await _alunoService.GetInformativos();
+            var result = await _alunoService.GetInformativos();
+            if (result.IsFailed)
+               return NoContent();
+
+            var (anos, salas) = result.Value;
+
             return Ok(new 
             {
                 Anos = anos,

@@ -8,14 +8,14 @@ using System.Security.Claims;
 namespace EduConnect.Controllers
 {
     [ApiController]
-    [Route("api/notas")]
-    public class NotasController(NotasService service) : ControllerBase
+    [Route("api/atividades")]
+    public class AtividadesController(AtividadesService service) : ControllerBase
     {
-        private readonly NotasService _notasService = service;
+        private readonly AtividadesService _atividadesService = service;
 
         [Authorize(Roles = "Administrador, Funcionario, Professor, Aluno")]
         [HttpGet("filtro")]
-        public async Task<IActionResult> GetNotas([FromQuery] FiltroViewModel viewModel)
+        public async Task<IActionResult> GetAtividades([FromQuery] FiltroViewModel viewModel)
         {
             var id = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var role = User.FindFirst(ClaimTypes.Role)?.Value;
@@ -31,15 +31,15 @@ namespace EduConnect.Controllers
                 Pesquisa = viewModel.Pesquisa
             };
 
-            var result = await _notasService.GetByFilters(filtro, id, role);
+            var result = await _atividadesService.GetByFilters(filtro, id, role);
             if (result.IsFailed)
                 return BadRequest(result.Errors);
 
-            var (notas, total) = result.Value;
+            var (atividades, total) = result.Value;
 
-            return Ok(new FiltroResponseViewModel<NotasDTO>
+            return Ok(new FiltroResponseViewModel<AtividadesDTO>
             {
-                Dados = notas,
+                Dados = atividades,
                 Total = total
             }
             );
@@ -47,19 +47,19 @@ namespace EduConnect.Controllers
 
         [Authorize(Roles = "Administrador, Funcionario, Professor")]
         [HttpGet("{Registro}")]
-        public async Task<IActionResult> GetNotasById(int Registro)
+        public async Task<IActionResult> GetAtividadesById(int Registro)
         {
-            var nota = await _notasService.GetNotasByIdAsync(Registro);
-            if (nota.IsFailed) return NotFound();
+            var atividade = await _atividadesService.GetAtividadesByIdAsync(Registro);
+            if (atividade.IsFailed) return NotFound();
 
-            return Ok(nota.Value);
+            return Ok(atividade.Value);
         }
 
         [Authorize(Roles = "Administrador, Funcionario, Professor")]
         [HttpGet("pegarInformativos")]
-        public async Task<IActionResult> GetInformativosNotasAsync()
+        public async Task<IActionResult> GetInformativosAtividadesAsync()
         {
-            var result = await _notasService.GetInformativos();
+            var result = await _atividadesService.GetInformativos();
             if (result.IsFailed) 
                 return BadRequest();
 
@@ -72,27 +72,27 @@ namespace EduConnect.Controllers
             });
         }
 
-
+        [Authorize(Roles = "Administrador, Funcionario, Professor")]
         [HttpPost]
-        public async Task<IActionResult> AddNota([FromBody] NotasCadastroDTO NotaDTO)
+        public async Task<IActionResult> AddAtividade([FromBody] AtividadesCadastroDTO AtividadeDTO)
         {
-            await _notasService.AddNotaAsync(NotaDTO);
+            await _atividadesService.AddAtividadesAsync(AtividadeDTO);
 
             return Ok();
         }
 
         [Authorize(Roles = "Administrador, Funcionario, Professor")]
         [HttpPut("{Registro}")]
-        public async Task<IActionResult> UpdateNota(int Registro, [FromBody] NotasUpdateDTO NotaDTO)
+        public async Task<IActionResult> UpdateAtividade(int Registro, [FromBody] AtividadesUpdateDTO AtividadeDTO)
         {
-            if (Registro != NotaDTO.Registro)
+            if (Registro != AtividadeDTO.Id)
                 return BadRequest();
 
-            var existingNota = await _notasService.GetNotasByIdAsync(Registro);
-            if (existingNota.IsFailed)
+            var existingAtividade = await _atividadesService.GetAtividadesByIdAsync(Registro);
+            if (existingAtividade.IsFailed)
                 return NotFound();
 
-            var update = await _notasService.UpdateNotaAsync(NotaDTO);
+            var update = await _atividadesService.UpdateAtividadesAsync(AtividadeDTO);
             if (update.IsFailed)
                 return BadRequest(update.Errors);
 
@@ -101,13 +101,13 @@ namespace EduConnect.Controllers
 
         [Authorize(Roles = "Administrador, Funcionario, Professor")]
         [HttpDelete("{Registro}")]
-        public async Task<IActionResult> DeleteNota(int Registro)
+        public async Task<IActionResult> DeleteAtividade(int Registro)
         {
-            var existingNota = await _notasService.GetNotasByIdAsync(Registro);
-            if (existingNota.IsFailed)
+            var existingAtividade = await _atividadesService.GetAtividadesByIdAsync(Registro);
+            if (existingAtividade.IsFailed)
                 return NotFound();
 
-            var update = await _notasService.DeleteNotaAsync(Registro);
+            var update = await _atividadesService.DeleteAtividadesAsync(Registro);
             if (update.IsFailed)
                 return BadRequest(update.Errors);
 

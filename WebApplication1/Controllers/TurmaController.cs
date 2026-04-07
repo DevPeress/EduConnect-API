@@ -49,7 +49,10 @@ namespace EduConnect.Controllers
         public async Task<IActionResult> GetTurmasValidas()
         {
             var turmas = await _turmaService.GetTurmasValidasAsync();
-            return Ok(turmas);
+            if (turmas.IsFailed)
+                return BadRequest(turmas.Errors);
+
+            return Ok(turmas.Value);
         }
 
         [Authorize(Roles = "Administrador, Funcionario, Professor")]
@@ -60,7 +63,7 @@ namespace EduConnect.Controllers
             if (turma.IsFailed)
                 return NotFound();
 
-            return Ok(turma);
+            return Ok(turma.Value);
         }
 
         [Authorize(Roles = "Administrador, Funcionario, Professor")]
@@ -68,7 +71,10 @@ namespace EduConnect.Controllers
         public async Task<IActionResult> GetInformativosAlunosAsync()
         {
             var anos = await _turmaService.GetInformativos();
-            return Ok(anos);
+            if (anos.IsFailed)
+                return NotFound();
+
+            return Ok(anos.Value);
         }
 
         [Authorize(Roles = "Administrador, Funcionario")]

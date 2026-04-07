@@ -67,18 +67,23 @@ namespace EduConnect.Controllers
             if (funcionarios.IsFailed)
                  return NotFound();
             
-            return Ok(funcionarios);
+            return Ok(funcionarios.Value);
         }
 
         [Authorize(Roles = "Administrador, Funcionario")]
         [HttpGet("pegarInformativos")]
         public async Task<IActionResult> GetInformativosFuncionariosAsync()
         {
-            var (deparamentos, anos) = await _funcionarioService.GetInformativos();
+            var resultados = await _funcionarioService.GetInformativos();
+            if (resultados.IsFailed)
+                return NotFound();
+
+            var (departamentos, anos) = resultados.Value;
+
             return Ok(new
             {
                 Anos = anos,
-                Departamentos = deparamentos
+                Departamentos = departamentos
             });
         }
 
@@ -128,7 +133,7 @@ namespace EduConnect.Controllers
                 return NotFound();
             
             await _funcionarioService.UpdateFuncionarioAsync(FuncionarioDTO, existingFuncionario.Value.DataAdmissao);
-            return NoContent();
+            return Ok();
         }
 
         [Authorize(Roles = "Administrador")]
@@ -140,7 +145,7 @@ namespace EduConnect.Controllers
                 return NotFound();
            
             await _funcionarioService.DeleteFuncionarioAsync(Registro);
-            return NoContent();
+            return Ok();
         }
     }
 }
