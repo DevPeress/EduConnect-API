@@ -112,10 +112,12 @@ namespace EduConnect.Controllers
             if (boletim.IsFailed)
                 return BadRequest(boletim.Errors);
 
+            var nomeSeguro = existingAluno.Value.Nome.Replace(" ", "_");
+
             return File(
                 boletim.Value,
                 "application/pdf",
-                $"boletim_{existingAluno.Value.Nome}.pdf"
+                $"boletim_{nomeSeguro}.pdf"
             );
         }
 
