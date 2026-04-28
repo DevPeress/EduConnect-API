@@ -46,7 +46,7 @@ public class NotasRepository(EduContext context) : INotasRepository
         }
         else
         {
-            query = query.Where(dados => dados.AlunoId.ToString() == id);
+            query = query.Where(dados => dados.Aluno.Registro == id);
             return query;
         }
     }
